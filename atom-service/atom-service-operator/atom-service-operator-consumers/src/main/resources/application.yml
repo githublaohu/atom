@@ -1,0 +1,18 @@
+server:
+  port: 9001
+  servlet:
+    context-path: "/lamp/atom/service/operator"
+
+dubbo:
+  application:
+    name: lamp-atom-service-operator
+    owner: dome
+
+  provider:
+    timeout: 30000
+    retries: 0
+
+  registry:
+    address: N/A
+    register: false
+    subscribe: true

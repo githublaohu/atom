@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    name: lamp-atom
+    url: jdbc:mysql://47.115.1.219:3306/vaast?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true
+    username: vaast
+    password: $Vaast2020
+    # using druid data source
+    type: com.alibaba.druid.pool.DruidDataSource
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    # encrypt password
+    filters: config,stat,slf4j
+
+dubbo:
+  scan:
+    base-packages: com.lamp.atom.service.operator.provider.service.impl
+  application:
+    name: lamp-atom-service-operator-provider
+    owner: dome
+    logger: slf4j
+
+  protocol:
+    name: dubbo
+    port: 19001
+    accesslog: true
+
+  consume:
+    timeout: 30000
+    retries: 0
+
+  registry:
+    address: N/A
+    register: true
+    subscribe: true
+
+mybatis:
+  checkConfig-location : false
+  configuration:
+    useGeneratedKeys: true
+    mapUnderscoreToCamelCase: true
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

@@ -1,0 +1,11 @@
+nacos-sdk-python==0.1.62
+rook-client==1.0.0
+hdfs3==0.3.1
+pyyaml==5.4.1
+drpc==0.1.1
+aio-ceph-api==0.0.2
+tensorflow==1.15
+pandas
+gitpython
+tqdm
+pydantic
