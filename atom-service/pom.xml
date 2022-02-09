@@ -11,7 +11,9 @@
 	<artifactId>atom-service</artifactId>
 	<packaging>pom</packaging>
 	<modules>
+		<module>atom-service-common</module>
 		<module>atom-service-operator</module>
+		<module>atom-service-reasoning</module>
 	</modules>
 
 	<properties>
