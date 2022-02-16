@@ -7,6 +7,7 @@ import com.lamp.atom.service.domain.OperatorSourceType;
 import com.lamp.atom.service.domain.OperatorStatus;
 import com.lamp.atom.service.domain.DeployType;
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 public class OperatorEntity extends BaseEntity {
@@ -16,6 +17,7 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 算子模板
      */
+    @NonNull
     private Long operatorTemplateId;
 
     /**
@@ -26,26 +28,31 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 算子源id
      */
+    @NonNull
     private String operatorSourceId;
 
     /**
      * 算子来源类型
      */
+    @NonNull
     private OperatorSourceType operatorSourceType;
 
     /**
      * 算子类型
      */
+    @NonNull
     private OperatorRuntimeType operatorRuntimeType;
 
     /**
      * 算子运行模式
      */
+    @NonNull
     private OperatorModel operatorModel;
 
     /**
      * 空间id
      */
+    @NonNull
     private Long spaceId;
 
     /**
@@ -61,6 +68,7 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 场景id
      */
+    @NonNull
     private Long sceneId;
 
     /**
@@ -76,6 +84,7 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 实验id
      */
+    @NonNull
     private Long experimentId;
 
     /**
@@ -91,16 +100,19 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 资源账户id
      */
+    @NonNull
     private Long resourcesAccountId;
 
     /**
      * 加载模式
      */
+    @NonNull
     private CodeMode codeMode;
 
     /**
      * 加载地址
      */
+    @NonNull
     private String codeAddress;
 
     /**
@@ -166,12 +178,18 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 训练状态
      */
+    @NonNull
     private OperatorStatus operatorStatus;
 
     /**
      * 训练优先级
      */
     private Integer operatorPriority;
+
+    /**
+     * 部署实例
+     */
+    private Long caseId;
 
     /**
      * 部署类型

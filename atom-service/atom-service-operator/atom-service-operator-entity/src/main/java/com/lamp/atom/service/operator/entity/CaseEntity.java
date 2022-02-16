@@ -5,14 +5,14 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class TaskEntity extends BaseEntity {
+public class CaseEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2237946472510786359L;
 
     /**
-     * 任务名
+     * 实例名
      */
-    private String taskName;
+    private String caseName;
 
     /**
      * 算子id
@@ -25,10 +25,7 @@ public class TaskEntity extends BaseEntity {
     private String operatorName;
 
     /**
-     * 服务器IP
-     */
-    private String serverIp;
-
+     -
     /**
      * 开始时间
      */

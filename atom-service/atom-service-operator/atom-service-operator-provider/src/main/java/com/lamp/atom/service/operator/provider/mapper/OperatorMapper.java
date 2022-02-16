@@ -30,9 +30,14 @@ public interface OperatorMapper {
      * @param operatorEntity
      * @return
      */
-    @Update("update operator set " +
-            "delete_flag = ${deleteFlag} " +
-            "where id = #{id}")
+    @Update({"<script>" +
+            "update operator" +
+            "<set>" +
+            "<if test = 'operatorStatus != null'>operator_status = #{operatorStatus},</if>" +
+            "<if test = 'deleteFlag != null'>delete_flag = #{deleteFlag}</if>" +
+            "where id = #{id}" +
+            "</set>" +
+            "</script>"})
     Integer updateOperatorEntity(OperatorEntity operatorEntity);
 
     /**

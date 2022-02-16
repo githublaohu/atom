@@ -15,7 +15,7 @@ public enum OperatorSourceType {
     SYSTEM,
 
     /**
-     * 他人
+     * 第三方
      */
     OTHER
 }

@@ -1,6 +1,5 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
-
 import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.OperatorService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
@@ -91,4 +90,5 @@ public class OperatorController {
             return null;
         }
     }
+
 }

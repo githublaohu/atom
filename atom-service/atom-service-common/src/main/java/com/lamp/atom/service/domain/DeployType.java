@@ -12,12 +12,17 @@ public enum DeployType {
     /**
      * 触发部署
      */
-    TOUCH("触发部署"),
+    TOUCH_DEPLOY("触发部署"),
+
+    /**
+     * 灰度部署
+     */
+    GREY_DEPLOY("灰度部署"),
 
     /**
      * 自动化部署
      */
-    AUTO("自动化部署");
+    AUTO_DEPLOY("自动化部署");
 
     private String name;
 

@@ -1,6 +1,6 @@
 package com.lamp.atom.service.operator.provider.mapper;
 
-import com.lamp.atom.service.operator.entity.TaskEntity;
+import com.lamp.atom.service.operator.entity.CaseEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -9,37 +9,37 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 @Mapper
-public interface TaskMapper {
+public interface CaseMapper {
     /**
-     * 添加任务
-     * @param taskEntity
+     * 添加实例
+     * @param caseEntity
      */
-    @Insert("insert into task" +
-            "(task_name,operator_id,operator_name,server_ip," +
+    @Insert("insert into case" +
+            "(case_name,operator_id,operator_name,server_ip," +
             "start_time,end_time,estimate_start_time,estimate_end_time," +
             "status,sequence,reason_data_num,data_flow_num) " +
-            "values(#{taskName},#{operatorId},#{operatorName},#{serverIp}," +
+            "values(#{caseName},#{operatorId},#{operatorName},#{serverIp}," +
             "#{startTime},#{endTime},#{estimateStartTime},#{estimateEndTime}," +
             "#{status},#{sequence},#{reasonDataNum},#{dataFlowNum})")
-    Integer insertTaskEntity(TaskEntity taskEntity);
+    Integer insertCaseEntity(CaseEntity caseEntity);
 
     /**
-     * 修改任务
-     * @param taskEntity
+     * 修改实例
+     * @param caseEntity
      * @return
      */
-    @Update("update task set " +
+    @Update("update case set " +
             "delete_flag = ${deleteFlag} " +
             "where id = #{id}")
-    Integer updateTaskEntity(TaskEntity taskEntity);
+    Integer updateCaseEntity(CaseEntity caseEntity);
 
     /**
-     * 查询多个任务
-     * @param taskEntity
+     * 查询多个实例
+     * @param caseEntity
      * @return
      */
     @Select({"<script>" +
-            "select * from task " +
+            "select * from case " +
             "<where>" +
             "<if test = 'operatorId != null'>operator_id = #{operatorId} </if>" +
             "<if test = 'startTime != null'>and start_time &gt; #{startTime} </if>" +
@@ -48,14 +48,14 @@ public interface TaskMapper {
             "<if test = 'estimateEndTime != null'>and estimate_end_time &lt; #{estimateEndTime} </if>" +
             "</where>" +
             "</script>"})
-    List<TaskEntity> queryTaskEntitys(TaskEntity taskEntity);
+    List<CaseEntity> queryCaseEntitys(CaseEntity caseEntity);
 
     /**
-     * 查询单个任务
-     * @param taskEntity
+     * 查询单个实例
+     * @param caseEntity
      * @return
      */
-    @Select("select * from task " +
+    @Select("select * from case " +
             "where id = #{id} and delete_flag = 0")
-    TaskEntity queryTaskEntity(TaskEntity taskEntity);
+    CaseEntity queryCaseEntity(CaseEntity caseEntity);
 }

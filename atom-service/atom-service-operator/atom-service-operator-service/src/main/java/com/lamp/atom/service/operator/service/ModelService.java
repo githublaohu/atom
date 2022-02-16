@@ -5,6 +5,14 @@ import com.lamp.atom.service.operator.entity.ModelEntity;
 import java.util.List;
 
 public interface ModelService {
+
+
+    /**
+     * 创建模型
+     * @param modelEntity
+     */
+    Integer createModelEntity(ModelEntity modelEntity);
+
     /**
      * 添加模型
      * @param modelEntity
