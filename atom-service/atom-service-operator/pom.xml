@@ -17,23 +17,24 @@
 		<module>atom-service-operator-common</module>
 		<module>atom-service-operator-provider</module>
 		<module>atom-service-operator-consumers</module>
+		<module>atom-service-operator-sdk</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>atom-service-operator-entity</artifactId>
-				<version>${project.version}</version>
+				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>atom-service-operator-service</artifactId>
-				<version>${project.version}</version>
+				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>atom-service-operator-common</artifactId>
-				<version>${project.version}</version>
+				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
