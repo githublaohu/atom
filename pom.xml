@@ -9,6 +9,7 @@
 	<modules>
 		<module>atom-service</module>
 		<module>atom-space</module>
+        <module>atom-service/atom-service-task</module>
     </modules>
 	<properties>
 		<reversion>0.0.1-SNAPSHOT</reversion>

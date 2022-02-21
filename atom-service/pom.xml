@@ -14,6 +14,7 @@
 		<module>atom-service-common</module>
 		<module>atom-service-operator</module>
 		<module>atom-service-reasoning</module>
+		<module>atom-service-task</module>
 	</modules>
 
 	<properties>
