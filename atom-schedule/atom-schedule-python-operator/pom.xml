@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.lampup</groupId>
+		<artifactId>atom-schedule</artifactId>
+		<version>${reversion}</version>
+	</parent>
+	<artifactId>atom-schedule-python-operator</artifactId>
+	<name>atom-schedule-python-operator</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<kubernetes.client.version>5.5.0</kubernetes.client.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>atom-schedule-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.fabric8</groupId>
+			<artifactId>kubernetes-client</artifactId>
+			<version>${kubernetes.client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.nacos</groupId>
+			<artifactId>nacos-client</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.lampup</groupId>
+			<artifactId>light-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+</project>

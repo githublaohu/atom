@@ -12,6 +12,8 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>atom-service-operator</module>
+		<module>atom-service-reasoning</module>
+		<module>atom-service-recommend</module>
 	</modules>
 
 	<properties>
