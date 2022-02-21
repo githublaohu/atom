@@ -1,0 +1,6 @@
+server:
+  port: 9020
+
+spring:
+  application:
+    name: atom-space-operato-consumer

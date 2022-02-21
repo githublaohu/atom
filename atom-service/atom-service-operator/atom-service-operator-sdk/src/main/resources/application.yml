@@ -1,0 +1,21 @@
+server:
+  port: 9004
+  servlet:
+    context-path: "/lamp/atom/service/sdk"
+
+nacos:
+  config:
+    bootstrap:
+      enable: true
+      logEnable: true
+    server-addr: 127.0.0.1:8848
+    remote-first: true
+    namespace: atom
+    data-id: atom-service-sdk
+    type: yaml
+    auto-refresh: true
+    max-retry: 10
+    config-retry-time: 2333
+    config-long-poll-timeout: 46000
+    enable-remote-sync-config: true
+
