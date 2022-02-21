@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("taskService")
+@Service("caseService")
 public class CaseServiceImpl implements CaseService {
 
     @Autowired

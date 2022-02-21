@@ -25,8 +25,6 @@ public class CaseEntity extends BaseEntity {
     private String operatorName;
 
     /**
-     -
-    /**
      * 开始时间
      */
     private Date startTime;

@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-@RequestMapping("/task")
-@RestController("taskController")
+@RequestMapping("/case")
+@RestController("caseController")
 public class CaseController {
 
     @Autowired
@@ -84,8 +84,7 @@ public class CaseController {
     @PostMapping("/queryCase")
     public CaseEntity queryCase(@RequestBody CaseEntity caseEntity){
         try {
-            CaseEntity caseEntity1 = caseService.queryCaseEntity(caseEntity);
-            return caseEntity1;
+            return caseService.queryCaseEntity(caseEntity);
         } catch (Exception e) {
             log.warn("实例查询失败 {}", e);
             return null;

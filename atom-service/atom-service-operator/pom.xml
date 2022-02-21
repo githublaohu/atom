@@ -17,6 +17,7 @@
 		<module>atom-service-operator-common</module>
 		<module>atom-service-operator-provider</module>
 		<module>atom-service-operator-consumers</module>
+		<module>atom-service-operator-sdk</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
