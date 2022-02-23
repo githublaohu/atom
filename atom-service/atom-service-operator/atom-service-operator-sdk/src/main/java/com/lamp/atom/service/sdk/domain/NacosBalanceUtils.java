@@ -9,25 +9,17 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.operator.consumers.utils;
+package com.lamp.atom.service.sdk.domain;
 
-import com.lamp.decoration.core.result.ResultObject;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Scope;
 
-public enum ResultObjectEnums {
-
-    SUCCESS(200,"success"),
-
-    FAIL(500,"fail"),
-
-    CHECK_PARAMETERS_FAIL(120001, "check parameters fail");
-
-    private ResultObject<String> resultObject;
-
-    ResultObjectEnums(Integer code, String message){
-        this.resultObject = ResultObject.getResultObjectMessgae(code,message);
-    }
-
-    public ResultObject<String> getResultObject(){
-        return this.resultObject;
+@ComponentScan
+public class NacosBalanceUtils {
+    @Bean
+    @Scope(value = "prototype")
+    public IRule loadBalanceRule() {
+        return new NacosRule();
     }
 }
