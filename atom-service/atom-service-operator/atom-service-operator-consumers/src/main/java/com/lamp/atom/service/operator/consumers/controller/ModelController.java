@@ -13,6 +13,7 @@ package com.lamp.atom.service.operator.consumers.controller;
 
 
 import com.lamp.atom.service.operator.entity.ModelEntity;
+import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.ModelService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
@@ -70,6 +71,21 @@ public class ModelController {
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
+    }
+
+    /**
+     * 模糊查询多个模型
+     * @param keyword
+     * @return
+     */
+    @PostMapping("/queryModelsByKeyword")
+    public List<ModelEntity> queryModelsByKeyword(@RequestBody String keyword){
+        try {
+            return modelService.queryModelEntitysByKeyword(keyword);
+        } catch (Exception e) {
+            log.warn("模型查询失败 {}", e);
+            return null;
+        }
     }
 
     /**

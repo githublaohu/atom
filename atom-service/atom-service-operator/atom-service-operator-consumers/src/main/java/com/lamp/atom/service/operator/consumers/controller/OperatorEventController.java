@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RequestMapping("/operatorEvent")
+@RequestMapping("/operator")
 @RestController("operatorEventController")
 public class OperatorEventController {
 

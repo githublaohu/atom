@@ -72,6 +72,21 @@ public class TaskController {
     }
 
     /**
+     * 模糊查询多个任务
+     * @param keyword
+     * @return
+     */
+    @PostMapping("/queryTasksByKeyword")
+    public List<TaskEntity> queryTasksByKeyword(@RequestBody String keyword){
+        try {
+            return taskService.queryTaskEntitysByKeyword(keyword);
+        } catch (Exception e) {
+            log.warn("任务查询失败 {}", e);
+            return null;
+        }
+    }
+
+    /**
      * 查询多个任务
      * @param taskEntity
      * @return

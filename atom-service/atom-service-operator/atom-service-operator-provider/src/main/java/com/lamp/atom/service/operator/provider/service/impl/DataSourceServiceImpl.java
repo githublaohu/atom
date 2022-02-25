@@ -38,6 +38,11 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     @Override
+    public List<DataSourceEntity> queryDataSourceEntitysByKeyword(String keyword) {
+        return dataSourceMapper.queryDataSourceEntitysByKeyword(keyword);
+    }
+
+    @Override
     public List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity) {
         return dataSourceMapper.queryDataSourceEntitys(dataSourceEntity);
     }

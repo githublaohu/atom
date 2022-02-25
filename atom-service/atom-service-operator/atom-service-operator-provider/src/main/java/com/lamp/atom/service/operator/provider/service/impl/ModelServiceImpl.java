@@ -28,8 +28,18 @@ public class ModelServiceImpl implements ModelService {
     private ModelMapper modelMapper;
 
     @Override
+    public Integer createModelEntity(ModelEntity modelEntity) {
+        return null;
+    }
+
+    @Override
     public Integer insertModelEntity(ModelEntity modelEntity) {
         return modelMapper.insertModelEntity(modelEntity);
+    }
+
+    @Override
+    public List<ModelEntity> queryModelEntitysByKeyword(String keyword) {
+        return modelMapper.queryModelEntitysByKeyword(keyword);
     }
 
     @Override

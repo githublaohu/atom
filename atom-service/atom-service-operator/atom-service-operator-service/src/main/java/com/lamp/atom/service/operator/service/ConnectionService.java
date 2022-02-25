@@ -30,6 +30,13 @@ public interface ConnectionService {
     Integer updateConnectionEntity(ConnectionEntity connectionEntity);
 
     /**
+     * 模糊查询多个连接
+     * @param keyword
+     * @return
+     */
+    List<ConnectionEntity> queryConnectionEntitysByKeyword(String keyword);
+
+    /**
      * 查询多个连接
      * @param connectionEntity
      * @return

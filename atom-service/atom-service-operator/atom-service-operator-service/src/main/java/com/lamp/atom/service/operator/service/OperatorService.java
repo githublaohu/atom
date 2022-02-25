@@ -30,6 +30,13 @@ public interface OperatorService {
     Integer updateOperatorEntity(OperatorEntity operatorEntity);
 
     /**
+     * 模糊查询多个算子
+     * @param keyword
+     * @return
+     */
+    List<OperatorEntity> queryOperatorEntitysByKeyword(String keyword);
+
+    /**
      * 查询多个算子
      * @param operatorEntity
      * @return

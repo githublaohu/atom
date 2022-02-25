@@ -12,6 +12,7 @@
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.ConnectionEntity;
+import com.lamp.atom.service.operator.entity.DataSourceEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -43,6 +44,22 @@ public interface ConnectionMapper {
             "delete_flag = ${deleteFlag} " +
             "where id = #{id}")
     Integer updateConnectionEntity(ConnectionEntity connectionEntity);
+
+    /**
+     * 模糊查询多个连接
+     * @param keyword
+     * @return
+     */
+    @Select({"select * from connection " +
+            "where" +
+            "id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+            "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
+            "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
+            "or operation_type like #{keyword} or source_type like #{keyword} or source_name like #{keyword} " +
+            "or source_addr like #{keyword} or source_account like #{keyword} or source_password like #{keyword} " +
+            "or source_space like #{keyword} or mode like #{keyword} or colony_type like #{keyword} " +
+            "or source_conf like #{keyword} or source_route like #{keyword} or source_size like #{keyword} or source_count like #{keyword}"})
+    List<ConnectionEntity> queryConnectionEntitysByKeyword(String keyword);
 
     /**
      * 查询多个连接

@@ -109,6 +109,11 @@ public class OperatorEntity extends BaseEntity {
     private String experimentAlias;
 
     /**
+     * 细化级别
+     */
+    private Integer level = 3;
+
+    /**
      * 资源账户id
      */
     @NonNull

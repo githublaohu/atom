@@ -30,6 +30,13 @@ public interface DataSourceService {
     Integer updateDataSourceEntity(DataSourceEntity dataSourceEntity);
 
     /**
+     * 模糊查询多个数据源
+     * @param keyword
+     * @return
+     */
+    List<DataSourceEntity> queryDataSourceEntitysByKeyword(String keyword);
+
+    /**
      * 查询多个数据源
      * @param dataSourceEntity
      * @return

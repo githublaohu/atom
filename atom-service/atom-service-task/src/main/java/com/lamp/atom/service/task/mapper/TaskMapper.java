@@ -41,6 +41,18 @@ public interface TaskMapper {
     Integer updateTaskEntity(TaskEntity taskEntity);
 
     /**
+     * 模糊查询多个任务
+     * @param keyword
+     * @return
+     */
+    @Select({"select * from model " +
+            "where" +
+            "id like #{keyword} or task_name like #{keyword} or explanation like #{keyword} " +
+            "or start_time like #{keyword} or end_time like #{keyword} or scene_id like #{keyword} " +
+            "or operator_id like #{keyword} or task_lifecycle like #{keyword} or task_status like #{keyword}"})
+    List<TaskEntity> queryTaskEntitysByKeyword(String keyword);
+
+    /**
      * 查询多个任务
      * @param taskEntity
      * @return

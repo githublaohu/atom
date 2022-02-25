@@ -38,6 +38,11 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     @Override
+    public List<OperatorEntity> queryOperatorEntitysByKeyword(String keyword) {
+        return operatorMapper.queryOperatorEntitysByKeyword(keyword);
+    }
+
+    @Override
     public List<OperatorEntity> queryOperatorEntitys(OperatorEntity operatorEntity) {
         return operatorMapper.queryOperatorEntitys(operatorEntity);
     }

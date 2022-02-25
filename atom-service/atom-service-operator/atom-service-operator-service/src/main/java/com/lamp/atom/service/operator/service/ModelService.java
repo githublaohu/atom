@@ -17,7 +17,6 @@ import java.util.List;
 
 public interface ModelService {
 
-
     /**
      * 创建模型
      * @param modelEntity
@@ -29,6 +28,13 @@ public interface ModelService {
      * @param modelEntity
      */
     Integer insertModelEntity(ModelEntity modelEntity);
+
+    /**
+     * 模糊查询多个模型
+     * @param keyword
+     * @return
+     */
+    List<ModelEntity> queryModelEntitysByKeyword(String keyword);
 
     /**
      * 修改模型

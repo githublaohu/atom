@@ -38,6 +38,11 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
+    public List<CaseEntity> queryCaseEntitysByKeyword(String keyword) {
+        return caseMapper.queryCaseEntitysByKeyword(keyword);
+    }
+
+    @Override
     public List<CaseEntity> queryCaseEntitys(CaseEntity caseEntity) {
         return caseMapper.queryCaseEntitys(caseEntity);
     }

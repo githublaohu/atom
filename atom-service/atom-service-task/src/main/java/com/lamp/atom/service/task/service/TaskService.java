@@ -30,6 +30,13 @@ public interface TaskService {
     Integer updateTaskEntity(TaskEntity taskEntity);
 
     /**
+     * 模糊查询多个任务
+     * @param keyword
+     * @return
+     */
+    List<TaskEntity> queryTaskEntitysByKeyword(String keyword);
+
+    /**
      * 查询多个任务
      * @param taskEntity
      * @return

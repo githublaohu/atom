@@ -38,6 +38,11 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
+    public List<ConnectionEntity> queryConnectionEntitysByKeyword(String keyword) {
+        return connectionMapper.queryConnectionEntitysByKeyword(keyword);
+    }
+
+    @Override
     public List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity) {
         return connectionMapper.queryConnectionEntitys(connectionEntity);
     }

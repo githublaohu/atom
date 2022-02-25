@@ -13,6 +13,7 @@ package com.lamp.atom.service.operator.consumers.controller;
 
 
 import com.lamp.atom.service.operator.entity.DataSourceEntity;
+import com.lamp.atom.service.operator.entity.ModelEntity;
 import com.lamp.atom.service.operator.service.DataSourceService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
@@ -70,6 +71,21 @@ public class DataSourceController {
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
+    }
+
+    /**
+     * 模糊查询多个数据源
+     * @param keyword
+     * @return
+     */
+    @PostMapping("/queryDataSourcesByKeyword")
+    public List<DataSourceEntity> queryDataSourcesByKeyword(@RequestBody String keyword){
+        try {
+            return dataSourceService.queryDataSourceEntitysByKeyword(keyword);
+        } catch (Exception e) {
+            log.warn("数据源查询失败 {}", e);
+            return null;
+        }
     }
 
     /**

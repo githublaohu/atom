@@ -30,6 +30,13 @@ public interface CaseService {
     Integer updateCaseEntity(CaseEntity caseEntity);
 
     /**
+     * 模糊查询多个实例
+     * @param keyword
+     * @return
+     */
+    List<CaseEntity> queryCaseEntitysByKeyword(String keyword);
+
+    /**
      * 查询多个任务
      * @param caseEntity
      * @return

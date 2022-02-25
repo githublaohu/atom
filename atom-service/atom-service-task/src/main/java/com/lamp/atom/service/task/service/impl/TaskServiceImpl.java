@@ -38,6 +38,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskEntity> queryTaskEntitysByKeyword(String keyword) {
+        return taskMapper.queryTaskEntitysByKeyword(keyword);
+    }
+
+    @Override
     public List<TaskEntity> queryTaskEntitys(TaskEntity taskEntity) {
         return taskMapper.queryTaskEntitys(taskEntity);
     }

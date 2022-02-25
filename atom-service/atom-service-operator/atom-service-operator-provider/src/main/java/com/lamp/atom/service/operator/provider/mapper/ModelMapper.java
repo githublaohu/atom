@@ -12,6 +12,7 @@
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.ModelEntity;
+import com.lamp.atom.service.operator.entity.OperatorEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -43,6 +44,23 @@ public interface ModelMapper {
             "delete_flag = ${deleteFlag} " +
             "where id = #{id}")
     Integer updateModelEntity(ModelEntity modelEntity);
+
+    /**
+     * 模糊查询多个模型
+     * @param keyword
+     * @return
+     */
+    @Select({"select * from model " +
+            "where" +
+            "id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+            "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
+            "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
+            "or model_create_type like #{keyword} or model_name like #{keyword} or model_version like #{keyword} " +
+            "or model_score like #{keyword} or model_type like #{keyword} or model_technology_type like #{keyword} " +
+            "or model_address like #{keyword} or model_status like #{keyword} or connect_id like #{keyword} " +
+            "or connect_status like #{keyword} or operator_id like #{keyword} or operator_result like #{keyword} " +
+            "or resource_type like #{keyword} or resource_value like #{keyword} or resource_size like #{keyword} or produce_way like #{keyword}"})
+    List<ModelEntity> queryModelEntitysByKeyword(String keyword);
 
     /**
      * 查询多个模型
