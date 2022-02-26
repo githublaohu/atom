@@ -1,3 +1,14 @@
+/*
+ *Copyright (c) [Year] [name of copyright holder]
+ *[Software Name] is licensed under Mulan PubL v2.
+ *You can use this software according to the terms and conditions of the Mulan PubL v2.
+ *You may obtain a copy of Mulan PubL v2 at:
+ *         http://license.coscl.org.cn/MulanPubL-2.0
+ *THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *See the Mulan PubL v2 for more details.
+ */
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.OperatorEntity;
@@ -39,6 +50,26 @@ public interface OperatorMapper {
             "</set>" +
             "</script>"})
     Integer updateOperatorEntity(OperatorEntity operatorEntity);
+
+    /**
+     * 模糊查询多个算子
+     * @param keyword
+     * @return
+     */
+    @Select({"select * from operator " +
+            "where" +
+            "id like #{keyword} or operator_template_id like #{keyword} or operator_name like #{keyword} or operator_source like #{keyword} " +
+            "or operator_source_id like #{keyword} or operator_runtime_type like #{keyword} or operator_model like #{keyword} " +
+            "or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+            "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
+            "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
+            "or resources_account_id like #{keyword} or code_mode like #{keyword} or code_address like #{keyword} " +
+            "or code_version like #{keyword} or module_name like #{keyword} or execute_object like #{keyword} " +
+            "or environment_conf like #{keyword} or operator_conf like #{keyword} or model_conf like #{keyword} " +
+            "or cpu like #{keyword} or gpu like #{keyword} or men like #{keyword} " +
+            "or display_card like #{keyword} or operator_epoch like #{keyword} or operator_plan_runtimes like #{keyword} " +
+            "or operator_status like #{keyword} or operator_priority like #{keyword} or deploy_type like #{keyword}"})
+    List<OperatorEntity> queryOperatorEntitysByKeyword(String keyword);
 
     /**
      * 查询多个算子
