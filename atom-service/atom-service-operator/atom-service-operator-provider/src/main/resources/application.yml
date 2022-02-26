@@ -1,3 +1,6 @@
+server:
+  port: 9001
+
 spring:
   datasource:
     name: lamp-atom

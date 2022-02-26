@@ -1,6 +1,18 @@
+/*
+ *Copyright (c) [Year] [name of copyright holder]
+ *[Software Name] is licensed under Mulan PubL v2.
+ *You can use this software according to the terms and conditions of the Mulan PubL v2.
+ *You may obtain a copy of Mulan PubL v2 at:
+ *         http://license.coscl.org.cn/MulanPubL-2.0
+ *THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *See the Mulan PubL v2 for more details.
+ */
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.CaseEntity;
+import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -32,6 +44,19 @@ public interface CaseMapper {
             "delete_flag = ${deleteFlag} " +
             "where id = #{id}")
     Integer updateCaseEntity(CaseEntity caseEntity);
+
+    /**
+     * 模糊查询多个实例
+     * @param keyword
+     * @return
+     */
+    @Select({"select * from connection " +
+            "where" +
+            "id like #{keyword} or case_name like #{keyword} or operator_id like #{keyword} or operator_name like #{keyword} " +
+            "or server_ip like #{keyword} or start_time like #{keyword} or end_time like #{keyword} " +
+            "or estimate_start_time like #{keyword} or estimate_end_time like #{keyword} or status like #{keyword} " +
+            "or sequence like #{keyword} or reason_data_num like #{keyword} or data_flow_num like #{keyword}"})
+    List<CaseEntity> queryCaseEntitysByKeyword(String keyword);
 
     /**
      * 查询多个实例

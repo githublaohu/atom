@@ -1,6 +1,19 @@
+/*
+ *Copyright (c) [Year] [name of copyright holder]
+ *[Software Name] is licensed under Mulan PubL v2.
+ *You can use this software according to the terms and conditions of the Mulan PubL v2.
+ *You may obtain a copy of Mulan PubL v2 at:
+ *         http://license.coscl.org.cn/MulanPubL-2.0
+ *THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *See the Mulan PubL v2 for more details.
+ */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import com.lamp.atom.service.operator.common.OperatorCreateTo;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
+import com.lamp.atom.service.operator.service.AvaliablePortService;
 import com.lamp.atom.service.operator.service.OperatorService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
@@ -12,8 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @RequestMapping("/operator")
@@ -23,6 +35,9 @@ public class OperatorController {
     @Autowired
     @Qualifier("operatorService")
     private OperatorService operatorService;
+    @Autowired
+    @Qualifier("avaliablePortService")
+    private AvaliablePortService avaliablePortService;
 
     /**
      * 添加算子
@@ -61,6 +76,21 @@ public class OperatorController {
     }
 
     /**
+     * 模糊查询多个算子
+     * @param keyword
+     * @return
+     */
+    @PostMapping("/queryOperatorsByKeyword")
+    public List<OperatorEntity> queryOperatorsByKeyword(@RequestBody String keyword){
+        try {
+            return operatorService.queryOperatorEntitysByKeyword(keyword);
+        } catch (Exception e) {
+            log.warn("算子查询失败 {}", e);
+            return null;
+        }
+    }
+
+    /**
      * 查询多个算子
      * @param operatorEntity
      * @return
@@ -81,14 +111,22 @@ public class OperatorController {
      * @return
      */
     @PostMapping("/queryOperator")
-    public OperatorEntity queryOperator(@RequestBody OperatorEntity operatorEntity){
+    public OperatorCreateTo queryOperator(@RequestBody OperatorEntity operatorEntity){
         try {
             OperatorEntity operatorEntity1 = operatorService.queryOperatorEntity(operatorEntity);
-            return operatorEntity1;
+            //查出算子的数据
+            OperatorCreateTo operatorCreateTo = new OperatorCreateTo();
+
+
+
+            operatorCreateTo.setOperatorTo(operatorEntity1);
+
+
+
+            return operatorCreateTo;
         } catch (Exception e) {
             log.warn("算子查询失败 {}", e);
             return null;
         }
     }
-
 }
