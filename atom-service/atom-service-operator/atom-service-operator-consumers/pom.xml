@@ -32,6 +32,11 @@
 			<artifactId>atom-service-operator-common</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>atom-schedule-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>dubbo-springmvc</artifactId>
 			<type>pom</type>

@@ -8,12 +8,15 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.Shedule;
+import com.lamp.atom.schedule.api.config.OperatorShedeleRpcConfig;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.SheduleStrategyType;
@@ -32,11 +35,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OperatorRpcSchedule implements AtomOperatorShedule {
 
-	private static String ATOM_RUNTIME_PYTHON_SERVICE_NAME = "atom-runtime-python-service";
+	private static String ATOM_RUNTIME_PYTHON_SERVICE_NAME = "atom-runtime-python-service-standalone";
 
 	private static String ATOM_RUNTIME_OPERATOR_NAME = "atom-runtime-operator-";
 
 	private NamingService namingService;
+
+	private OperatorShedeleRpcConfig operatorShedeleRpcConfig;
 
 	/**
 	 * 重试是否需要
@@ -45,9 +50,12 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 	private ScheduledThreadPoolExecutor retryExecutor = new ScheduledThreadPoolExecutor(4);
 
 	private Map<Instance, AtomOperatorRPCServier> runtimeClient = new ConcurrentHashMap<>();
-
-	public void initialization() throws Exception {
+	
+	public OperatorRpcSchedule(OperatorShedeleRpcConfig operatorShedeleRpcConfig) throws NacosException {
+		this.operatorShedeleRpcConfig = operatorShedeleRpcConfig;
 		Properties properties = new Properties();
+		JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(this.operatorShedeleRpcConfig));
+		properties.putAll(jsonObject);
 		namingService = NamingFactory.createNamingService(properties);
 	}
 
@@ -66,10 +74,10 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 		List<Instance> instanceList = null;
 		Deploy deploy = shedule.getDeploy();
 		// 指定部署实例
-		if (Objects.nonNull(deploy.getInstancesList())) {
+		if (Objects.nonNull(deploy) && Objects.nonNull(deploy.getInstancesList())) {
 			instanceList = new ArrayList<Instance>(deploy.getInstancesList().size());
-			
-			for(AtomInstances atomInstances : deploy.getInstancesList()) {
+
+			for (AtomInstances atomInstances : deploy.getInstancesList()) {
 				Instance instance = new Instance();
 				instance.setIp(atomInstances.getIp());
 				instance.setPort(atomInstances.getPort());
@@ -96,12 +104,13 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 	@Override
 	public void createOperators(Shedule shedule) {
 		try {
-			
+
 			List<Instance> instanceList = this.getInstance(shedule);
 			// 创建对象
+			CreateOperator object = (CreateOperator) shedule.getObject();
 			for (Instance instance : instanceList) {
-				CreateOperator object = (CreateOperator) shedule.getObject();
-				this.createClient(instance).createOperators(object);
+				this.createClient(instance)
+					.createOperators(object);
 			}
 			// 发送请求
 

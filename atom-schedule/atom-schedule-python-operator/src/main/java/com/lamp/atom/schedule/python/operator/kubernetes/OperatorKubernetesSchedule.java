@@ -25,7 +25,8 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 
 	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
 
-	public void initialization() throws Exception {
+	public  OperatorKubernetesSchedule(OperatorShedeleKubernetesConfig operatorKubernetesConfig) throws Exception {
+		this.operatorKubernetesConfig = operatorKubernetesConfig;
 		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
 			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());
 		} else if (Objects.nonNull(operatorKubernetesConfig.getConfigYaml())) {
@@ -41,7 +42,6 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
 		client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getDeployment());
-
 	}
 
 	@Override

@@ -39,6 +39,10 @@ class RegisterService():
         
 
     def __get_net_address__(self):
+        if self.atom_config.node_ip != None:
+            self.net_address = self.atom_config.node_ip
+            return
+
         """
         实现的是方案一  
             这种方案是完全可靠
@@ -64,8 +68,8 @@ class RegisterService():
             那么服务名是否可变
             如果不可变是否加入groupid 用于区别
         """
-        self.nacso_client.add_naming_instance("atom-runtime-python-service", self.net_address,  self.atom_config.rpc_controller_port)
-        self.service_instances = self.nacso_client.list_naming_instance("atom-runtime-python-service" , healthy_only = True)
+        self.nacso_client.add_naming_instance("atom-runtime-python-service-"+self.atom_config.runtime_model, self.net_address,  self.atom_config.rpc_controller_port)
+        self.service_instances = self.nacso_client.list_naming_instance("atom-service" , healthy_only = True)
         self.__heartbeat__()
 
     def __heartbeat__(self):

@@ -1,7 +1,6 @@
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,11 @@ import io.fabric8.kubernetes.api.model.batch.v1.JobFluent.MetadataNested;
 import io.fabric8.kubernetes.api.model.batch.v1.JobFluent.SpecNested;
 import lombok.Setter;
 
+/**
+ * 训练，数据算子
+ * @author laohu
+ *
+ */
 public class SessionOperatorKubernetesBuilder {
 
 	@Setter
@@ -48,7 +52,7 @@ public class SessionOperatorKubernetesBuilder {
 				// 标签，需要几个
 				// 第一个 算子的名字+序列
 				// 的哥
-				.withLabels(Collections.singletonMap("label1", "maximum-length-of-63-characters"));
+				.withLabels(shedule.getLabels());
 		metadata.endMetadata();
 	}
 

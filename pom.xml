@@ -11,7 +11,8 @@
 		<module>atom-service</module>
 		<module>atom-sdk</module>
 		<module>atom-schedule</module>
-	</modules>
+		<module>atom-space</module>
+    </modules>
 	<properties>
 		<reversion>0.0.1-SNAPSHOT</reversion>
 		<!-- Test libs -->

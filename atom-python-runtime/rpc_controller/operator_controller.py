@@ -26,10 +26,10 @@ class OperatorController():
 
     def __init__(self,operator_service:OperatorService,app:Flask):
         self.operator_service = operator_service
-        app.add_url_rule('/operator/create_operators', "/operator/create_operators",self.create_operators)
-        app.add_url_rule('/operator/start_operators','/operator/start_operators',self.start_operators)
-        app.add_url_rule('/operator/suspend_operators','/operator/suspend_operators',self.suspend_operators)
-        app.add_url_rule('/operator/uninstall_operators','/operator/uninstall_operators',self.uninstall_operators)
+        app.add_url_rule('/operator/create_operators', "/operator/create_operators",self.create_operators,methods=["POST"])
+        app.add_url_rule('/operator/start_operators','/operator/start_operators',self.start_operators,methods=["POST"])
+        app.add_url_rule('/operator/suspend_operators','/operator/suspend_operators',self.suspend_operators,methods=["POST"])
+        app.add_url_rule('/operator/uninstall_operators','/operator/uninstall_operators',self.uninstall_operators,methods=["POST"])
 
     def create_operators(self):
         data = json.loads(request.get_data(as_text=True))

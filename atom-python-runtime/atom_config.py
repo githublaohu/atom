@@ -14,13 +14,15 @@ from asyncio.log import logger
 import os
 
 import json
+from typing_extensions import runtime
 
 import nacos
 import yaml
 from utils.environment import atrom_catalogue,get_env
 
 class AtomConfig():
-    
+    runtime_model:str = "standalone"
+    node_ip:str = "127.0.0.1"
     nacos_address:str
     nacos_namespace:str
     config_name:str
@@ -40,6 +42,12 @@ class  AtomConfigServier():
         self.__check_()
     
     def __docker_model(self):
+            node_ip = get_env("node_ip")
+            if node_ip  != None:
+                self.atom_config.node_ip = node_ip
+            runtime_model = get_env("runtime_model")
+            if runtime_model != None:
+                self.atom_config.runtime_model = runtime_model
             nacos_config = get_env("nacos_config")
             if nacos_config == None:
                 return

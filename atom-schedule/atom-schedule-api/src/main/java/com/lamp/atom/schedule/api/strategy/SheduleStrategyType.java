@@ -20,11 +20,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SheduleStrategyType {
 	
-	DEFAULT_RONDOM("default","default","total quantity"),
+	DEFAULT_RONDOM("default","default","rondom"),
 	DEFAULT_TOTAL_QUANTITY("default","default","total quantity"),
 	DEFAULT_LABEL("default","default","label"),
 	DEFAULT_REPLACE("default","default","replace"),
-	DEFAULT_BACH("default","default","replace"),
+	DEFAULT_BATCH("default","default","batch"),
 	KUBERNETES_SIMPLE("kubernetes","simple",""),
 	KUBERNETES_SIMPLE_NODE_SELECTOR("kubernetes","simple","nodeSelector"),
 	KUBERNETES_SIMPLE_NODE_AFFINITY("kubernetes","simple","nodeAffinity"),

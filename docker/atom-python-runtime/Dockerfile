@@ -17,6 +17,6 @@ FROM python:${PY_VER}
 RUN apt-get install -y git\
     && pip install atom  \
     &&  pip3 install sklearn -i https://mirrors.aliyun.com/pypi/simple/
-    && mkdir -p ~/atom/{}
+    && mkdir -p ~/atom/{download_catalogue,code_directory,model_directory,public}
 
 CMD atom 

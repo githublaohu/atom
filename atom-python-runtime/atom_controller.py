@@ -9,8 +9,10 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
+import json
 import signal
 import logging
+
 from service.logging_service import LoggingServcie
 from transfer_object.operator.operator_create_to import OperatorCreateTo
 from utils.environment import get_env
@@ -49,10 +51,10 @@ class AtomController():
         self.__init_config__()
         self.__init_logging__()
         self.__init_code__()
-        self.__init_register_service__()
         self.__init_source_servcie__()
         self.__init_connect_service__()
         self.__init_rpc_servcie__()
+        self.__init_register_service__()
         self.__init_operator_service__()
         # 注意 rpc_controller 会启动http servier
         self.__init_rpc_controller__()
@@ -69,7 +71,7 @@ class AtomController():
         self.code_service = CodeService(self.atom_config)
 
     def __init_register_service__(self):
-        #self.register_service = RegisterService(self.atom_config)
+        self.register_service = RegisterService(self.atom_config)
         pass
         
 
@@ -109,7 +111,11 @@ class AtomController():
         if operator_id != None:
             operator_create_to = self.rpc_operator_servcie.query_operator_by_id(operator_id)
             self.operator_service.create_operators(operator_create_to)
-            pass
+        else:
+            operator_create_string = get_env("operator-data")
+            if operator_create_string != None:
+                operator_create_to = OperatorCreateTo(json.loads(operator_create_string))
+                self.operator_service.create_operators(operator_create_to)
 
     def local_load_remote_operator(self , operator_id):
         operator_create_to = self.rpc_operator_servcie.query_operator_by_id(operator_id)

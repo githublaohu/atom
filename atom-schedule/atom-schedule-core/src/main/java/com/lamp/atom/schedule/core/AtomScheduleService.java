@@ -3,6 +3,7 @@ package com.lamp.atom.schedule.core;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Shedule;
+import com.lamp.atom.schedule.api.config.OperatorSheduleConfig;
 import com.lamp.atom.schedule.python.operator.kubernetes.OperatorKubernetesSchedule;
 import com.lamp.atom.schedule.python.operator.rpc.OperatorRpcSchedule;
 
@@ -18,8 +19,12 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	
 	private OperatorRpcSchedule rpcSchedule;
 	
-	public AtomScheduleService() {
-		
+	private OperatorSheduleConfig operatorSheduleConfig;
+	
+	public AtomScheduleService(OperatorSheduleConfig operatorSheduleConfig) throws Exception {
+		this.operatorSheduleConfig = operatorSheduleConfig;
+		kubernetesSchedule = new OperatorKubernetesSchedule(this.operatorSheduleConfig.getOperatorKubernetesConfig());
+		rpcSchedule = new OperatorRpcSchedule(this.operatorSheduleConfig.getOperatorShedeleRpcConfig());
 	}
 	
 	
