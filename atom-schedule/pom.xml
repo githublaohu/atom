@@ -8,10 +8,11 @@
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom</artifactId>
 		<version>${reversion}</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>atom-schedule</artifactId>
 	<packaging>pom</packaging>
-	<name>atom-schedule</name>
+	<name>${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<modules>
 		<module>atom-schedule-python-operator</module>

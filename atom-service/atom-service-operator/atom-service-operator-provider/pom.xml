@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom-service-operator</artifactId>
-		<version>${reversion}</version>
+		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>atom-service-operator-provider</artifactId>
@@ -36,7 +36,6 @@
 			<artifactId>dubbo-provider</artifactId>
 			<type>pom</type>
 		</dependency>
-
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>shardingsphere-dependent</artifactId>
@@ -61,6 +60,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>2.1.7.RELEASE</version>
 				<executions>
 					<execution>
 						<goals>

@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("operatorEventController")
 public class OperatorEventController {
 
-    @Autowired
-    @Qualifier("operatorService")
+    @Reference
     private OperatorService operatorService;
     
     private AtomScheduleService atomScheduleService;

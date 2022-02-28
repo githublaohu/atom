@@ -14,8 +14,6 @@ package com.lamp.atom.service.sdk.domain;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
-import com.alibaba.nacos.api.naming.listener.Event;
-import com.alibaba.nacos.api.naming.listener.EventListener;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.service.sdk.sdk.AtomReasonService;
 import com.lamp.light.Light;
@@ -33,12 +31,11 @@ public class AtomService {
 
     private Map<Long, List<Instance>> sceneIdByInstances = new ConcurrentHashMap<>();
 
-    public  AtomService(AtomConfig atomConfig){
+    public AtomService(AtomConfig atomConfig) {
         this.atomConfig = atomConfig;
     }
 
-
-    public  void init() throws Exception {
+    public void init() throws Exception {
         this.namingService = NamingFactory.createNamingService(this.atomConfig.getNacosAddr());
     }
 
@@ -52,14 +49,13 @@ public class AtomService {
         List<Instance> instanceList = this.sceneIdByInstances.get(sceneId);
         if (instanceList == null) {
             instanceList = this.namingService.getAllInstances(atomConfig.getNacosNamespace());
-            this.sceneIdByInstances.put(sceneId,instanceList);
-            this.namingService.subscribe(atomConfig.getNacosNamespace(),new EventListener(){
-
+            this.sceneIdByInstances.put(sceneId, instanceList);
+            /*this.namingService.subscribe(atomConfig.getNacosNamespace(), new EventListener() {
                 @Override
                 public void onEvent(Event event) {
 
                 }
-            });
+            });*/
         }
         //负载均衡
         ThreadLocalRandom.current().nextInt();

@@ -14,14 +14,14 @@ package com.lamp.atom.service.operator.provider.service.impl;
 import com.lamp.atom.service.operator.entity.ModelEntity;
 import com.lamp.atom.service.operator.provider.mapper.ModelMapper;
 import com.lamp.atom.service.operator.service.ModelService;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 @Transactional
-@Service("modelService")
 public class ModelServiceImpl implements ModelService {
 
     @Autowired
