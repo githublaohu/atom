@@ -11,14 +11,14 @@
  */
 package com.lamp.atom.service.operator.provider.mapper;
 
-import com.lamp.atom.service.operator.entity.CaseEntity;
-import com.lamp.atom.service.operator.entity.ConnectionEntity;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import java.util.List;
+import com.lamp.atom.service.operator.entity.CaseEntity;
 
 @Mapper
 public interface CaseMapper {

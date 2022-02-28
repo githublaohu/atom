@@ -12,6 +12,9 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
 import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
+import com.lamp.atom.service.operator.entity.ServiceInfo;
+import com.lamp.atom.service.operator.service.ServiceInfoService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,11 +27,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServiceController {
 
     @Autowired
-    PortCreatingFunction portCreatingFunction;
+    private PortCreatingFunction portCreatingFunction;
+    
+    private ServiceInfoService serviceInfoService;
 
     @RequestMapping("/getServicePort")
     public Integer getServicePort(@RequestBody String ip) {
         return portCreatingFunction.getPort(ip);
+    }
+    
+    @RequestMapping("/createRuntime")
+    public Integer createRuntime(ServiceInfo serviceInfo) {
+    	// 查询服务状态
+    	
+    	// 如果服务在运行中，那么退出
+    	
+    	// 如果是停止，那么从新创建一个
+    	
+    	// 如果是等待运行，
+    	return 0;
+    }
+    
+    @RequestMapping("/dropRuntime")
+    public Integer dropRuntime() {
+    	
+    	return 0;
     }
 
 }
