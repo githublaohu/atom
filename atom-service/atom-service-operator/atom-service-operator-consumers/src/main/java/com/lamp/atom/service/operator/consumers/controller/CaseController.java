@@ -13,13 +13,11 @@ package com.lamp.atom.service.operator.consumers.controller;
 
 
 import com.lamp.atom.service.operator.entity.CaseEntity;
-import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import com.lamp.atom.service.operator.service.CaseService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +31,7 @@ import java.util.Objects;
 @RestController("caseController")
 public class CaseController {
 
-    @Autowired
-    @Qualifier("caseService")
+    @Reference
     private CaseService caseService;
 
     /**

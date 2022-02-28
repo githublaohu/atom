@@ -18,6 +18,7 @@ import com.lamp.atom.service.operator.service.OperatorService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,11 +33,9 @@ import java.util.*;
 @RestController("operatorController")
 public class OperatorController {
 
-    @Autowired
-    @Qualifier("operatorService")
+    @Reference
     private OperatorService operatorService;
-    @Autowired
-    @Qualifier("avaliablePortService")
+    @Reference
     private AvaliablePortService avaliablePortService;
 
     /**
