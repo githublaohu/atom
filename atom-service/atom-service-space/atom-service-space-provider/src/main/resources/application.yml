@@ -1,19 +1,11 @@
-server:
-  port: 9000
-  servlet:
-    context-path: "/lamp/atom/space/operator/"
-
 spring:
-  application:
-    name: atom-space-operato-consumer
   datasource:
-    name: lamp
-    url: jdbc:mysql://120.78.148.188:3306/atom?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    name: lamp-atom
+    url: jdbc:mysql://120.78.148.188:3306/vaast?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true
     username: lampup
     password: Lampup@123
     # using druid data source
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
     maxActive: 20
     initialSize: 1
     maxWait: 60000
@@ -27,7 +19,29 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
     # encrypt password
-    filters: config
+    filters: config,stat,slf4j
+
+dubbo:
+  scan:
+    base-packages: com.lamp.atom.service.space.provider.service.impl
+  application:
+    name: lamp-atom-service-operator-space
+    owner: dome
+    logger: slf4j
+
+  protocol:
+    name: dubbo
+    port: 19002
+    accesslog: true
+
+  consume:
+    timeout: 30000
+    retries: 0
+
+  registry:
+    address: N/A
+    register: true
+    subscribe: true
 
 mybatis:
   checkConfig-location : false

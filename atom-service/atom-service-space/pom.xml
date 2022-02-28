@@ -4,24 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>atom</artifactId>
+        <artifactId>atom-service</artifactId>
         <groupId>cn.lampup</groupId>
-        <version>${reversion}</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>0.0.1-SNAPSHOT</version>
+<!--        <relativePath>../pom.xml</relativePath>-->
     </parent>
 
-    <artifactId>atom-space</artifactId>
+    <artifactId>atom-service-space</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>atom-space-common</module>
-        <module>atom-space-consumers</module>
-        <module>atom-space-entity</module>
-        <module>atom-space-provider</module>
-        <module>atom-space-service</module>
+        <module>atom-service-space-common</module>
+        <module>atom-service-space-consumers</module>
+        <module>atom-service-space-entity</module>
+        <module>atom-service-space-provider</module>
+        <module>atom-service-space-service</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+        <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -63,6 +63,11 @@
             <version>1.18.8</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.38.Final</version>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>
@@ -78,10 +83,6 @@
                         <testIncludes>
                             <testInclude>none</testInclude>
                         </testIncludes>
-                        <!-- <annotationProcessorPaths> <path> <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId> <version>${mapstruct.version}</version>
-                            </path> <path> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version> </path> </annotationProcessorPaths> -->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -99,21 +100,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jdeps-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>jdkinternals</goal>
-                                <goal>test-jdkinternals</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.2.1</version>
                     <configuration>
                         <attach>true</attach>
                     </configuration>
@@ -139,14 +127,6 @@
                             <include>**/*Test*.java</include>
                         </includes>
                         <excludes />
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
-                    <configuration>
-                        <executable>true</executable>
                     </configuration>
                 </plugin>
             </plugins>

@@ -6,11 +6,11 @@
         <artifactId>atom-space</artifactId>
         <groupId>cn.lampup</groupId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>atom-space-consumers</artifactId>
+    <artifactId>atom-service-space-provider</artifactId>
 
     <dependencies>
         <dependency>
@@ -21,28 +21,41 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>atom-space-service</artifactId>
+            <artifactId>atom-service-space-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>atom-space-provider</artifactId>
+            <artifactId>atom-service-space-entity</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>atom-space-common</artifactId>
+            <artifactId>atom-service-space-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>io.github.githublaohu</groupId>
-            <artifactId>dubbo-springmvc</artifactId>
+            <artifactId>dubbo-provider</artifactId>
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>cn.lampup</groupId>
-            <artifactId>decoration-core</artifactId>
-            <version>0.0.5</version>
+            <groupId>io.github.githublaohu</groupId>
+            <artifactId>shardingsphere-dependent</artifactId>
+            <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.shardingsphere</groupId>
+                    <artifactId>
+                        sharding-core-parse-sqlserver
+                    </artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.shardingsphere</groupId>
+                    <artifactId>sharding-jdbc-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <build>
@@ -51,6 +64,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.1.7.RELEASE</version>
                 <executions>
                     <execution>
                         <goals>

@@ -1,0 +1,23 @@
+server:
+  port: 9004
+  servlet:
+    context-path: "/lamp/atom/service/space"
+
+dubbo:
+  application:
+    name: lamp-atom-service-space
+    owner: dome
+
+  protocol:
+    name: dubbo
+    port: 19002
+    accesslog: true
+
+  provider:
+    timeout: 30000
+    retries: 0
+
+  registry:
+    address: N/A
+    register: false
+    subscribe: true

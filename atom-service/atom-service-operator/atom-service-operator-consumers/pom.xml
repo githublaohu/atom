@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom-service-operator</artifactId>
-		<version>${reversion}</version>
+		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>atom-service-operator-consumers</artifactId>
@@ -31,11 +31,6 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>com.alibaba.boot</groupId>
-			<artifactId>nacos-discovery-spring-boot-starter</artifactId>
-			<version>0.2.10</version>
-		</dependency>
-		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>test-mock-dependent</artifactId>
 			<version>0.1.4</version>
@@ -47,6 +42,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>2.1.7.RELEASE</version>
 				<executions>
 					<execution>
 						<goals>
