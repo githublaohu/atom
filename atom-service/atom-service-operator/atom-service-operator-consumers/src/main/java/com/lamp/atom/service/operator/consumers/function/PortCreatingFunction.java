@@ -31,12 +31,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class PortCreatingFunction {
 
-    @Value("nacos.config.server-addr")
+    @Value("${nacos.config.server-addr}")
     private String nacosAddr;
-    @Value("nacos.config.namespace")
+    @Value("${nacos.config.namespace}")
     private String namespace;
-    @Value("server.port")
-    private int port;
+    @Value("${server.port}")
+    private String port;
 
     private String ip = getIp();
 
@@ -113,7 +113,7 @@ public class PortCreatingFunction {
 
     //注册实例到服务中
     public void registerService() throws NacosException {
-        namingService.registerInstance("atom-operator-service", ip, port);
+        namingService.registerInstance("atom-operator-service", ip, Integer.parseInt(port));
     }
 
     public static class ServiceAndPort {

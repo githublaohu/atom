@@ -14,14 +14,14 @@ package com.lamp.atom.service.operator.provider.service.impl;
 import com.lamp.atom.service.operator.entity.DataSourceEntity;
 import com.lamp.atom.service.operator.provider.mapper.DataSourceMapper;
 import com.lamp.atom.service.operator.service.DataSourceService;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 @Transactional
-@Service("dataSourceService")
 public class DataSourceServiceImpl implements DataSourceService {
 
     @Autowired

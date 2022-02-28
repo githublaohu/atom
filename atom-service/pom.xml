@@ -5,8 +5,8 @@
 	<parent>
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom</artifactId>
-		<version>${reversion}</version>
-		<relativePath>../pom.xml</relativePath>
+		<version>0.0.1-SNAPSHOT</version>
+<!--		<relativePath>../pom.xml</relativePath>-->
 	</parent>
 	<artifactId>atom-service</artifactId>
 	<packaging>pom</packaging>
@@ -14,12 +14,12 @@
 		<module>atom-service-common</module>
 		<module>atom-service-operator</module>
 		<module>atom-service-reasoning</module>
-		<module>atom-service-task</module>
+		<module>atom-service-space</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+		<spring-boot.version>2.1.7.RELEASE</spring-boot.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -62,92 +62,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.7.0</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-						<encoding>UTF-8</encoding>
-						<testIncludes>
-							<testInclude>none</testInclude>
-						</testIncludes>
-						<!-- <annotationProcessorPaths> <path> <groupId>org.mapstruct</groupId> 
-							<artifactId>mapstruct-processor</artifactId> <version>${mapstruct.version}</version> 
-							</path> <path> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId> 
-							<version>${lombok.version}</version> </path> </annotationProcessorPaths> -->
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.0.2</version>
-					<configuration>
-						<archive>
-							<manifest>
-								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							</manifest>
-						</archive>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jdeps-plugin</artifactId>
-					<version>3.0.0</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>jdkinternals</goal>
-								<goal>test-jdkinternals</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>3.0.0</version>
-					<configuration>
-						<attach>true</attach>
-					</configuration>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<goals>
-								<goal>jar-no-fork</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.20.1</version>
-					<configuration>
-						<argLine>-Xmx512m -XX:PermSize=128m
-							-XX:MaxPermSize=128m
-						</argLine>
-						<testFailureIgnore>true</testFailureIgnore>
-						<includes>
-							<include>**/*Test*.java</include>
-						</includes>
-						<excludes />
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-maven-plugin</artifactId>
-					<version>${spring-boot.version}</version>
-					<configuration>
-						<executable>true</executable>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>

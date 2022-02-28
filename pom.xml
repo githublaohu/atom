@@ -4,12 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cn.lampup</groupId>
 	<artifactId>atom</artifactId>
-	<version>${reversion}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>atom-service</module>
-		<module>atom-space</module>
-        <module>atom-service/atom-service-task</module>
     </modules>
 	<properties>
 		<reversion>0.0.1-SNAPSHOT</reversion>
