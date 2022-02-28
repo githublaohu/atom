@@ -1,3 +1,14 @@
+/*
+ *Copyright (c) [Year] [name of copyright holder]
+ *[Software Name] is licensed under Mulan PubL v2.
+ *You can use this software according to the terms and conditions of the Mulan PubL v2.
+ *You may obtain a copy of Mulan PubL v2 at:
+ *         http://license.coscl.org.cn/MulanPubL-2.0
+ *THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *See the Mulan PubL v2 for more details.
+ */
 package com.lamp.atom.service.task.mapper;
 
 import com.lamp.atom.service.task.entity.TaskEntity;
@@ -28,6 +39,18 @@ public interface TaskMapper {
             "delete_flag = ${deleteFlag} " +
             "where id = #{id}")
     Integer updateTaskEntity(TaskEntity taskEntity);
+
+    /**
+     * 模糊查询多个任务
+     * @param keyword
+     * @return
+     */
+    @Select({"select * from model " +
+            "where" +
+            "id like #{keyword} or task_name like #{keyword} or explanation like #{keyword} " +
+            "or start_time like #{keyword} or end_time like #{keyword} or scene_id like #{keyword} " +
+            "or operator_id like #{keyword} or task_lifecycle like #{keyword} or task_status like #{keyword}"})
+    List<TaskEntity> queryTaskEntitysByKeyword(String keyword);
 
     /**
      * 查询多个任务

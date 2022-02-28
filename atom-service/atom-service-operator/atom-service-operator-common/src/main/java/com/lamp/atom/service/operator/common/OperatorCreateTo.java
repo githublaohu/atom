@@ -9,38 +9,26 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.space.operator.entity;
+package com.lamp.atom.service.operator.common;
 
+import com.lamp.atom.service.operator.entity.ConnectionEntity;
+import com.lamp.atom.service.operator.entity.DataSourceEntity;
+import com.lamp.atom.service.operator.entity.ModelEntity;
+import com.lamp.atom.service.operator.entity.OperatorEntity;
 import lombok.Data;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 @Data
-public class BaseEntity implements Serializable {
+public class OperatorCreateTo {
 
-    /**
-     * 序列号
-     */
-    private static final long serialVersionUID = -7162490774296452711L;
+    private List<SourceAndConnect> sourceAndConnects;
 
-    /**
-     * 主键id
-     */
-    private Long id;
+    private ModelEntity modelTo;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+    private DataSourceEntity sourceAccountTo;
 
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
+    private OperatorEntity operatorTo;
 
-    /**
-     * 状态：0正常1删除
-     */
-    private Integer deleteFlag;
+    private ConnectionEntity connectionTo;
 }

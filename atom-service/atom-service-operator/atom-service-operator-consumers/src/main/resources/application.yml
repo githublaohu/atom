@@ -1,11 +1,11 @@
 server:
-  port: 9001
+  port: 9002
   servlet:
     context-path: "/lamp/atom/service/operator"
 
 spring:
   application:
-    name: atom-space-operato-consumer
+    name: atom-space-operator-consumer
   datasource:
     name: lamp
     url: jdbc:mysql://120.78.148.188:3306/atom?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
@@ -29,6 +29,21 @@ spring:
     # encrypt password
     filters: config
 
+nacos:
+  config:
+    bootstrap:
+      enable: true
+      logEnable: true
+    server-addr: 127.0.0.1:8848
+    namespace: atom
+    remote-first: true
+    type: yaml
+    auto-refresh: true
+    max-retry: 10
+    config-retry-time: 2333
+    config-long-poll-timeout: 46000
+    enable-remote-sync-config: true
+
 mybatis:
   checkConfig-location : false
   configuration:
@@ -40,17 +55,3 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-
-dubbo:
-  application:
-    name: lamp-atom-service-operator
-    owner: dome
-
-  provider:
-    timeout: 30000
-    retries: 0
-
-  registry:
-    address: N/A
-    register: false
-    subscribe: true
