@@ -11,13 +11,14 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
-
-import com.lamp.atom.service.operator.entity.CaseEntity;
-import com.lamp.atom.service.operator.service.CaseService;
+import com.lamp.atom.service.operator.entity.TaskEntity;
+import com.lamp.atom.service.operator.service.TaskService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,90 +28,90 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-@RequestMapping("/case")
-@RestController("caseController")
-public class CaseController {
+@RequestMapping("/task")
+@RestController("taskController")
+public class TaskController {
 
     @Reference
-    private CaseService caseService;
+    private TaskService taskService;
 
     /**
-     * 添加实例
-     * @param caseEntity
+     * 添加任务
+     * @param taskEntity
      */
-    @PostMapping("/insertCase")
-    public ResultObject<String> insertCase(@RequestBody CaseEntity caseEntity){
+    @PostMapping("/insertTask")
+    public ResultObject<String> insertTask(@RequestBody TaskEntity taskEntity){
         //字段判空
-        if (Objects.isNull(caseEntity.getOperatorId())) {
-            log.info("参数校验失败 {}", caseEntity);
+        if (Objects.isNull(taskEntity.getOperatorId())) {
+            log.info("参数校验失败 {}", taskEntity);
             return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
         try {
-            caseService.insertCaseEntity(caseEntity);
+            taskService.insertTaskEntity(taskEntity);
         } catch (Exception e) {
-            log.warn("实例插入失败 {}", e);
+            log.warn("任务插入失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 修改实例
-     * @param caseEntity
+     * 修改任务
+     * @param taskEntity
      * @return
      */
-    @PostMapping("/updateCase")
-    public ResultObject<String> updateCase(@RequestBody CaseEntity caseEntity){
+    @PostMapping("/updateTask")
+    public ResultObject<String> updateTask(@RequestBody TaskEntity taskEntity){
         try {
-            caseService.updateCaseEntity(caseEntity);
+            taskService.updateTaskEntity(taskEntity);
         } catch (Exception e) {
-            log.warn("实例修改失败 {}", e);
+            log.warn("任务修改失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 模糊查询多个实例
+     * 模糊查询多个任务
      * @param keyword
      * @return
      */
-    @PostMapping("/queryCasesByKeyword")
-    public List<CaseEntity> queryCasesByKeyword(@RequestBody String keyword){
+    @PostMapping("/queryTasksByKeyword")
+    public List<TaskEntity> queryTasksByKeyword(@RequestBody String keyword){
         try {
-            return caseService.queryCaseEntitysByKeyword(keyword);
+            return taskService.queryTaskEntitysByKeyword(keyword);
         } catch (Exception e) {
-            log.warn("实例查询失败 {}", e);
+            log.warn("任务查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询多个实例
-     * @param caseEntity
+     * 查询多个任务
+     * @param taskEntity
      * @return
      */
-    @PostMapping("/queryCases")
-    public List<CaseEntity> queryCases(@RequestBody CaseEntity caseEntity){
+    @PostMapping("/queryTasks")
+    public List<TaskEntity> queryTasks(@RequestBody TaskEntity taskEntity){
         try {
-            return caseService.queryCaseEntitys(caseEntity);
+            return taskService.queryTaskEntitys(taskEntity);
         } catch (Exception e) {
-            log.warn("实例查询失败 {}", e);
+            log.warn("任务查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询单个实例
-     * @param caseEntity
+     * 查询单个任务
+     * @param taskEntity
      * @return
      */
-    @PostMapping("/queryCase")
-    public CaseEntity queryCase(@RequestBody CaseEntity caseEntity){
+    @PostMapping("/queryTask")
+    public TaskEntity queryTask(@RequestBody TaskEntity taskEntity){
         try {
-            return caseService.queryCaseEntity(caseEntity);
+            return taskService.queryTaskEntity(taskEntity);
         } catch (Exception e) {
-            log.warn("实例查询失败 {}", e);
+            log.warn("任务查询失败 {}", e);
             return null;
         }
     }

@@ -9,25 +9,21 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.operator.consumers;
+package com.lamp.atom.service.space.provider;
 
-
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
 @SpringBootApplication
-@EnableTransactionManagement
-public class AtomServiceOperatorConsumerApplication {
+public class AtomServiceSpaceProviderApplication {
 
     public static void main(String[] args) {
         try {
-            SpringApplication.run(AtomServiceOperatorConsumerApplication.class, args);
-            log.info("{} 启动成功", AtomServiceOperatorConsumerApplication.class.getSimpleName());
+            SpringApplication.run(AtomServiceSpaceProviderApplication.class, args);
+            log.info("{} 启动成功", AtomServiceSpaceProviderApplication.class.getSimpleName());
         } catch (Exception e) {
         	log.error(e.getMessage() , e);
         }

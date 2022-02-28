@@ -11,9 +11,9 @@
  */
 package com.lamp.atom.service.operator.provider.service.impl;
 
-import com.lamp.atom.service.operator.entity.CaseEntity;
-import com.lamp.atom.service.operator.provider.mapper.CaseMapper;
-import com.lamp.atom.service.operator.service.CaseService;
+import com.lamp.atom.service.operator.entity.TaskEntity;
+import com.lamp.atom.service.operator.provider.mapper.TaskMapper;
+import com.lamp.atom.service.operator.service.TaskService;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,33 +22,33 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CaseServiceImpl implements CaseService {
+public class TaskServiceImpl implements TaskService {
 
     @Autowired
-    private CaseMapper caseMapper;
+    private TaskMapper taskMapper;
 
     @Override
-    public Integer insertCaseEntity(CaseEntity caseEntity) {
-        return caseMapper.insertCaseEntity(caseEntity);
+    public Integer insertTaskEntity(TaskEntity taskEntity) {
+        return taskMapper.insertTaskEntity(taskEntity);
     }
 
     @Override
-    public Integer updateCaseEntity(CaseEntity caseEntity) {
-        return caseMapper.updateCaseEntity(caseEntity);
+    public Integer updateTaskEntity(TaskEntity taskEntity) {
+        return taskMapper.updateTaskEntity(taskEntity);
     }
 
     @Override
-    public List<CaseEntity> queryCaseEntitysByKeyword(String keyword) {
-        return caseMapper.queryCaseEntitysByKeyword(keyword);
+    public List<TaskEntity> queryTaskEntitysByKeyword(String keyword) {
+        return taskMapper.queryTaskEntitysByKeyword(keyword);
     }
 
     @Override
-    public List<CaseEntity> queryCaseEntitys(CaseEntity caseEntity) {
-        return caseMapper.queryCaseEntitys(caseEntity);
+    public List<TaskEntity> queryTaskEntitys(TaskEntity taskEntity) {
+        return taskMapper.queryTaskEntitys(taskEntity);
     }
 
     @Override
-    public CaseEntity queryCaseEntity(CaseEntity caseEntity) {
-        return caseMapper.queryCaseEntity(caseEntity);
+    public TaskEntity queryTaskEntity(TaskEntity taskEntity) {
+        return taskMapper.queryTaskEntity(taskEntity);
     }
 }
