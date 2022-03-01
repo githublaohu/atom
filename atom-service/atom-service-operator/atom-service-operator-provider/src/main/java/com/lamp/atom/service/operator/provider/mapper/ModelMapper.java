@@ -12,7 +12,6 @@
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.ModelEntity;
-import com.lamp.atom.service.operator.entity.OperatorEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -41,7 +40,7 @@ public interface ModelMapper {
      * @return
      */
     @Update("update model set " +
-            "delete_flag = ${deleteFlag} " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateModelEntity(ModelEntity modelEntity);
 
@@ -50,16 +49,16 @@ public interface ModelMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from model " +
-            "where" +
-            "id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+    @Select("select * from model " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
             "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
             "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
             "or model_create_type like #{keyword} or model_name like #{keyword} or model_version like #{keyword} " +
             "or model_score like #{keyword} or model_type like #{keyword} or model_technology_type like #{keyword} " +
             "or model_address like #{keyword} or model_status like #{keyword} or connect_id like #{keyword} " +
             "or connect_status like #{keyword} or operator_id like #{keyword} or operator_result like #{keyword} " +
-            "or resource_type like #{keyword} or resource_value like #{keyword} or resource_size like #{keyword} or produce_way like #{keyword}"})
+            "or resource_type like #{keyword} or resource_value like #{keyword} or resource_size like #{keyword} or produce_way like #{keyword})")
     List<ModelEntity> queryModelEntitysByKeyword(String keyword);
 
     /**
@@ -85,6 +84,6 @@ public interface ModelMapper {
      * @return
      */
     @Select("select * from model " +
-            "where id = #{id} and delete_flag = 0")
+            "where id = #{id}")
     ModelEntity queryModelEntity(ModelEntity modelEntity);
 }

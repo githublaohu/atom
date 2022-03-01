@@ -14,12 +14,16 @@ package com.lamp.atom.service.operator.entity;
 import com.lamp.atom.service.domain.OperatorRuntimeType;
 import com.lamp.atom.service.domain.TaskLifecycle;
 import com.lamp.atom.service.domain.TaskStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskEntity extends BaseEntity {
 
     private static final long serialVersionUID = 6643322885682857016L;

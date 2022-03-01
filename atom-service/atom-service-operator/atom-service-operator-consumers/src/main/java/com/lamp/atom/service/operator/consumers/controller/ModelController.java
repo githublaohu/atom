@@ -13,20 +13,15 @@ package com.lamp.atom.service.operator.consumers.controller;
 
 
 import com.lamp.atom.service.operator.entity.ModelEntity;
-import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.ModelService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 
 @Slf4j
@@ -75,13 +70,13 @@ public class ModelController {
 
     /**
      * 模糊查询多个模型
-     * @param keyword
+     * @param params
      * @return
      */
     @PostMapping("/queryModelsByKeyword")
-    public List<ModelEntity> queryModelsByKeyword(@RequestBody String keyword){
+    public List<ModelEntity> queryModelsByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return modelService.queryModelEntitysByKeyword(keyword);
+            return modelService.queryModelEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
             log.warn("模型查询失败 {}", e);
             return null;

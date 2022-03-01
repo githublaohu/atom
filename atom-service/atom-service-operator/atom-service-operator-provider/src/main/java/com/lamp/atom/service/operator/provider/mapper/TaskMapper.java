@@ -26,8 +26,10 @@ public interface TaskMapper {
      * @param taskEntity
      */
     @Insert("insert into task" +
-            "(task_name,explanation,start_time,end_time,scene_id,operator_id,task_lifecycle,task_status" +
-            "values(#{taskName},#{explanation},#{startTime},#{endTime},#{sceneId},#{operatorId},#{taskLifecycle},#{taskStatus})")
+            "(task_name,explanation,start_time,end_time," +
+            "space_id,scene_id,operator_id,operator_runtime_type,task_lifecycle,task_status) " +
+            "values(#{taskName},#{explanation},#{startTime},#{endTime}," +
+            "#{spaceId},#{sceneId},#{operatorId},#{operatorRuntimeType},#{taskLifecycle},#{taskStatus})")
     Integer insertTaskEntity(TaskEntity taskEntity);
 
     /**
@@ -36,7 +38,7 @@ public interface TaskMapper {
      * @return
      */
     @Update("update task set " +
-            "delete_flag = ${deleteFlag} " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateTaskEntity(TaskEntity taskEntity);
 
@@ -45,11 +47,12 @@ public interface TaskMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from model " +
-            "where" +
-            "id like #{keyword} or task_name like #{keyword} or explanation like #{keyword} " +
-            "or start_time like #{keyword} or end_time like #{keyword} or scene_id like #{keyword} " +
-            "or operator_id like #{keyword} or task_lifecycle like #{keyword} or task_status like #{keyword}"})
+    @Select("select * from task " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or task_name like #{keyword} or explanation like #{keyword} " +
+            "or start_time like #{keyword} or end_time like #{keyword} " +
+            "or space_id like #{keyword} or scene_id like #{keyword} or operator_id like #{keyword} " +
+            "or operator_runtime_type like #{keyword} or task_lifecycle like #{keyword} or task_status like #{keyword})")
     List<TaskEntity> queryTaskEntitysByKeyword(String keyword);
 
     /**
@@ -76,6 +79,6 @@ public interface TaskMapper {
      * @return
      */
     @Select("select * from task " +
-            "where id = #{id} and delete_flag = 0")
+            "where id = #{id}")
     TaskEntity queryTaskEntity(TaskEntity taskEntity);
 }

@@ -13,19 +13,17 @@ package com.lamp.atom.service.operator.consumers.controller;
 
 
 import com.lamp.atom.service.operator.entity.DataSourceEntity;
-import com.lamp.atom.service.operator.entity.ModelEntity;
 import com.lamp.atom.service.operator.service.DataSourceService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,13 +73,13 @@ public class DataSourceController {
 
     /**
      * 模糊查询多个数据源
-     * @param keyword
+     * @param params
      * @return
      */
     @PostMapping("/queryDataSourcesByKeyword")
-    public List<DataSourceEntity> queryDataSourcesByKeyword(@RequestBody String keyword){
+    public List<DataSourceEntity> queryDataSourcesByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return dataSourceService.queryDataSourceEntitysByKeyword(keyword);
+            return dataSourceService.queryDataSourceEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
             log.warn("数据源查询失败 {}", e);
             return null;
@@ -111,8 +109,7 @@ public class DataSourceController {
     @PostMapping("/queryDataSource")
     public DataSourceEntity queryDataSource(@RequestBody DataSourceEntity dataSourceEntity){
         try {
-            DataSourceEntity dataSourceEntity1 = dataSourceService.queryDataSourceEntity(dataSourceEntity);
-            return dataSourceEntity1;
+            return dataSourceService.queryDataSourceEntity(dataSourceEntity);
         } catch (Exception e) {
             log.warn("数据源查询失败 {}", e);
             return null;

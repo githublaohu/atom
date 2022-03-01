@@ -13,19 +13,17 @@ package com.lamp.atom.service.operator.consumers.controller;
 
 
 import com.lamp.atom.service.operator.entity.ConnectionEntity;
-import com.lamp.atom.service.operator.entity.DataSourceEntity;
 import com.lamp.atom.service.operator.service.ConnectionService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,13 +73,13 @@ public class ConnectionController {
 
     /**
      * 模糊查询多个连接
-     * @param keyword
+     * @param params
      * @return
      */
     @PostMapping("/queryConnectionsByKeyword")
-    public List<ConnectionEntity> queryConnectionsByKeyword(@RequestBody String keyword){
+    public List<ConnectionEntity> queryConnectionsByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return connectionService.queryConnectionEntitysByKeyword(keyword);
+            return connectionService.queryConnectionEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
             log.warn("连接查询失败 {}", e);
             return null;
@@ -111,8 +109,7 @@ public class ConnectionController {
     @PostMapping("/queryConnection")
     public ConnectionEntity queryConnection(@RequestBody ConnectionEntity connectionEntity){
         try {
-            ConnectionEntity connectionEntity1 = connectionService.queryConnectionEntity(connectionEntity);
-            return connectionEntity1;
+            return connectionService.queryConnectionEntity(connectionEntity);
         } catch (Exception e) {
             log.warn("连接查询失败 {}", e);
             return null;

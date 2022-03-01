@@ -13,9 +13,13 @@ package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.ColonyType;
 import com.lamp.atom.service.domain.SourceType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConnectionEntity extends BaseEntity {
 
     private static final long serialVersionUID = 7945055154629636963L;

@@ -12,9 +12,13 @@
 package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.DataSourceType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DataSourceEntity extends BaseEntity {
 
     private static final long serialVersionUID = -9016196677726614802L;

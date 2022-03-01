@@ -11,11 +11,15 @@
  */
 package com.lamp.atom.service.operator.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CaseEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2237946472510786359L;
@@ -29,6 +33,11 @@ public class CaseEntity extends BaseEntity {
      * 算子id
      */
     private Long operatorId;
+
+    /**
+     * 服务IP
+     */
+    private String serverIp;
 
     /**
      * 算子名

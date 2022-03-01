@@ -12,7 +12,6 @@
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.CaseEntity;
-import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -26,7 +25,7 @@ public interface CaseMapper {
      * 添加实例
      * @param caseEntity
      */
-    @Insert("insert into case" +
+    @Insert("insert into `case`" +
             "(case_name,operator_id,operator_name,server_ip," +
             "start_time,end_time,estimate_start_time,estimate_end_time," +
             "status,sequence,reason_data_num,data_flow_num) " +
@@ -40,8 +39,8 @@ public interface CaseMapper {
      * @param caseEntity
      * @return
      */
-    @Update("update case set " +
-            "delete_flag = ${deleteFlag} " +
+    @Update("update `case` set " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateCaseEntity(CaseEntity caseEntity);
 
@@ -50,12 +49,12 @@ public interface CaseMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from connection " +
-            "where" +
-            "id like #{keyword} or case_name like #{keyword} or operator_id like #{keyword} or operator_name like #{keyword} " +
+    @Select("select * from `case` " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or case_name like #{keyword} or operator_id like #{keyword} or operator_name like #{keyword} " +
             "or server_ip like #{keyword} or start_time like #{keyword} or end_time like #{keyword} " +
             "or estimate_start_time like #{keyword} or estimate_end_time like #{keyword} or status like #{keyword} " +
-            "or sequence like #{keyword} or reason_data_num like #{keyword} or data_flow_num like #{keyword}"})
+            "or sequence like #{keyword} or reason_data_num like #{keyword} or data_flow_num like #{keyword})")
     List<CaseEntity> queryCaseEntitysByKeyword(String keyword);
 
     /**
@@ -64,7 +63,7 @@ public interface CaseMapper {
      * @return
      */
     @Select({"<script>" +
-            "select * from case " +
+            "select * from `case` " +
             "<where>" +
             "<if test = 'operatorId != null'>operator_id = #{operatorId} </if>" +
             "<if test = 'startTime != null'>and start_time &gt; #{startTime} </if>" +
@@ -80,7 +79,7 @@ public interface CaseMapper {
      * @param caseEntity
      * @return
      */
-    @Select("select * from case " +
-            "where id = #{id} and delete_flag = 0")
+    @Select("select * from `case` " +
+            "where id = #{id}")
     CaseEntity queryCaseEntity(CaseEntity caseEntity);
 }

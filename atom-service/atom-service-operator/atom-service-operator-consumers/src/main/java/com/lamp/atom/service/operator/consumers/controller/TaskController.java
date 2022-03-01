@@ -17,13 +17,12 @@ import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,13 +72,13 @@ public class TaskController {
 
     /**
      * 模糊查询多个任务
-     * @param keyword
+     * @param params
      * @return
      */
     @PostMapping("/queryTasksByKeyword")
-    public List<TaskEntity> queryTasksByKeyword(@RequestBody String keyword){
+    public List<TaskEntity> queryTasksByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return taskService.queryTaskEntitysByKeyword(keyword);
+            return taskService.queryTaskEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
             log.warn("任务查询失败 {}", e);
             return null;

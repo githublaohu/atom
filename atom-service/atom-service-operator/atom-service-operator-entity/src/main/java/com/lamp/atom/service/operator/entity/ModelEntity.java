@@ -15,9 +15,13 @@ import com.lamp.atom.service.domain.ModelCreateType;
 import com.lamp.atom.service.domain.ModelTechnologyType;
 import com.lamp.atom.service.domain.ModelType;
 import com.lamp.atom.service.domain.OperatorResult;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ModelEntity extends BaseEntity {
 
     private static final long serialVersionUID = 4378966092513467540L;

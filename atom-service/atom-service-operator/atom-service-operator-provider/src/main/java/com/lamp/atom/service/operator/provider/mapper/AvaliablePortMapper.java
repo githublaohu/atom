@@ -24,7 +24,7 @@ public interface AvaliablePortMapper {
      * @return
      */
     @Update("update avaliable_port set " +
-            "delete_flag = ${deleteFlag} " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateAvaliablePortEntity(AvaliablePortEntity avaliablePortEntity);
 

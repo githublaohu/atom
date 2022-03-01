@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,13 +73,13 @@ public class CaseController {
 
     /**
      * 模糊查询多个实例
-     * @param keyword
+     * @param params
      * @return
      */
     @PostMapping("/queryCasesByKeyword")
-    public List<CaseEntity> queryCasesByKeyword(@RequestBody String keyword){
+    public List<CaseEntity> queryCasesByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return caseService.queryCaseEntitysByKeyword(keyword);
+            return caseService.queryCaseEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
             log.warn("实例查询失败 {}", e);
             return null;

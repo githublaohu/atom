@@ -17,10 +17,14 @@ import com.lamp.atom.service.domain.OperatorRuntimeType;
 import com.lamp.atom.service.domain.OperatorSourceType;
 import com.lamp.atom.service.domain.OperatorStatus;
 import com.lamp.atom.service.domain.DeployType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OperatorEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3837234206057086494L;

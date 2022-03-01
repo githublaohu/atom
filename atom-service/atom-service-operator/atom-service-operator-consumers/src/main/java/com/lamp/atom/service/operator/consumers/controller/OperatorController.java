@@ -19,8 +19,6 @@ import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,13 +74,13 @@ public class OperatorController {
 
     /**
      * 模糊查询多个算子
-     * @param keyword
+     * @param params
      * @return
      */
     @PostMapping("/queryOperatorsByKeyword")
-    public List<OperatorEntity> queryOperatorsByKeyword(@RequestBody String keyword){
+    public List<OperatorEntity> queryOperatorsByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return operatorService.queryOperatorEntitysByKeyword(keyword);
+            return operatorService.queryOperatorEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
             log.warn("算子查询失败 {}", e);
             return null;
