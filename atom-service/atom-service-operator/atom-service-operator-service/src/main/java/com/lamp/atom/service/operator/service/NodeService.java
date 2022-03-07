@@ -11,42 +11,49 @@
  */
 package com.lamp.atom.service.operator.service;
 
-import com.lamp.atom.service.operator.entity.TaskEntity;
+import com.lamp.atom.service.operator.entity.NodeEntity;
 
 import java.util.List;
 
-public interface TaskService {
-    /**
-     * 添加任务
-     * @param taskEntity
-     */
-    Integer insertTaskEntity(TaskEntity taskEntity);
+public interface NodeService {
 
     /**
-     * 修改任务
-     * @param taskEntity
-     * @return
+     * 创建节点
+     * @param nodeEntity
      */
-    Integer updateTaskEntity(TaskEntity taskEntity);
+    Integer createNodeEntity(NodeEntity nodeEntity);
 
     /**
-     * 模糊查询多个任务
+     * 添加节点
+     * @param nodeEntity
+     */
+    Integer insertNodeEntity(NodeEntity nodeEntity);
+
+    /**
+     * 模糊查询多个节点
      * @param keyword
      * @return
      */
-    List<TaskEntity> queryTaskEntitysByKeyword(String keyword);
+    List<NodeEntity> queryNodeEntitysByKeyword(String keyword);
 
     /**
-     * 查询多个任务
-     * @param taskEntity
+     * 修改节点
+     * @param nodeEntity
      * @return
      */
-    List<TaskEntity> queryTaskEntitys(TaskEntity taskEntity);
+    Integer updateNodeEntity(NodeEntity nodeEntity);
 
     /**
-     * 查询单个任务
-     * @param taskEntity
+     * 查询多个节点
+     * @param nodeEntity
      * @return
      */
-    TaskEntity queryTaskEntity(TaskEntity taskEntity);
+    List<NodeEntity> queryNodeEntitys(NodeEntity nodeEntity);
+
+    /**
+     * 查询单个节点
+     * @param nodeEntity
+     * @return
+     */
+    NodeEntity queryNodeEntity(NodeEntity nodeEntity);
 }

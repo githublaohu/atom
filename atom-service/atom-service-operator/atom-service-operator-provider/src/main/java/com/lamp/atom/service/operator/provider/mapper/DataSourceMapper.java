@@ -40,7 +40,7 @@ public interface DataSourceMapper {
      * @return
      */
     @Update("update datasource set " +
-            "delete_flag = ${deleteFlag} " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateDataSourceEntity(DataSourceEntity dataSourceEntity);
 
@@ -49,14 +49,14 @@ public interface DataSourceMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from model " +
-            "where" +
-            "id like #{keyword} or operator_id like #{keyword} or connection_id like #{keyword} or data_source_type like #{keyword} " +
+    @Select("select * from datasource " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or operator_id like #{keyword} or connection_id like #{keyword} or data_source_type like #{keyword} " +
             "or source_space like #{keyword} or source_conf like #{keyword} or task_init_execute like #{keyword} " +
             "or operate_execute_before like #{keyword} or data_execute_before like #{keyword} or operate_execute like #{keyword} " +
             "or data_execute_after like #{keyword} or operate_execute_after like #{keyword} or data_format like #{keyword} " +
             "or operator_read_num like #{keyword} or connect_read_num like #{keyword} or disposable like #{keyword} " +
-            "or paginate_read_num like #{keyword} or async_load like #{keyword} or `order` like #{keyword}"})
+            "or paginate_read_num like #{keyword} or async_load like #{keyword} or `order` like #{keyword})")
     List<DataSourceEntity> queryDataSourceEntitysByKeyword(String keyword);
 
     /**
@@ -79,6 +79,6 @@ public interface DataSourceMapper {
      * @return
      */
     @Select("select * from datasource " +
-            "where id = #{id} and delete_flag = 0")
+            "where id = #{id}")
     DataSourceEntity queryDataSourceEntity(DataSourceEntity dataSourceEntity);
 }
