@@ -27,12 +27,12 @@ public interface ModelMapper {
      * @param modelEntity
      */
     @Insert("insert into model" +
-            "(space_id,space_name,space_alias,scene_id,scene_name,scene_alias,experiment_id,experiment_name,experiment_alias," +
+            "(space_id,node_id,runtime_id,operator_id," +
             "model_create_type,model_name,model_version,model_score,model_type,model_technology_type,model_address,model_status," +
-            "connect_id,connect_status,operator_id,operator_result,resource_type,resource_value,resource_size,produce_way) " +
-            "values(#{spaceId},#{spaceName},#{spaceAlias},#{sceneId},#{sceneName},#{sceneAlias},#{experimentId},#{experimentName},#{experimentAlias}," +
+            "connect_id,connect_status,operator_result,resource_type,resource_value,resource_size,produce_way) " +
+            "values(#{spaceId},#{nodeId},#{runtimeId},#{operatorId}," +
             "#{modelCreateType},#{modelName},#{modelVersion},#{modelScore},#{modelType},#{modelTechnologyType},#{modelAddress},#{modelStatus}," +
-            "#{connectId},#{connectStatus},#{operatorId},#{operatorResult},#{resourceType},#{resourceValue},#{resourceSize},#{produceWay})")
+            "#{connectId},#{connectStatus},#{operatorResult},#{resourceType},#{resourceValue},#{resourceSize},#{produceWay})")
     Integer insertModelEntity(ModelEntity modelEntity);
 
     /**
@@ -41,7 +41,7 @@ public interface ModelMapper {
      * @return
      */
     @Update("update model set " +
-            "delete_flag = ${deleteFlag} " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateModelEntity(ModelEntity modelEntity);
 
@@ -50,16 +50,16 @@ public interface ModelMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from model " +
-            "where" +
-            "id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+    @Select("select * from model " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
             "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
             "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
             "or model_create_type like #{keyword} or model_name like #{keyword} or model_version like #{keyword} " +
             "or model_score like #{keyword} or model_type like #{keyword} or model_technology_type like #{keyword} " +
             "or model_address like #{keyword} or model_status like #{keyword} or connect_id like #{keyword} " +
             "or connect_status like #{keyword} or operator_id like #{keyword} or operator_result like #{keyword} " +
-            "or resource_type like #{keyword} or resource_value like #{keyword} or resource_size like #{keyword} or produce_way like #{keyword}"})
+            "or resource_type like #{keyword} or resource_value like #{keyword} or resource_size like #{keyword} or produce_way like #{keyword})")
     List<ModelEntity> queryModelEntitysByKeyword(String keyword);
 
     /**
@@ -85,6 +85,6 @@ public interface ModelMapper {
      * @return
      */
     @Select("select * from model " +
-            "where id = #{id} and delete_flag = 0")
+            "where id = #{id}")
     ModelEntity queryModelEntity(ModelEntity modelEntity);
 }

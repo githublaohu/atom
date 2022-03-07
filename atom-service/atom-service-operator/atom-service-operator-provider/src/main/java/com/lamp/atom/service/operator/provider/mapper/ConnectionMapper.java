@@ -41,7 +41,7 @@ public interface ConnectionMapper {
      * @return
      */
     @Update("update connection set " +
-            "delete_flag = ${deleteFlag} " +
+            "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateConnectionEntity(ConnectionEntity connectionEntity);
 
@@ -50,15 +50,15 @@ public interface ConnectionMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from connection " +
-            "where" +
-            "id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+    @Select("select * from connection " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
             "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
             "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
             "or operation_type like #{keyword} or source_type like #{keyword} or source_name like #{keyword} " +
             "or source_addr like #{keyword} or source_account like #{keyword} or source_password like #{keyword} " +
             "or source_space like #{keyword} or mode like #{keyword} or colony_type like #{keyword} " +
-            "or source_conf like #{keyword} or source_route like #{keyword} or source_size like #{keyword} or source_count like #{keyword}"})
+            "or source_conf like #{keyword} or source_route like #{keyword} or source_size like #{keyword} or source_count like #{keyword})")
     List<ConnectionEntity> queryConnectionEntitysByKeyword(String keyword);
 
     /**
@@ -83,6 +83,6 @@ public interface ConnectionMapper {
      * @return
      */
     @Select("select * from connection " +
-            "where id = #{id} and delete_flag = 0")
+            "where id = #{id}")
     ConnectionEntity queryConnectionEntity(ConnectionEntity connectionEntity);
 }

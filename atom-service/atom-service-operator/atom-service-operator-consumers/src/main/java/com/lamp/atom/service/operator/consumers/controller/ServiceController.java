@@ -11,17 +11,20 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
 import com.lamp.atom.service.operator.entity.ServiceInfo;
 import com.lamp.atom.service.operator.service.ServiceInfoService;
 
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 推理
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/service")
 @RestController("serviceController")
+@Api(hidden = true)
 public class ServiceController {
 
     @Autowired
@@ -43,7 +47,7 @@ public class ServiceController {
     private ServiceInfoService serviceInfoService;
     
 
-    @RequestMapping("/getServicePort")
+    @PostMapping("/getServicePort")
     public Integer getServicePort(@RequestBody String ip) {
         return portCreatingFunction.getPort(ip);
     }

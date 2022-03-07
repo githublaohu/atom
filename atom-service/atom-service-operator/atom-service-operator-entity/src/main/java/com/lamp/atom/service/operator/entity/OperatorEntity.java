@@ -11,19 +11,24 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import com.lamp.atom.service.domain.CodeMode;
-import com.lamp.atom.service.domain.OperatorModel;
-import com.lamp.atom.service.domain.OperatorRuntimeType;
-import com.lamp.atom.service.domain.OperatorSourceType;
-import com.lamp.atom.service.domain.OperatorStatus;
-import com.lamp.atom.service.domain.DeployType;
+import com.lamp.atom.service.domain.*;
+import com.lamp.atom.service.domain.RuntimeStatus;
+
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.NonNull;
 
 @Data
+@ApiModel("算子类")
 public class OperatorEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3837234206057086494L;
+
+    /**
+     * 空间id
+     */
+    @NonNull
+    private Long spaceId;
 
     /**
      * 算子模板
@@ -59,54 +64,6 @@ public class OperatorEntity extends BaseEntity {
      */
     @NonNull
     private OperatorModel operatorModel;
-
-    /**
-     * 空间id
-     */
-    @NonNull
-    private Long spaceId;
-
-    /**
-     * 空间名
-     */
-    private String spaceName;
-
-    /**
-     * 空间别名
-     */
-    private String spaceAlias;
-
-    /**
-     * 场景id
-     */
-    @NonNull
-    private Long sceneId;
-
-    /**
-     * 场景名
-     */
-    private String sceneName;
-
-    /**
-     * 场景别名
-     */
-    private String sceneAlias;
-
-    /**
-     * 实验id
-     */
-    @NonNull
-    private Long experimentId;
-
-    /**
-     * 实验名
-     */
-    private String experimentName;
-
-    /**
-     * 实验别名
-     */
-    private String experimentAlias;
 
     /**
      * 细化级别
@@ -195,7 +152,7 @@ public class OperatorEntity extends BaseEntity {
      * 训练状态
      */
     @NonNull
-    private OperatorStatus operatorStatus;
+    private RuntimeStatus runtimeStatus;
 
     /**
      * 训练优先级
@@ -211,4 +168,8 @@ public class OperatorEntity extends BaseEntity {
      * 部署类型
      */
     private DeployType deployType;
+
+    public OperatorEntity(Long id) {
+        super(id);
+    }
 }
