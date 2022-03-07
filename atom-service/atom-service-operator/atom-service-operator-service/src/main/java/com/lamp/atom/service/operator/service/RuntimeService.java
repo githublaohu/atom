@@ -11,42 +11,42 @@
  */
 package com.lamp.atom.service.operator.service;
 
-import com.lamp.atom.service.operator.entity.CaseEntity;
+import com.lamp.atom.service.operator.entity.RuntimeEntity;
 
 import java.util.List;
 
-public interface CaseService {
+public interface RuntimeService {
     /**
-     * 添加任务
-     * @param caseEntity
+     * 添加运行实例
+     * @param runtimeEntity
      */
-    Integer insertCaseEntity(CaseEntity caseEntity);
+    Integer insertRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
-     * 修改任务
-     * @param caseEntity
+     * 修改运行实例
+     * @param runtimeEntity
      * @return
      */
-    Integer updateCaseEntity(CaseEntity caseEntity);
+    Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
-     * 模糊查询多个实例
+     * 模糊查询多个运行实例
      * @param keyword
      * @return
      */
-    List<CaseEntity> queryCaseEntitysByKeyword(String keyword);
+    List<RuntimeEntity> queryRuntimeEntitysByKeyword(String keyword);
 
     /**
-     * 查询多个任务
-     * @param caseEntity
+     * 查询多个运行实例
+     * @param runtimeEntity
      * @return
      */
-    List<CaseEntity> queryCaseEntitys(CaseEntity caseEntity);
+    List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity);
 
     /**
-     * 查询单个任务
-     * @param caseEntity
+     * 查询单个运行实例
+     * @param runtimeEntity
      * @return
      */
-    CaseEntity queryCaseEntity(CaseEntity caseEntity);
+    RuntimeEntity queryRuntimeEntity(RuntimeEntity runtimeEntity);
 }

@@ -11,25 +11,18 @@
  */
 package com.lamp.atom.service.domain;
 
-public enum TaskLifecycle {
+/**
+ * 运行实例来源类型
+ */
+public enum CaseSourceType {
+
     /**
-     * 创建中
+     * 服务
      */
-    CREATE,
+    SERVICE,
+
     /**
-     * 修改中
+     * 节点
      */
-    UPDATE,
-    /**
-     * 检查中
-     */
-    CHECK,
-    /**
-     * 创建完成
-     */
-    FINISH,
-    /**
-     * 作废
-     */
-    ABANDON;
+    NODE
 }

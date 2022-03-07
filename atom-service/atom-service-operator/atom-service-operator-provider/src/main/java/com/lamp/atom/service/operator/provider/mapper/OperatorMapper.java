@@ -26,16 +26,14 @@ public interface OperatorMapper {
      * @param operatorEntity
      */
     @Insert("insert into operator" +
-            "(operator_template_id,operator_name,operator_source_id,operator_source_type,operator_runtime_type,operator_model," +
-            "space_id,space_name,space_alias,scene_id,scene_name,scene_alias,experiment_id,experiment_name,experiment_alias," +
+            "(space_id,operator_template_id,operator_name,operator_source_id,operator_source_type,operator_runtime_type,operator_model," +
             "level,resources_account_id,code_mode,code_address,code_version,module_name,execute_object,environment_conf,operator_conf,model_conf," +
             "cpu,gpu,men,display_card," +
             "operator_epoch,operator_plan_runtimes,operator_status,operator_priority,case_id,deploy_type) " +
-            "values(#{operatorTemplateId},#{operatorName},#{operatorSourceId},#{operatorSourceType},#{operatorRuntimeType},#{operatorModel}," +
-            "#{spaceId},#{spaceName},#{spaceAlias},#{sceneId},#{sceneName},#{sceneAlias},#{experimentId},#{experimentName},#{experimentAlias}," +
+            "values(#{spaceId},#{operatorTemplateId},#{operatorName},#{operatorSourceId},#{operatorSourceType},#{operatorRuntimeType},#{operatorModel}," +
             "#{level},#{resourcesAccountId},#{codeMode},#{codeAddress},#{codeVersion},#{moduleName},#{executeObject},#{operatorConf},#{environmentConf},#{modelConf}," +
             "#{cpu},#{gpu},#{men},#{displayCard}," +
-            "#{operatorEpoch},#{operatorPlanRuntimes},#{operatorStatus},#{operatorPriority},#{caseId},#{deployType})")
+            "#{operatorEpoch},#{operatorPlanRuntimes},#{runtimeStatus},#{operatorPriority},#{caseId},#{deployType})")
     Integer insertOperatorEntity(OperatorEntity operatorEntity);
 
     /**
@@ -46,7 +44,7 @@ public interface OperatorMapper {
     @Update({"<script>" +
             "update operator" +
             "<set>" +
-            "<if test = 'operatorStatus != null'>operator_status = #{operatorStatus},</if>" +
+            "<if test = 'runtimeStatus != null'>operator_status = #{runtimeStatus},</if>" +
             "<if test = 'deleteFlag != null'>delete_flag = #{deleteFlag}</if>" +
             "</set>" +
             "where id = #{id}" +

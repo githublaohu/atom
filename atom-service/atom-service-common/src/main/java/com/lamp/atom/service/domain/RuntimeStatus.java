@@ -14,7 +14,7 @@ package com.lamp.atom.service.domain;
 /**
  * 训练状态
  */
-public enum OperatorStatus {
+public enum RuntimeStatus {
     /**
      * console 编辑中
      */
@@ -112,7 +112,7 @@ public enum OperatorStatus {
 
     private String name;
 
-    OperatorStatus(String name) {
+    RuntimeStatus(String name) {
         this.name = name;
     }
 }

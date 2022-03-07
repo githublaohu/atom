@@ -31,11 +31,17 @@
 		<dependency>
 			<groupId>cn.lampup</groupId>
 			<artifactId>decoration-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>fastjson</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-			<dependency>
-				<groupId>io.github.githublaohu</groupId>
-				<artifactId>logback-dependent</artifactId>
-				<type>pom</type>
-			</dependency>
+		<dependency>
+			<groupId>io.github.githublaohu</groupId>
+			<artifactId>logback-dependent</artifactId>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 </project>

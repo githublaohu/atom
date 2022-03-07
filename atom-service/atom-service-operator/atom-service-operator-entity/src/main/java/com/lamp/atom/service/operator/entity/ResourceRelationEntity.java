@@ -11,50 +11,46 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class BaseEntity implements Serializable {
+@ApiModel("资源关系类")
+public class ResourceRelationEntity extends BaseEntity {
+
+    private static final long serialVersionUID = -3149595542813993064L;
 
     /**
-     * 序列号
+     * 关联ID
      */
-    private static final long serialVersionUID = -7162490774296452711L;
+    private Long relationId;
 
     /**
-     * 主键id
+     * 关联类型
      */
-//    @JsonIgnore
-    private Long id;
+    private String relationType;
 
     /**
-     * 创建时间
+     * 被关联ID
      */
-//    @JsonIgnore
-    private Date createTime;
+    private Long beRelationId;
 
     /**
-     * 修改时间
+     * 被关联类型
      */
-//    @JsonIgnore
-    private Date updateTime;
+    private String beRelationType;
 
     /**
-     * 状态：0正常1删除
+     * 关联状态
      */
-//    @JsonIgnore
-    private Integer deleteFlag;
+    private String relationStatus;
 
-    public BaseEntity(Long id) {
-        this.id = id;
+    /**
+     * 顺序
+     */
+    private Integer order;
+
+    public ResourceRelationEntity(Long id) {
+        super(id);
     }
 }

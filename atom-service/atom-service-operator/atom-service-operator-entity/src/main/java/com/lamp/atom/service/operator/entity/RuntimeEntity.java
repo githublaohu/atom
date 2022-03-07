@@ -11,38 +11,48 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
 
+import com.lamp.atom.service.domain.CaseSourceType;
+import com.lamp.atom.service.domain.RuntimeStatus;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class CaseEntity extends BaseEntity {
+@ApiModel("运行实例类")
+public class RuntimeEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2237946472510786359L;
 
     /**
-     * 实例名
+     * 空间ID
      */
-    private String caseName;
+    private Long spaceId;
 
     /**
-     * 算子id
+     * 来源类型
      */
-    private Long operatorId;
+    private CaseSourceType caseSourceType;
 
     /**
-     * 服务IP
+     * 服务配置ID
+     */
+    private Long sourceId;
+
+    /**
+     * 节点ID
+     */
+    private Long nodeId;
+
+    /**
+     * 服务器IP
      */
     private String serverIp;
 
     /**
-     * 算子名
+     * 服务器端口
      */
-    private String operatorName;
+    private String serverPort;
 
     /**
      * 开始时间
@@ -67,35 +77,34 @@ public class CaseEntity extends BaseEntity {
     /**
      * 状态
      */
-    private String status;
+    private RuntimeStatus runtimeStatus;
 
     /**
-     * 序列
+     * 服务标签
      */
-    private String sequence;
+    private String label;
 
     /**
-     * 推理数据条数
+     * 启动人ID
      */
-    private Integer reasonDataNum;
+    private Integer startId;
 
     /**
-     * 数据流量总数
+     * 启动人名
      */
-    private Integer dataFlowNum;
+    private String startName;
 
     /**
-     * 创建时间
+     * 关闭人ID
      */
-    private Date createTime;
+    private Integer endId;
 
     /**
-     * 修改时间
+     * 关闭人名
      */
-    private Date updateTime;
+    private String endName;
 
-    /**
-     * 状态：0正常1删除
-     */
-    private Integer deleteFlag;
+    public RuntimeEntity(Long id) {
+        super(id);
+    }
 }

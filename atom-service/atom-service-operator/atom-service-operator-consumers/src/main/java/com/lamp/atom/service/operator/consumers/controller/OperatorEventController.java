@@ -12,9 +12,11 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
 import com.lamp.atom.service.domain.DeployType;
-import com.lamp.atom.service.domain.OperatorStatus;
+import com.lamp.atom.service.domain.RuntimeStatus;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.OperatorService;
+
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/operator")
 @RestController("operatorEventController")
+@Api(hidden = true)
 public class OperatorEventController {
 
     @Reference
@@ -38,7 +41,7 @@ public class OperatorEventController {
     @PostMapping("/editing")
     public Integer editStart(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.EDITING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.EDITING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -50,7 +53,7 @@ public class OperatorEventController {
     @PostMapping("/editCancel")
     public Integer editCancel(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.EDIT_CANCEL);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.EDIT_CANCEL);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -62,7 +65,7 @@ public class OperatorEventController {
     @PostMapping("/editFinish")
     public Integer editFinish(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.EDIT_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.EDIT_FINISH);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -74,7 +77,7 @@ public class OperatorEventController {
         // 1、调度schedule
 
         // 2、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.QUEUING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -88,7 +91,7 @@ public class OperatorEventController {
         // 1、调度schedule
 
         // 2、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.QUEUE_CANCELING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUE_CANCELING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -100,7 +103,7 @@ public class OperatorEventController {
     @PostMapping("/queueCancelFinish")
     public Integer queueCancelFinish(@RequestBody OperatorEntity operatorEntity) {
         // 1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.QUEUE_CANCEL);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUE_CANCEL);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -114,7 +117,7 @@ public class OperatorEventController {
         // 1、调度schedule
 
         // 2、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.QUEUING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -126,7 +129,7 @@ public class OperatorEventController {
     @PostMapping("/caseCreating")
     public Integer caseCreating(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.CASE_CREATING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.CASE_CREATING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -138,7 +141,7 @@ public class OperatorEventController {
     @PostMapping("/caseCreateFinish")
     public Integer caseCreateFinish(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.CASE_CREATE_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.CASE_CREATE_FINISH);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -150,7 +153,7 @@ public class OperatorEventController {
     @PostMapping("/dataUploading")
     public Integer dataUploading(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.DATA_UPLOADING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.DATA_UPLOADING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -162,7 +165,7 @@ public class OperatorEventController {
     @PostMapping("/dataUploadFinish")
     public Integer dataUploadFinish(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.DATA_UPLOAD_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.DATA_UPLOAD_FINISH);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -174,7 +177,7 @@ public class OperatorEventController {
     @PostMapping("/running")
     public Integer running(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.RUNNING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.RUNNING);
         Integer status = operatorService.updateOperatorEntity(operatorEntity);
         if (status != 1) {
             return status;
@@ -192,7 +195,7 @@ public class OperatorEventController {
     @PostMapping("/testing")
     public Integer testing(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.TESTING);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.TESTING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
@@ -204,7 +207,7 @@ public class OperatorEventController {
     @PostMapping("/runningAutoFinish")
     public Integer runningAutoFinish(@RequestBody OperatorEntity operatorEntity){
         // 1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.RUNNING_AUTO_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.RUNNING_AUTO_FINISH);
         Integer status = operatorService.updateOperatorEntity(operatorEntity);
         if (status != 1) {
             return status;
@@ -240,7 +243,7 @@ public class OperatorEventController {
     @PostMapping("/runningFinish")
     public Integer runningFinish(@RequestBody OperatorEntity operatorEntity){
         // 1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.RUNNING_AUTO_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.RUNNING_AUTO_FINISH);
         Integer status = operatorService.updateOperatorEntity(operatorEntity);
         if (status != 1) {
             return status;
@@ -259,7 +262,7 @@ public class OperatorEventController {
     @PostMapping("/runningException")
     public Integer runningException(@RequestBody OperatorEntity operatorEntity){
         // 1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.RUNNING_AUTO_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.RUNNING_AUTO_FINISH);
         Integer status = operatorService.updateOperatorEntity(operatorEntity);
         if (status != 1) {
             return status;
@@ -278,7 +281,7 @@ public class OperatorEventController {
     @PostMapping("/serviceException")
     public Integer serviceException(@RequestBody OperatorEntity operatorEntity) {
         // 1、修改状态
-        operatorEntity.setOperatorStatus(OperatorStatus.RUNNING_AUTO_FINISH);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.RUNNING_AUTO_FINISH);
         Integer status = operatorService.updateOperatorEntity(operatorEntity);
         if (status != 1) {
             return status;

@@ -12,8 +12,8 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
 
-import com.lamp.atom.service.operator.entity.ConnectionEntity;
-import com.lamp.atom.service.operator.service.ConnectionService;
+import com.lamp.atom.service.operator.entity.RuntimeEntity;
+import com.lamp.atom.service.operator.service.RuntimeService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 
@@ -32,106 +32,100 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
-@RequestMapping("/connection")
-@RestController("connectionController")
-@Api(tags={"连接操作接口"})
-public class ConnectionController {
+@RequestMapping("/runtime")
+@RestController("runtimeController")
+@Api(tags={"运行实例操作接口"})
+public class RuntimeController {
 
     @Reference
-    private ConnectionService connectionService;
+    private RuntimeService runtimeService;
 
     /**
-     * 添加连接
-     * @param connectionEntity
+     * 添加实例
+     * @param runtimeEntity
      */
-    @PostMapping("/insertConnection")
-    @ApiOperation(value = "添加连接")
-    public ResultObject<String> insertConnection(@RequestBody ConnectionEntity connectionEntity){
-        //字段判空
-        if (Objects.isNull(connectionEntity.getSpaceId())) {
-            log.info("参数校验失败 {}", connectionEntity);
-            return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
-        }
+    @PostMapping("/insertRuntime")
+    @ApiOperation(value = "添加实例")
+    public ResultObject<String> insertRuntime(@RequestBody RuntimeEntity runtimeEntity){
         try {
-            connectionService.insertConnectionEntity(connectionEntity);
+            runtimeService.insertRuntimeEntity(runtimeEntity);
         } catch (Exception e) {
-            log.warn("连接插入失败 {}", e);
+            log.warn("实例插入失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 修改连接
-     * @param connectionEntity
+     * 修改实例
+     * @param runtimeEntity
      * @return
      */
-    @PostMapping("/updateConnection")
-    @ApiOperation(value = "修改连接")
+    @PostMapping("/updateRuntime")
+    @ApiOperation(value = "修改实例")
     @ApiImplicitParams({
             @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
             @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
     })
-    public ResultObject<String> updateConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity){
+    public ResultObject<String> updateRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity){
         try {
-            connectionService.updateConnectionEntity(connectionEntity);
+            runtimeService.updateRuntimeEntity(runtimeEntity);
         } catch (Exception e) {
-            log.warn("连接修改失败 {}", e);
+            log.warn("实例修改失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 模糊查询多个连接
+     * 模糊查询多个实例
      * @param params
      * @return
      */
-    @PostMapping("/queryConnectionsByKeyword")
-    @ApiOperation(value = "模糊查询多个连接")
-    public List<ConnectionEntity> queryConnectionsByKeyword(@RequestBody HashMap<String, String> params){
+    @PostMapping("/queryRuntimesByKeyword")
+    @ApiOperation(value = "模糊查询多个实例")
+    public List<RuntimeEntity> queryRuntimesByKeyword(@RequestBody HashMap<String, String> params){
         try {
-            return connectionService.queryConnectionEntitysByKeyword(params.get("keyword"));
+            return runtimeService.queryRuntimeEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
-            log.warn("连接查询失败 {}", e);
+            log.warn("实例查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询多个连接
-     * @param connectionEntity
+     * 查询多个实例
+     * @param runtimeEntity
      * @return
      */
-    @PostMapping("/queryConnections")
-    @ApiOperation(value = "查询多个连接")
-    public List<ConnectionEntity> queryConnections(@RequestBody ConnectionEntity connectionEntity){
+    @PostMapping("/queryRuntimes")
+    @ApiOperation(value = "查询多个实例")
+    public List<RuntimeEntity> queryRuntimes(@RequestBody RuntimeEntity runtimeEntity){
         try {
-            return connectionService.queryConnectionEntitys(connectionEntity);
+            return runtimeService.queryRuntimeEntitys(runtimeEntity);
         } catch (Exception e) {
-            log.warn("连接查询失败 {}", e);
+            log.warn("实例查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询单个连接
-     * @param connectionEntity
+     * 查询单个实例
+     * @param runtimeEntity
      * @return
      */
-    @PostMapping("/queryConnection")
-    @ApiOperation(value = "查询单个连接")
+    @PostMapping("/queryRuntime")
+    @ApiOperation(value = "查询单个实例")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
     })
-    public ConnectionEntity queryConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity){
+    public RuntimeEntity queryRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity){
         try {
-            return connectionService.queryConnectionEntity(connectionEntity);
+            return runtimeService.queryRuntimeEntity(runtimeEntity);
         } catch (Exception e) {
-            log.warn("连接查询失败 {}", e);
+            log.warn("实例查询失败 {}", e);
             return null;
         }
     }
