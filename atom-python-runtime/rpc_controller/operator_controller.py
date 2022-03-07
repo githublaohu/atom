@@ -15,7 +15,7 @@ from utils.environment import name_atom
 
 
 
-from service.operator_service import CreateOperator, OperatorService
+from service.operator_service import  OperatorService
 from transfer_object.operator.operator_create_to import OperatorCreateTo
 from transfer_object.operator.operator_to import OperatorTo
 
@@ -33,7 +33,7 @@ class OperatorController():
 
     def create_operators(self):
         data = json.loads(request.get_data(as_text=True))
-        create_operator = CreateOperator(**data)
+        create_operator = OperatorCreateTo(**data)
         self.operator_service.create_operators(create_operator)
         
     def start_operators(self):

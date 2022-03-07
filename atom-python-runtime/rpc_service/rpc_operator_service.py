@@ -10,7 +10,6 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 
-from utils.environment import get_env
 
 from rpc_service.rpc_service import RpcService
 from transfer_object.operator.operator_create_to import OperatorCreateTo, SourceAndConnect

@@ -22,6 +22,8 @@ import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.EnvVar;
+import io.fabric8.kubernetes.api.model.EnvVarSource;
+import io.fabric8.kubernetes.api.model.ObjectFieldSelector;
 import io.fabric8.kubernetes.api.model.Quantity;
 import io.fabric8.kubernetes.api.model.ResourceRequirements;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
@@ -79,17 +81,27 @@ public class StandaloneOperatorKubernetesBuilder {
 		Map<String, Quantity> limits = new HashMap<>();
 		resourceRequirements.setLimits(limits);
 		for (Entry<String, String> e : shedule.getLimits().entrySet()) {
-			limits.put(e.getKey(), new Quantity(e.getKey()));
+			limits.put(e.getKey(), new Quantity(e.getValue()));
 		}
 		List<EnvVar> envList = new ArrayList<EnvVar>();
 		for(Entry<String, String> e : shedule.getEnvs().entrySet()) {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
 		envList.add(new EnvVar("runtime_model", "standalone", null));
+		ObjectFieldSelector podId = new ObjectFieldSelector();
+		podId.setFieldPath("status.podIP");
+		EnvVarSource nodeIp = new EnvVarSource();
+		nodeIp.setFieldRef(podId);
+		envList.add(new EnvVar("node_ip", null, nodeIp));
+		
 		String value = shedule.getHardwareConfig().get("nvidia.com/gpu");
 		SpecNested<DeploymentBuilder> spec = job.withNewSpec();
 		spec.withReplicas(this.shedule.getDeploy().getCount());
-		spec.withNewTemplate().withNewSpec().withHostNetwork(true).addNewContainer().withName(this.shedule.getNoteName())
+		spec.withNewTemplate()
+				.withNewSpec()
+				.withRestartPolicy("OnFailure")
+				.withHostNetwork(true)
+				.addNewContainer().withName(this.shedule.getNoteName())
 				.withImage(Objects.isNull(value)
 						? this.operatorKubernetesConfig.getCpuContainerName()
 						: this.operatorKubernetesConfig.getGpcContainerName())

@@ -65,7 +65,7 @@ setup(
     packages=packages,
     include_package_data=True,
     zip_safe=False,
-    version= "0.0.1",
+    version= "0.0.2",
     entry_points={"console_scripts": ["atom=atom_controller:main"]},
 
     url="https://github.com/githublaohu/atom",
@@ -89,6 +89,7 @@ setup(
         "nacos-sdk-python",
         "gitpython",
         "Flask",
+        "nvidia-ml-py",
         "hdfs3",
         "oss2",
         "crcmod",

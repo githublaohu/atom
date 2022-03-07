@@ -11,6 +11,7 @@
  */
 package com.lamp.atom.schedule.api;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.lamp.atom.schedule.api.deploy.Deploy;
@@ -25,14 +26,17 @@ public class Shedule {
 	
 	private Deploy deploy;
 	
-	private Map<String ,String> limits;
+	private Map<String ,String> limits = new HashMap<String, String>();
 	
-	private Map<String,String> hardwareConfig;
+	private Map<String,String> hardwareConfig = new HashMap<String, String>();
 	
-	private Map<String,String> runParameter;
+	private Map<String,String> runParameter = new HashMap<String, String>();
 	
-	private Map<String,String> envs;
+	private Map<String,String> envs = new HashMap<String, String>();
 	
+	/**
+	 * 
+	 */
 	private Map<String,String> labels;
 	
 	private Object object;
@@ -41,5 +45,5 @@ public class Shedule {
 	
 	private String noteName;
 	
-	private String namespace;
+	private String namespace = "default";
 }

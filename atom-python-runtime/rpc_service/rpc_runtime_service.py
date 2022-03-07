@@ -15,4 +15,4 @@ from rpc_service.rpc_service import RpcService
 class RpcRuntimeService(RpcService):
 
     def get_internet_protocol_address(self):
-        pass
+        return self.client.send("",None)

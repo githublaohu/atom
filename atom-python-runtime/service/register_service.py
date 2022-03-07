@@ -69,7 +69,8 @@ class RegisterService():
             如果不可变是否加入groupid 用于区别
         """
         self.nacso_client.add_naming_instance("atom-runtime-python-service-"+self.atom_config.runtime_model, self.net_address,  self.atom_config.rpc_controller_port)
-        self.service_instances = self.nacso_client.list_naming_instance("atom-service" , healthy_only = True)
+        result = self.nacso_client.list_naming_instance("atom-service" , healthy_only = True)
+        self.service_instances = result["hosts"]
         self.__heartbeat__()
 
     def __heartbeat__(self):

@@ -17,15 +17,18 @@ import lombok.Data;
 @Data
 public class OperatorShedeleKubernetesConfig {
 
+	
 	private String masterUrl;
+	
+	private String configName  = "kubernetesConfig.yaml";
 	
 	private String configYaml;
 		
-	private String cpuContainerName;
+	private String cpuContainerName = "githublaohu/atom-base-cpu:tf1.15-cpu";
 	
-	private String gpcContainerName;
+	private String gpcContainerName = "githublaohu/atom-base-cpu:tf1.15-gpu";
 	
 	private String getPortMode;
 	
-	private String namespace;
+	private String namespace = "default";
 }

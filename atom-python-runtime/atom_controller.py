@@ -12,6 +12,7 @@
 import json
 import signal
 import logging
+from rpc_service.rpc_runtime_service import RpcRuntimeService
 
 from service.logging_service import LoggingServcie
 from transfer_object.operator.operator_create_to import OperatorCreateTo
@@ -84,12 +85,16 @@ class AtomController():
 
 
     def __init_rpc_servcie__(self):
-        self.service_service = RpcServcieServcie()
+        self.service_service = RpcServcieServcie(self.register_service)
         http_client:HttpClient = self.service_service.get_http_client()
         http_client.register_servcie = self.register_service
 
         self.rpc_operator_servcie:RpcOperatorServcie = RpcOperatorServcie()
         self.rpc_operator_servcie.client = http_client
+        if self.atom_config.docker_model : 
+            self.rpcRuntimeService:RpcRuntimeService = RpcRuntimeService()
+            self.rpcRuntimeService.client = http_client;
+            self.atom_config.rpc_controller_port = self.rpcRuntimeService.get_internet_protocol_address()
 
     def __init_operator_service__(self):
         self.operator_service = OperatorService()

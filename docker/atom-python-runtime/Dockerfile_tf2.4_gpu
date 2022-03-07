@@ -1,0 +1,15 @@
+FROM tensorflow/tensorflow:2.4.3-gpu-jupyter
+
+# Install git
+RUN apt update
+RUN apt-get install -y git
+
+# upgrade pip
+RUN /usr/local/bin/python -m pip install --upgrade pip
+
+# Install requirements
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -i https://mirrors.aliyun.com/pypi/simple/ -r /tmp/requirements.txt
+
+RUN mkdir -p ~/atom/{download_catalogue,code_directory,model_directory,public}
+CMD atom

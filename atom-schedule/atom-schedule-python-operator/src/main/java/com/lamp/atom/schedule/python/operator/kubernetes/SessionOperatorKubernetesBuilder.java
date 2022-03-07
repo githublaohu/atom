@@ -22,6 +22,8 @@ import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.EnvVar;
+import io.fabric8.kubernetes.api.model.EnvVarSource;
+import io.fabric8.kubernetes.api.model.ObjectFieldSelector;
 import io.fabric8.kubernetes.api.model.Quantity;
 import io.fabric8.kubernetes.api.model.ResourceRequirements;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
@@ -72,7 +74,7 @@ public class SessionOperatorKubernetesBuilder {
 		Map<String, Quantity> requests = new HashMap<>();
 		resourceRequirements.setRequests(requests);
 		for (Entry<String, String> e : shedule.getHardwareConfig().entrySet()) {
-			requests.put(e.getKey(), new Quantity(e.getKey()));
+			requests.put(e.getKey(), new Quantity(e.getValue()));
 		}
 
 		Map<String, Quantity> limits = new HashMap<>();
@@ -85,9 +87,19 @@ public class SessionOperatorKubernetesBuilder {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
 		envList.add(new EnvVar("runtime_model", "standalone", null));
+		ObjectFieldSelector podId = new ObjectFieldSelector();
+		podId.setFieldPath("status.podIP");
+		EnvVarSource nodeIp = new EnvVarSource();
+		nodeIp.setFieldRef(podId);
+		envList.add(new EnvVar("node_ip", null, nodeIp));
 		String value = shedule.getHardwareConfig().get("nvidia.com/gpu");
 		SpecNested<JobBuilder> spec = job.withNewSpec();
-		spec.withNewTemplate().withNewSpec().withHostNetwork(true).addNewContainer().withName(this.shedule.getNoteName())
+		spec.withNewTemplate()
+				.withNewSpec()
+				.withRestartPolicy("Never")
+				.withHostNetwork(true)
+				.addNewContainer()
+				.withName(this.shedule.getNoteName())
 				.withImage(Objects.isNull(value)
 						? this.operatorKubernetesConfig.getCpuContainerName()
 						: this.operatorKubernetesConfig.getGpcContainerName())
@@ -103,6 +115,7 @@ public class SessionOperatorKubernetesBuilder {
 		this.job();
 		this.metadata();
 		this.spec();
+		System.out.println(this.job.build().toString());
 		return this.job.build();
 	}
 }

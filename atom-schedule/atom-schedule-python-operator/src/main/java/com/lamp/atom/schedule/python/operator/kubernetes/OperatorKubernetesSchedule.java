@@ -18,6 +18,7 @@ import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
 
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -65,8 +66,9 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setShedule(shedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getJob());
+		job.getKind();
 	}
 
 	@Override

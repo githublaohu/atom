@@ -9,7 +9,11 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
+import random
+import logging
+import traceback
 from service.register_service import RegisterService
+ 
 
 
 import http.client
@@ -19,21 +23,34 @@ class HttpClient():
     register_servcie:RegisterService
     
 
-    def send(url:str , data:map):
-        connection = http.client.HTTPSConnection('api.github.com')
-        headers = {'Content-type': 'application/json'}
-        json_foo = json.dumps(data)
-        connection.request('POST', url, json_foo, headers)
-        response = connection.getresponse()
-        result = json.loads(response.read().decode())
-        return result
+    def send(slef,url:str , data:map):
+        for i in range(0,5):
+            try:
+                connection = http.client.HTTPSConnection('api.github.com')
+                headers = {'Content-type': 'application/json'}
+                json_foo = json.dumps(data)
+                connection.request('POST', url, json_foo, headers)
+                response = connection.getresponse()
+                result = json.loads(response.read().decode())
+                return result
+            except BaseException as e:
+                s = traceback.format_exc()
+                logging.error(s)
+                logging.exception("请求异常 {}".format(e))
+    
+    def getAddress(self):
+        instances = self.register_servcie.get_instance()
+        index = random.randint(0, len(instances));
+        instance = instances[index]
+        return instance["ip"]+":"+instance["port"]
 
 class RpcServcieServcie():
     register_servcie:RegisterService
     http_client:HttpClient
     
-    def __init__(self):
+    def __init__(self,register_servcie:RegisterService):
         self.http_client = HttpClient()
+        self.http_client.register_servcie = register_servcie;
     
     def get_http_client(self) -> HttpClient:
         return self.http_client

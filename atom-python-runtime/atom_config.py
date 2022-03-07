@@ -10,23 +10,21 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 
-from asyncio.log import logger
 import os
-
 import json
-from typing_extensions import runtime
-
-import nacos
 import yaml
+import nacos
+import logging
 from utils.environment import atrom_catalogue,get_env
 
 class AtomConfig():
+    docker_model:bool = False
     runtime_model:str = "standalone"
     node_ip:str = "127.0.0.1"
     nacos_address:str
     nacos_namespace:str
     config_name:str
-    rpc_controller_port:int
+    rpc_controller_port:int = None
     is_config:bool
     download_catalogue:str = None
     code_directory:str  = None
@@ -38,11 +36,17 @@ class  AtomConfigServier():
     atom_config:AtomConfig = AtomConfig()
     def __init__(self) :
         self.__atrom_catalogue = atrom_catalogue
-        self.__load_atom_config__()
-        self.__check_()
+        docker = get_env("docker")
+        if docker == None:
+            self.__load_atom_config__()
+            self.__check_()
+        else:
+            self.atom_config.docker_model = True
+            self.__docker_model()
     
     def __docker_model(self):
             node_ip = get_env("node_ip")
+            self.__atrom_catalogue = "~/atom"
             if node_ip  != None:
                 self.atom_config.node_ip = node_ip
             runtime_model = get_env("runtime_model")
@@ -54,6 +58,7 @@ class  AtomConfigServier():
             nacos_config = json.decoder(nacos_config)
             self.nacso_client = nacos.NacosClient(nacos_config.get("nacos_address"), namespace=nacos_config.get("nacos_namespace"))
             self.nacso_client.get_config(nacos_config.get("config_name"),None)
+
 
     def __load_atom_config__(self):
         """
@@ -71,24 +76,17 @@ class  AtomConfigServier():
         # 读取当前目录配置文件
         atrom_config_file =  os.getcwd() +"/atom_config.yml"
         if os.path.isfile(atrom_config_file)  == False:
-            logger.info("读取开发目录配置文件失败")
+            logging.info("读取开发目录配置文件失败")
             atrom_config_file = "~/atom/atom_config.yml"
         else:
-             logger.info("读取开发目录配置文件成功")
+             logging.info("读取开发目录配置文件成功")
         if os.path.isfile(atrom_config_file)  == False:
             self.__atrom_catalogue = "~/atom"
-            logger.info("读取默认目录下配置文件失败")
-            atrom_config_string = self.__docker_model()
-            if atrom_config_string == None :
-                logger.info("读取docker环境变量内容失败")
-                logger.info("使用默认配置，默认目镜为：~/atom/")
-                return
-            logger.info("读取docker环境变量内容成功")
-            atrom_config_json = yaml.load(atrom_config_string, Loader=yaml.SafeLoader)
+            logging.info("读取默认目录下配置文件失败")
         else:
-            logger.info("读取默认目录下配置文件成功")
+            logging.info("读取默认目录下配置文件成功")
             atrom_config_json = yaml.load(open(atrom_config_file, "r"), Loader=yaml.SafeLoader)
-        logger.info("配置内容%s", atrom_config_json)
+        logging.info("配置内容%s", atrom_config_json)
         self.atom_config.nacos_address = atrom_config_json["nacos_address"]
         self.atom_config.nacos_namespace = atrom_config_json["nacos_namespace"]
         self.atom_config.rpc_controller_port = atrom_config_json["rpc_controller_port"]

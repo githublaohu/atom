@@ -13,9 +13,9 @@ import logging
 import traceback
 import sys
 import os
-import pynvml
 
 try:
+    import pynvml
     pynvml.nvmlInit()  # 必须先初始化
     #1.获取显卡驱动版本
     Driver_Version = pynvml.nvmlSystemGetDriverVersion()

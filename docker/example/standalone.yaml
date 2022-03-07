@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atom-runtime-standalone
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: atom-runtime-standalone
+        image: githublaohu/atom-base-cpu:tf1.15-cpu
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: node_ip
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: runtime_model
+            value: "standalone"
+          - name: nacos_config
+            value: "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}"
+        

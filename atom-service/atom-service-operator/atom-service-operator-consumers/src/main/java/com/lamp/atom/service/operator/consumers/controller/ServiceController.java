@@ -11,6 +11,8 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import com.lamp.atom.schedule.api.Shedule;
+import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
 import com.lamp.atom.service.operator.entity.ServiceInfo;
 import com.lamp.atom.service.operator.service.ServiceInfoService;
@@ -21,6 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 推理
+ * @author laohu
+ *
+ */
 @Slf4j
 @RequestMapping("/service")
 @RestController("serviceController")
@@ -29,7 +36,12 @@ public class ServiceController {
     @Autowired
     private PortCreatingFunction portCreatingFunction;
     
+    @Autowired
+    private AtomScheduleService atomScheduleService;
+    
+    @Autowired
     private ServiceInfoService serviceInfoService;
+    
 
     @RequestMapping("/getServicePort")
     public Integer getServicePort(@RequestBody String ip) {
@@ -45,12 +57,15 @@ public class ServiceController {
     	// 如果是停止，那么从新创建一个
     	
     	// 如果是等待运行，
+    	Shedule shedule = new Shedule();
+    	atomScheduleService.createService(shedule);
     	return 0;
     }
     
     @RequestMapping("/dropRuntime")
-    public Integer dropRuntime() {
-    	
+    public Integer dropRuntime(ServiceInfo serviceInfo) {
+    	Shedule shedule = new Shedule();
+    	atomScheduleService.closeService(shedule);
     	return 0;
     }
 

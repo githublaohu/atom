@@ -11,23 +11,21 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lamp.atom.schedule.api.config.OperatorSheduleConfig;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.service.domain.DeployType;
 import com.lamp.atom.service.domain.OperatorStatus;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.OperatorService;
+
 import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequestMapping("/operator")
@@ -37,14 +35,11 @@ public class OperatorEventController {
     @Reference
     private OperatorService operatorService;
     
+    @Autowired
     private AtomScheduleService atomScheduleService;
     
-    private OperatorSheduleConfig operatorSheduleConfig;
     
-    @PostConstruct
-    private void init() throws Exception {
-    	atomScheduleService = new AtomScheduleService(operatorSheduleConfig);
-    }
+ 
 
     /**
      * console：算子编辑中

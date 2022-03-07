@@ -117,7 +117,7 @@ public class PortCreatingFunction {
     }
 
     public static class ServiceAndPort {
-        private String ip;
+        String ip;
         private AtomicInteger port = new AtomicInteger();
         private ConcurrentHashMap<Integer, Integer> portMap = new ConcurrentHashMap<>();
     }
