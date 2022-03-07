@@ -11,127 +11,124 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
-
-import com.lamp.atom.service.operator.entity.ConnectionEntity;
-import com.lamp.atom.service.operator.service.ConnectionService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
+import com.lamp.atom.service.operator.entity.OrganizationEntity;
+import com.lamp.atom.service.operator.service.OrganizationService;
 import com.lamp.decoration.core.result.ResultObject;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import springfox.documentation.annotations.ApiIgnore;
-
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
-@RequestMapping("/connection")
-@RestController("connectionController")
-@Api(tags={"连接操作接口"})
-public class ConnectionController {
+@RequestMapping("/organization")
+@RestController("organizationController")
+@Api(tags = {"组织操作接口"})
+public class OrganizationController {
 
     @Reference
-    private ConnectionService connectionService;
+    private OrganizationService organizationService;
 
     /**
-     * 添加连接
-     * @param connectionEntity
+     * 添加组织
+     *
+     * @param organizationEntity
      */
-    @PostMapping("/insertConnection")
-    @ApiOperation(value = "添加连接")
-    public ResultObject<String> insertConnection(@RequestBody ConnectionEntity connectionEntity){
-        //字段判空
-        if (Objects.isNull(connectionEntity.getSpaceId())) {
-            log.info("参数校验失败 {}", connectionEntity);
-            return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
-        }
+    @PostMapping("/insertOrganization")
+    @ApiOperation(value = "添加组织")
+    public ResultObject<String> insertOrganization(@RequestBody OrganizationEntity organizationEntity) {
         try {
-            connectionService.insertConnectionEntity(connectionEntity);
+            organizationService.insertOrganizationEntity(organizationEntity);
         } catch (Exception e) {
-            log.warn("连接插入失败 {}", e);
+            log.warn("组织插入失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 修改连接
-     * @param connectionEntity
+     * 修改组织
+     *
+     * @param organizationEntity
      * @return
      */
-    @PostMapping("/updateConnection")
-    @ApiOperation(value = "修改连接")
+    @PostMapping("/updateOrganization")
+    @ApiOperation(value = "修改组织")
     @ApiImplicitParams({
             @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
             @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
     })
-    public ResultObject<String> updateConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity){
+    public ResultObject<String> updateOrganization(@ApiIgnore @RequestBody OrganizationEntity organizationEntity) {
         try {
-            connectionService.updateConnectionEntity(connectionEntity);
+            organizationService.updateOrganizationEntity(organizationEntity);
         } catch (Exception e) {
-            log.warn("连接修改失败 {}", e);
+            log.warn("组织修改失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 模糊查询多个连接
+     * 模糊查询多个组织
+     *
      * @param params
      * @return
      */
-    @PostMapping("/queryConnectionsByKeyword")
-    @ApiOperation(value = "模糊查询多个连接")
-    public List<ConnectionEntity> queryConnectionsByKeyword(@RequestBody HashMap<String, String> params){
+    @PostMapping("/queryOrganizationsByKeyword")
+    @ApiOperation(value = "模糊查询多个组织")
+    public List<OrganizationEntity> queryOrganizationsByKeyword(@RequestBody HashMap<String, String> params) {
         try {
-            return connectionService.queryConnectionEntitysByKeyword(params.get("keyword"));
+            return organizationService.queryOrganizationEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
-            log.warn("连接查询失败 {}", e);
+            log.warn("组织查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询多个连接
-     * @param connectionEntity
+     * 查询多个组织
+     *
+     * @param organizationEntity
      * @return
      */
-    @PostMapping("/queryConnections")
-    @ApiOperation(value = "查询多个连接")
-    public List<ConnectionEntity> queryConnections(@RequestBody ConnectionEntity connectionEntity){
+    @PostMapping("/queryOrganizations")
+    @ApiOperation(value = "查询多个组织")
+    public List<OrganizationEntity> queryOrganizations(@RequestBody OrganizationEntity organizationEntity) {
         try {
-            return connectionService.queryConnectionEntitys(connectionEntity);
+            return organizationService.queryOrganizationEntitys(organizationEntity);
         } catch (Exception e) {
-            log.warn("连接查询失败 {}", e);
+            log.warn("组织查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询单个连接
-     * @param connectionEntity
+     * 查询单个组织
+     *
+     * @param organizationEntity
      * @return
      */
-    @PostMapping("/queryConnection")
-    @ApiOperation(value = "查询单个连接")
+    @PostMapping("/queryOrganization")
+    @ApiOperation(value = "查询单个组织")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
     })
-    public ConnectionEntity queryConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity){
+    public OrganizationEntity queryOrganization(@ApiIgnore @RequestBody OrganizationEntity organizationEntity) {
         try {
-            return connectionService.queryConnectionEntity(connectionEntity);
+            OrganizationEntity organizationEntity1 = organizationService.queryOrganizationEntity(organizationEntity);
+            return organizationEntity1;
         } catch (Exception e) {
-            log.warn("连接查询失败 {}", e);
+            log.warn("组织查询失败 {}", e);
             return null;
         }
     }

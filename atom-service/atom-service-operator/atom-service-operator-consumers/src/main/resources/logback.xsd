@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="configuration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="appender" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="encoder">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="pattern" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="file" minOccurs="0" type="xs:string" />
+              <xs:element name="rollingPolicy" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="fileNamePattern" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="class" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" />
+            <xs:attribute name="class" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="logger">
+          <xs:complexType>
+            <xs:attribute name="name" use="required" />
+            <xs:attribute name="level" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="root">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="appender-ref" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="ref" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="level" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

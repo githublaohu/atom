@@ -9,25 +9,14 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.space.consumer.utils;
+package com.lamp.atom.service.domain;
 
-import com.lamp.decoration.core.result.ResultObject;
+/**
+ * 服务运行模式
+ */
+public enum SiRuntimePattern {
 
-public enum ResultObjectEnums {
+    COMMAND,
 
-    SUCCESS(200,"success"),
-
-    FAIL(500,"fail"),
-
-    CHECK_PARAMETERS_FAIL(120001, "check parameters fail");
-
-    private ResultObject<String> resultObject;
-
-    ResultObjectEnums(Integer code, String message){
-        this.resultObject = ResultObject.getResultObjectMessgae(code,message);
-    }
-
-    public ResultObject<String> getResultObject(){
-        return this.resultObject;
-    }
+    KUBERNETES
 }

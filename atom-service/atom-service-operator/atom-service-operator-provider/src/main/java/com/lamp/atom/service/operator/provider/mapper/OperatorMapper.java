@@ -26,14 +26,14 @@ public interface OperatorMapper {
      * @param operatorEntity
      */
     @Insert("insert into operator" +
-            "(operator_template_id,operator_name,operator_source,operator_source_id,operator_runtime_type,operator_model," +
-            "space_id,space_name,space_alias,scene_id,scene_name,scene_alias,experiment_id,experiment_name,experiment_alias," +
-            "resources_account_id,code_mode,code_address,code_version,module_name,execute_object,environment_conf,operator_conf,model_conf," +
-            "cpu,gpu,men,display_card,operator_epoch,operator_plan_runtimes,operator_status,operator_priority,deploy_type) " +
-            "values(#{operatorTemplateId},#{operatorName},#{operatorSourceType},#{operatorSourceId},#{operatorRuntimeType},#{operatorModel}," +
-            "#{spaceId},#{spaceName},#{spaceAlias},#{sceneId},#{sceneName},#{sceneAlias},#{experimentId},#{experimentName},#{experimentAlias}," +
-            "#{resourcesAccountId},#{codeMode},#{codeAddress},#{codeVersion},#{moduleName},#{executeObject},#{operatorConf},#{environmentConf},#{modelConf}," +
-            "#{cpu},#{gpu},#{men},#{displayCard},#{operatorEpoch},#{operatorPlanRuntimes},#{operatorStatus},#{operatorPriority},#{deployType})")
+            "(space_id,operator_template_id,operator_name,operator_source_id,operator_source_type,operator_runtime_type,operator_model," +
+            "level,resources_account_id,code_mode,code_address,code_version,module_name,execute_object,environment_conf,operator_conf,model_conf," +
+            "cpu,gpu,men,display_card," +
+            "operator_epoch,operator_plan_runtimes,operator_status,operator_priority,case_id,deploy_type) " +
+            "values(#{spaceId},#{operatorTemplateId},#{operatorName},#{operatorSourceId},#{operatorSourceType},#{operatorRuntimeType},#{operatorModel}," +
+            "#{level},#{resourcesAccountId},#{codeMode},#{codeAddress},#{codeVersion},#{moduleName},#{executeObject},#{operatorConf},#{environmentConf},#{modelConf}," +
+            "#{cpu},#{gpu},#{men},#{displayCard}," +
+            "#{operatorEpoch},#{operatorPlanRuntimes},#{runtimeStatus},#{operatorPriority},#{caseId},#{deployType})")
     Integer insertOperatorEntity(OperatorEntity operatorEntity);
 
     /**
@@ -44,10 +44,10 @@ public interface OperatorMapper {
     @Update({"<script>" +
             "update operator" +
             "<set>" +
-            "<if test = 'operatorStatus != null'>operator_status = #{operatorStatus},</if>" +
+            "<if test = 'runtimeStatus != null'>operator_status = #{runtimeStatus},</if>" +
             "<if test = 'deleteFlag != null'>delete_flag = #{deleteFlag}</if>" +
-            "where id = #{id}" +
             "</set>" +
+            "where id = #{id}" +
             "</script>"})
     Integer updateOperatorEntity(OperatorEntity operatorEntity);
 
@@ -56,19 +56,19 @@ public interface OperatorMapper {
      * @param keyword
      * @return
      */
-    @Select({"select * from operator " +
-            "where" +
-            "id like #{keyword} or operator_template_id like #{keyword} or operator_name like #{keyword} or operator_source like #{keyword} " +
-            "or operator_source_id like #{keyword} or operator_runtime_type like #{keyword} or operator_model like #{keyword} " +
+    @Select("select * from operator " +
+            "where delete_flag = 0 and " +
+            "(id like #{keyword} or operator_template_id like #{keyword} or operator_name like #{keyword} or operator_source_id like #{keyword} " +
+            "or operator_source_type like #{keyword} or operator_runtime_type like #{keyword} or operator_model like #{keyword} " +
             "or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
             "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
             "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
-            "or resources_account_id like #{keyword} or code_mode like #{keyword} or code_address like #{keyword} " +
+            "or level like #{keyword} or resources_account_id like #{keyword} or code_mode like #{keyword} or code_address like #{keyword} " +
             "or code_version like #{keyword} or module_name like #{keyword} or execute_object like #{keyword} " +
-            "or environment_conf like #{keyword} or operator_conf like #{keyword} or model_conf like #{keyword} " +
-            "or cpu like #{keyword} or gpu like #{keyword} or men like #{keyword} " +
-            "or display_card like #{keyword} or operator_epoch like #{keyword} or operator_plan_runtimes like #{keyword} " +
-            "or operator_status like #{keyword} or operator_priority like #{keyword} or deploy_type like #{keyword}"})
+            "or operator_conf like #{keyword} or environment_conf like #{keyword} or model_conf like #{keyword} " +
+            "or cpu like #{keyword} or gpu like #{keyword} or men like #{keyword} or display_card like #{keyword} " +
+            "or operator_epoch like #{keyword} or operator_plan_runtimes like #{keyword} " +
+            "or operator_status like #{keyword} or operator_priority like #{keyword} or case_id like #{keyword} or deploy_type like #{keyword})")
     List<OperatorEntity> queryOperatorEntitysByKeyword(String keyword);
 
     /**
@@ -95,6 +95,6 @@ public interface OperatorMapper {
      * @return
      */
     @Select("select * from operator " +
-            "where id = #{id} and delete_flag = 0")
+            "where id = #{id}")
     OperatorEntity queryOperatorEntity(OperatorEntity operatorEntity);
 }

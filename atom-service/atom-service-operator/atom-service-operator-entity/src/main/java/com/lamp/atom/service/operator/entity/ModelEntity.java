@@ -15,9 +15,12 @@ import com.lamp.atom.service.domain.ModelCreateType;
 import com.lamp.atom.service.domain.ModelTechnologyType;
 import com.lamp.atom.service.domain.ModelType;
 import com.lamp.atom.service.domain.OperatorResult;
+
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
+@ApiModel("模型类")
 public class ModelEntity extends BaseEntity {
 
     private static final long serialVersionUID = 4378966092513467540L;
@@ -28,44 +31,19 @@ public class ModelEntity extends BaseEntity {
     private Long spaceId;
 
     /**
-     * 空间名
+     * 节点id
      */
-    private String spaceName;
+    private Long nodeId;
 
     /**
-     * 空间别名
+     * 运行实例id
      */
-    private String spaceAlias;
+    private Long runtimeId;
 
     /**
-     * 场景id
+     * 训练id
      */
-    private Long sceneId;
-
-    /**
-     * 场景名
-     */
-    private String sceneName;
-
-    /**
-     * 场景别名
-     */
-    private String sceneAlias;
-
-    /**
-     * 实验id
-     */
-    private Long experimentId;
-
-    /**
-     * 实验名
-     */
-    private String experimentName;
-
-    /**
-     * 实验别名
-     */
-    private String experimentAlias;
+    private Long operatorId;
 
     /**
      * 模型创建类型
@@ -118,11 +96,6 @@ public class ModelEntity extends BaseEntity {
     private String connectStatus;
 
     /**
-     * 训练id
-     */
-    private Long operatorId;
-
-    /**
      * 训练结果
      */
     private OperatorResult operatorResult;
@@ -146,4 +119,8 @@ public class ModelEntity extends BaseEntity {
      * 产生方式
      */
     private String produceWay;
+
+    public ModelEntity(Long id) {
+        super(id);
+    }
 }

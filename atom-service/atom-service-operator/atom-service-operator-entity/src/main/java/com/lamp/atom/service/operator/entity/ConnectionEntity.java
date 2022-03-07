@@ -13,9 +13,12 @@ package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.ColonyType;
 import com.lamp.atom.service.domain.SourceType;
+
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 @Data
+@ApiModel("连接实体")
 public class ConnectionEntity extends BaseEntity {
 
     private static final long serialVersionUID = 7945055154629636963L;
@@ -24,46 +27,6 @@ public class ConnectionEntity extends BaseEntity {
      * 空间id
      */
     private Long spaceId;
-
-    /**
-     * 空间名
-     */
-    private String spaceName;
-
-    /**
-     * 空间别名
-     */
-    private String spaceAlias;
-
-    /**
-     * 场景id
-     */
-    private Long sceneId;
-
-    /**
-     * 场景名
-     */
-    private String sceneName;
-
-    /**
-     * 场景别名
-     */
-    private String sceneAlias;
-
-    /**
-     * 实验id
-     */
-    private Long experimentId;
-
-    /**
-     * 实验名
-     */
-    private String experimentName;
-
-    /**
-     * 实验别名
-     */
-    private String experimentAlias;
 
     /**
      * 操作类型
@@ -129,4 +92,8 @@ public class ConnectionEntity extends BaseEntity {
      * 源数据条数
      */
     private Long sourceCount;
+
+    public ConnectionEntity(Long id) {
+        super(id);
+    }
 }
