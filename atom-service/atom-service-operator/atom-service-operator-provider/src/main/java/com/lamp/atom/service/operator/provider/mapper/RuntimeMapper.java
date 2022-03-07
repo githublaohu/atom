@@ -11,7 +11,7 @@
  */
 package com.lamp.atom.service.operator.provider.mapper;
 
-import com.lamp.atom.service.operator.entity.CaseEntity;
+import com.lamp.atom.service.operator.entity.RuntimeEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -20,50 +20,49 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 @Mapper
-public interface CaseMapper {
+public interface RuntimeMapper {
     /**
      * 添加实例
-     * @param caseEntity
+     * @param runtimeEntity
      */
-    @Insert("insert into `case`" +
-            "(case_name,operator_id,operator_name,server_ip," +
-            "start_time,end_time,estimate_start_time,estimate_end_time," +
-            "status,sequence,reason_data_num,data_flow_num) " +
-            "values(#{caseName},#{operatorId},#{operatorName},#{serverIp}," +
-            "#{startTime},#{endTime},#{estimateStartTime},#{estimateEndTime}," +
-            "#{status},#{sequence},#{reasonDataNum},#{dataFlowNum})")
-    Integer insertCaseEntity(CaseEntity caseEntity);
+    @Insert("insert into runtime" +
+            "(space_id,case_source_type,source_id,node_id," +
+            "server_ip,server_port,start_time,end_time,estimate_start_time,estimate_end_time," +
+            "runtime_status,label,start_id,start_name,end_id,end_name) " +
+            "values(#{spaceId},#{caseSourceType},#{sourceId},#{nodeId}," +
+            "#{serverIp},#{serverPort},#{startTime},#{endTime},#{estimateStartTime},#{estimateEndTime}," +
+            "#{runtimeStatus},#{label},#{startId},#{startName},#{endId},#{endName})")
+    Integer insertRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
      * 修改实例
-     * @param caseEntity
+     * @param runtimeEntity
      * @return
      */
-    @Update("update `case` set " +
+    @Update("update runtime set " +
             "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
-    Integer updateCaseEntity(CaseEntity caseEntity);
+    Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
      * 模糊查询多个实例
      * @param keyword
      * @return
      */
-    @Select("select * from `case` " +
+    @Select("select * from runtime " +
             "where delete_flag = 0 and " +
-            "(id like #{keyword} or case_name like #{keyword} or operator_id like #{keyword} or operator_name like #{keyword} " +
-            "or server_ip like #{keyword} or start_time like #{keyword} or end_time like #{keyword} " +
-            "or estimate_start_time like #{keyword} or estimate_end_time like #{keyword} or status like #{keyword} " +
-            "or sequence like #{keyword} or reason_data_num like #{keyword} or data_flow_num like #{keyword})")
-    List<CaseEntity> queryCaseEntitysByKeyword(String keyword);
+            "(id like #{keyword} or space_id like #{keyword} or case_source_type like #{keyword} or source_id like #{keyword} or node_id like #{keyword} " +
+            "or server_ip like #{keyword} or server_port like #{keyword} start_time like #{keyword} or end_time like #{keyword} or estimate_start_time like #{keyword} or estimate_end_time like #{keyword} " +
+            "or runtime_status like #{keyword} or label like #{keyword} or start_id like #{keyword} or start_name like #{keyword} or end_id like #{keyword} or end_name like #{keyword})")
+    List<RuntimeEntity> queryRuntimeEntitysByKeyword(String keyword);
 
     /**
      * 查询多个实例
-     * @param caseEntity
+     * @param runtimeEntity
      * @return
      */
     @Select({"<script>" +
-            "select * from `case` " +
+            "select * from runtime " +
             "<where>" +
             "<if test = 'operatorId != null'>operator_id = #{operatorId} </if>" +
             "<if test = 'startTime != null'>and start_time &gt; #{startTime} </if>" +
@@ -72,14 +71,14 @@ public interface CaseMapper {
             "<if test = 'estimateEndTime != null'>and estimate_end_time &lt; #{estimateEndTime} </if>" +
             "</where>" +
             "</script>"})
-    List<CaseEntity> queryCaseEntitys(CaseEntity caseEntity);
+    List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity);
 
     /**
      * 查询单个实例
-     * @param caseEntity
+     * @param runtimeEntity
      * @return
      */
-    @Select("select * from `case` " +
+    @Select("select * from runtime " +
             "where id = #{id}")
-    CaseEntity queryCaseEntity(CaseEntity caseEntity);
+    RuntimeEntity queryRuntimeEntity(RuntimeEntity runtimeEntity);
 }

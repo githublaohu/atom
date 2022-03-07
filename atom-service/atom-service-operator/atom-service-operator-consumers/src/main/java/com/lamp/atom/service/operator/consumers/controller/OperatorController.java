@@ -11,24 +11,34 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
-import com.lamp.atom.service.operator.common.OperatorCreateTo;
-import com.lamp.atom.service.operator.entity.OperatorEntity;
-import com.lamp.atom.service.operator.service.AvaliablePortService;
-import com.lamp.atom.service.operator.service.OperatorService;
-import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
-import com.lamp.decoration.core.result.ResultObject;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import com.lamp.atom.service.operator.common.OperatorCreateTo;
+import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
+import com.lamp.atom.service.operator.entity.OperatorEntity;
+import com.lamp.atom.service.operator.service.AvaliablePortService;
+import com.lamp.atom.service.operator.service.OperatorService;
+import com.lamp.decoration.core.result.ResultObject;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RequestMapping("/operator")
 @RestController("operatorController")
+@Api(tags={"算子操作接口"})
 public class OperatorController {
 
     @Reference
@@ -41,9 +51,10 @@ public class OperatorController {
      * @param operatorEntity
      */
     @PostMapping("/insertOperator")
+    @ApiOperation(value = "添加算子")
     public ResultObject<String> insertOperator(@RequestBody OperatorEntity operatorEntity){
         //字段判空
-        if (Objects.isNull(operatorEntity.getSpaceId()) || Objects.isNull(operatorEntity.getSceneId()) || Objects.isNull(operatorEntity.getExperimentId())) {
+        if (Objects.isNull(operatorEntity.getSpaceId())) {
             log.info("参数校验失败 {}", operatorEntity);
             return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
@@ -62,7 +73,12 @@ public class OperatorController {
      * @return
      */
     @PostMapping("/updateOperator")
-    public ResultObject<String> updateOperator(@RequestBody OperatorEntity operatorEntity){
+    @ApiOperation(value = "修改算子")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
+            @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
+    })
+    public ResultObject<String> updateOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity){
         try {
             operatorService.updateOperatorEntity(operatorEntity);
         } catch (Exception e) {
@@ -78,6 +94,7 @@ public class OperatorController {
      * @return
      */
     @PostMapping("/queryOperatorsByKeyword")
+    @ApiOperation(value = "模糊查询多个算子")
     public List<OperatorEntity> queryOperatorsByKeyword(@RequestBody HashMap<String, String> params){
         try {
             return operatorService.queryOperatorEntitysByKeyword(params.get("keyword"));
@@ -93,6 +110,7 @@ public class OperatorController {
      * @return
      */
     @PostMapping("/queryOperators")
+    @ApiOperation(value = "查询多个算子")
     public List<OperatorEntity> queryOperators(@RequestBody OperatorEntity operatorEntity){
         try {
             return operatorService.queryOperatorEntitys(operatorEntity);
@@ -108,7 +126,11 @@ public class OperatorController {
      * @return
      */
     @PostMapping("/queryOperator")
-    public OperatorCreateTo queryOperator(@RequestBody OperatorEntity operatorEntity){
+    @ApiOperation(value = "查询单个算子")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
+    })
+    public OperatorCreateTo queryOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity){
         try {
             OperatorEntity operatorEntity1 = operatorService.queryOperatorEntity(operatorEntity);
             //查出算子的数据

@@ -12,13 +12,12 @@
 package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.DataSourceType;
-import lombok.AllArgsConstructor;
+
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@ApiModel(value="DataSourceEntity",description="数据源类")
 public class DataSourceEntity extends BaseEntity {
 
     private static final long serialVersionUID = -9016196677726614802L;
@@ -113,4 +112,7 @@ public class DataSourceEntity extends BaseEntity {
      */
     private Integer order;
 
+    public DataSourceEntity(Long id) {
+        super(id);
+    }
 }

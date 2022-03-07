@@ -26,12 +26,12 @@ public interface ModelMapper {
      * @param modelEntity
      */
     @Insert("insert into model" +
-            "(space_id,space_name,space_alias,scene_id,scene_name,scene_alias,experiment_id,experiment_name,experiment_alias," +
+            "(space_id,node_id,runtime_id,operator_id," +
             "model_create_type,model_name,model_version,model_score,model_type,model_technology_type,model_address,model_status," +
-            "connect_id,connect_status,operator_id,operator_result,resource_type,resource_value,resource_size,produce_way) " +
-            "values(#{spaceId},#{spaceName},#{spaceAlias},#{sceneId},#{sceneName},#{sceneAlias},#{experimentId},#{experimentName},#{experimentAlias}," +
+            "connect_id,connect_status,operator_result,resource_type,resource_value,resource_size,produce_way) " +
+            "values(#{spaceId},#{nodeId},#{runtimeId},#{operatorId}," +
             "#{modelCreateType},#{modelName},#{modelVersion},#{modelScore},#{modelType},#{modelTechnologyType},#{modelAddress},#{modelStatus}," +
-            "#{connectId},#{connectStatus},#{operatorId},#{operatorResult},#{resourceType},#{resourceValue},#{resourceSize},#{produceWay})")
+            "#{connectId},#{connectStatus},#{operatorResult},#{resourceType},#{resourceValue},#{resourceSize},#{produceWay})")
     Integer insertModelEntity(ModelEntity modelEntity);
 
     /**
