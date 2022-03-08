@@ -9,7 +9,7 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.space.operator.entity;
+package com.lamp.atom.service.space.entity;
 
 import lombok.Data;
 
