@@ -14,9 +14,13 @@ package com.lamp.atom.service.operator.entity;
 import com.lamp.atom.service.domain.DataSourceType;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(value="DataSourceEntity",description="数据源类")
 public class DataSourceEntity extends BaseEntity {
 

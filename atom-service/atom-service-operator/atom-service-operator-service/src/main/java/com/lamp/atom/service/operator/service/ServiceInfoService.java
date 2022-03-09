@@ -19,18 +19,21 @@ public interface ServiceInfoService {
 
     /**
      * 创建服务配置
+     *
      * @param serviceInfoEntity
      */
     Integer createServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 
     /**
      * 添加服务配置
+     *
      * @param serviceInfoEntity
      */
     Integer insertServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 
     /**
      * 模糊查询多个服务配置
+     *
      * @param keyword
      * @return
      */
@@ -38,6 +41,7 @@ public interface ServiceInfoService {
 
     /**
      * 修改服务配置
+     *
      * @param serviceInfoEntity
      * @return
      */
@@ -45,13 +49,14 @@ public interface ServiceInfoService {
 
     /**
      * 查询多个服务配置
-     * @param serviceInfoEntity
+     *
      * @return
      */
-    List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
+    List<ServiceInfoEntity> queryServiceInfoEntitys();
 
     /**
      * 查询单个服务配置
+     *
      * @param serviceInfoEntity
      * @return
      */

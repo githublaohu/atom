@@ -13,10 +13,14 @@ package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.SiRuntimePattern;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel("服务配置类")
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value="ServiceInfoEntity",description="服务配置类")
 public class ServiceInfoEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2082481705511854778L;

@@ -43,8 +43,8 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity) {
-        return runtimeMapper.queryRuntimeEntitys(runtimeEntity);
+    public List<RuntimeEntity> queryRuntimeEntitys() {
+        return runtimeMapper.queryRuntimeEntitys();
     }
 
     @Override

@@ -15,10 +15,14 @@ import com.lamp.atom.service.domain.NodeModel;
 import com.lamp.atom.service.domain.NodeStatus;
 import com.lamp.atom.service.domain.NodeType;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel("节点类")
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value="NodeEntity",description="节点类")
 public class NodeEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2786281072838530374L;
