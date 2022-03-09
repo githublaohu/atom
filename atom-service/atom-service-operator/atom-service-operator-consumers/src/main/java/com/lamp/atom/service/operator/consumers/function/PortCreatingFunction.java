@@ -113,7 +113,7 @@ public class PortCreatingFunction {
 
     //注册实例到服务中
     public void registerService() throws NacosException {
-        namingService.registerInstance("atom-operator-service", ip, Integer.parseInt(port));
+        namingService.registerInstance("atom-service-operator", ip, Integer.parseInt(port));
     }
 
     public static class ServiceAndPort {

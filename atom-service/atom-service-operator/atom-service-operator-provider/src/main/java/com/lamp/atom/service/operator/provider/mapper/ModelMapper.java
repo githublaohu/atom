@@ -23,6 +23,7 @@ import java.util.List;
 public interface ModelMapper {
     /**
      * 添加模型
+     *
      * @param modelEntity
      */
     @Insert("insert into model" +
@@ -36,6 +37,7 @@ public interface ModelMapper {
 
     /**
      * 修改模型
+     *
      * @param modelEntity
      * @return
      */
@@ -46,6 +48,7 @@ public interface ModelMapper {
 
     /**
      * 模糊查询多个模型
+     *
      * @param keyword
      * @return
      */
@@ -63,23 +66,16 @@ public interface ModelMapper {
 
     /**
      * 查询多个模型
-     * @param modelEntity
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from model " +
-            "<where>" +
-            "<if test = 'spaceId != null'>space_id = #{spaceId} </if>" +
-            "<if test = 'sceneId != null'>and scene_id = #{sceneId} </if>" +
-            "<if test = 'experimentId != null'>and experiment_id = #{experimentId} </if>" +
-            "<if test = 'connectId != null'>and connect_id = #{connectId} </if>" +
-            "<if test = 'operatorId != null'>and operator_id = #{operatorId} </if>" +
-            "</where>" +
-            "</script>"})
-    List<ModelEntity> queryModelEntitys(ModelEntity modelEntity);
+    @Select("select * from model " +
+            "where delete_flag = 0")
+    List<ModelEntity> queryModelEntitys();
 
     /**
      * 查询单个模型
+     *
      * @param modelEntity
      * @return
      */

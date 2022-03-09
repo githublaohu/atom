@@ -16,10 +16,14 @@ import java.util.Date;
 import com.lamp.atom.service.domain.CaseSourceType;
 import com.lamp.atom.service.domain.RuntimeStatus;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel("运行实例类")
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value="RuntimeEntity",description="运行实例类")
 public class RuntimeEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2237946472510786359L;

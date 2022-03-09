@@ -47,10 +47,7 @@ public class ResourceRelationController {
      */
     @PostMapping("/insertResourceRelation")
     @ApiOperation(value = "添加资源关系")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", required = false, paramType = "body" ,dataType="Long")
-    })
-    public ResultObject<String> insertResourceRelation(@ApiIgnore @RequestBody ResourceRelationEntity resourceRelationEntity) {
+    public ResultObject<String> insertResourceRelation(@RequestBody ResourceRelationEntity resourceRelationEntity) {
         // 字段判空
         if (Objects.isNull(resourceRelationEntity.getRelationId()) || Objects.isNull(resourceRelationEntity.getBeRelationId())) {
             log.info("参数校验失败 {}", resourceRelationEntity);
@@ -107,14 +104,13 @@ public class ResourceRelationController {
     /**
      * 查询多个资源关系
      *
-     * @param resourceRelationEntity
      * @return
      */
     @PostMapping("/queryResourceRelations")
     @ApiOperation(value = "查询多个资源关系")
-    public List<ResourceRelationEntity> queryResourceRelations(@RequestBody ResourceRelationEntity resourceRelationEntity) {
+    public List<ResourceRelationEntity> queryResourceRelations() {
         try {
-            return resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
+            return resourceRelationService.queryResourceRelationEntitys();
         } catch (Exception e) {
             log.warn("资源关系查询失败 {}", e);
             return null;

@@ -18,12 +18,14 @@ import java.util.List;
 public interface OperatorService {
     /**
      * 添加算子
+     *
      * @param operatorEntity
      */
     Integer insertOperatorEntity(OperatorEntity operatorEntity);
 
     /**
      * 修改算子
+     *
      * @param operatorEntity
      * @return
      */
@@ -31,6 +33,7 @@ public interface OperatorService {
 
     /**
      * 模糊查询多个算子
+     *
      * @param keyword
      * @return
      */
@@ -38,13 +41,14 @@ public interface OperatorService {
 
     /**
      * 查询多个算子
-     * @param operatorEntity
+     *
      * @return
      */
-    List<OperatorEntity> queryOperatorEntitys(OperatorEntity operatorEntity);
+    List<OperatorEntity> queryOperatorEntitys();
 
     /**
      * 查询单个算子
+     *
      * @param operatorEntity
      * @return
      */
