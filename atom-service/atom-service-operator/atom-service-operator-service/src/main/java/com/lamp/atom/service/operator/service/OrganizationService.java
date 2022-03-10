@@ -19,18 +19,21 @@ public interface OrganizationService {
 
     /**
      * 创建组织
+     *
      * @param organizationEntity
      */
     Integer createOrganizationEntity(OrganizationEntity organizationEntity);
 
     /**
      * 添加组织
+     *
      * @param organizationEntity
      */
     Integer insertOrganizationEntity(OrganizationEntity organizationEntity);
 
     /**
      * 模糊查询多个组织
+     *
      * @param keyword
      * @return
      */
@@ -38,6 +41,7 @@ public interface OrganizationService {
 
     /**
      * 修改组织
+     *
      * @param organizationEntity
      * @return
      */
@@ -45,13 +49,14 @@ public interface OrganizationService {
 
     /**
      * 查询多个组织
-     * @param organizationEntity
+     *
      * @return
      */
-    List<OrganizationEntity> queryOrganizationEntitys(OrganizationEntity organizationEntity);
+    List<OrganizationEntity> queryOrganizationEntitys();
 
     /**
      * 查询单个组织
+     *
      * @param organizationEntity
      * @return
      */

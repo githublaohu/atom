@@ -31,8 +31,8 @@ public class ServiceController {
     PortCreatingFunction portCreatingFunction;
 
     @PostMapping("/getServicePort")
-    public Integer getServicePort(@RequestBody String ip) {
-        return portCreatingFunction.getPort(ip);
+    public Long getServicePort(@RequestBody String ip) {
+        return portCreatingFunction.getPort(ip).longValue();
     }
 
 }

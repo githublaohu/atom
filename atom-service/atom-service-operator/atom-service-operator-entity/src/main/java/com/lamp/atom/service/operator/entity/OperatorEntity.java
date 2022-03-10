@@ -15,11 +15,15 @@ import com.lamp.atom.service.domain.*;
 import com.lamp.atom.service.domain.RuntimeStatus;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@ApiModel("算子类")
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value="OperatorEntity",description="算子类")
 public class OperatorEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3837234206057086494L;
@@ -45,7 +49,7 @@ public class OperatorEntity extends BaseEntity {
      * 算子源id
      */
     @NonNull
-    private String operatorSourceId;
+    private Long operatorSourceId;
 
     /**
      * 算子来源类型

@@ -23,6 +23,7 @@ import java.util.List;
 public interface OrganizationMapper {
     /**
      * 添加组织
+     *
      * @param organizationEntity
      */
     @Insert("insert into organization" +
@@ -34,6 +35,7 @@ public interface OrganizationMapper {
 
     /**
      * 修改组织
+     *
      * @param organizationEntity
      * @return
      */
@@ -44,6 +46,7 @@ public interface OrganizationMapper {
 
     /**
      * 模糊查询多个组织
+     *
      * @param keyword
      * @return
      */
@@ -55,21 +58,16 @@ public interface OrganizationMapper {
 
     /**
      * 查询多个组织
-     * @param organizationEntity
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from organization " +
-            "<where>" +
-            "<if test = 'parentId != null'>parent_id = #{parentId} </if>" +
-            "<if test = 'createId != null'>and create_id = #{createId} </if>" +
-            "<if test = 'ownerId != null'>and owner_id = #{ownerId} </if>" +
-            "</where>" +
-            "</script>"})
-    List<OrganizationEntity> queryOrganizationEntitys(OrganizationEntity organizationEntity);
+    @Select("select * from organization " +
+            "where delete_flag = 0")
+    List<OrganizationEntity> queryOrganizationEntitys();
 
     /**
      * 查询单个组织
+     *
      * @param organizationEntity
      * @return
      */

@@ -36,7 +36,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/runtime")
 @RestController("runtimeController")
-@Api(tags={"运行实例操作接口"})
+@Api(tags = {"运行实例操作接口"})
 public class RuntimeController {
 
     @Reference
@@ -44,11 +44,12 @@ public class RuntimeController {
 
     /**
      * 添加实例
+     *
      * @param runtimeEntity
      */
     @PostMapping("/insertRuntime")
     @ApiOperation(value = "添加实例")
-    public ResultObject<String> insertRuntime(@RequestBody RuntimeEntity runtimeEntity){
+    public ResultObject<String> insertRuntime(@RequestBody RuntimeEntity runtimeEntity) {
         try {
             runtimeService.insertRuntimeEntity(runtimeEntity);
         } catch (Exception e) {
@@ -60,16 +61,17 @@ public class RuntimeController {
 
     /**
      * 修改实例
+     *
      * @param runtimeEntity
      * @return
      */
     @PostMapping("/updateRuntime")
     @ApiOperation(value = "修改实例")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
-            @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
+            @ApiImplicitParam(name = "id", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long"),
+            @ApiImplicitParam(name = "deleteFlag", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long")
     })
-    public ResultObject<String> updateRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity){
+    public ResultObject<String> updateRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity) {
         try {
             runtimeService.updateRuntimeEntity(runtimeEntity);
         } catch (Exception e) {
@@ -81,12 +83,13 @@ public class RuntimeController {
 
     /**
      * 模糊查询多个实例
+     *
      * @param params
      * @return
      */
     @PostMapping("/queryRuntimesByKeyword")
     @ApiOperation(value = "模糊查询多个实例")
-    public List<RuntimeEntity> queryRuntimesByKeyword(@RequestBody HashMap<String, String> params){
+    public List<RuntimeEntity> queryRuntimesByKeyword(@RequestBody HashMap<String, String> params) {
         try {
             return runtimeService.queryRuntimeEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
@@ -97,14 +100,14 @@ public class RuntimeController {
 
     /**
      * 查询多个实例
-     * @param runtimeEntity
+     *
      * @return
      */
     @PostMapping("/queryRuntimes")
     @ApiOperation(value = "查询多个实例")
-    public List<RuntimeEntity> queryRuntimes(@RequestBody RuntimeEntity runtimeEntity){
+    public List<RuntimeEntity> queryRuntimes() {
         try {
-            return runtimeService.queryRuntimeEntitys(runtimeEntity);
+            return runtimeService.queryRuntimeEntitys();
         } catch (Exception e) {
             log.warn("实例查询失败 {}", e);
             return null;
@@ -113,15 +116,16 @@ public class RuntimeController {
 
     /**
      * 查询单个实例
+     *
      * @param runtimeEntity
      * @return
      */
     @PostMapping("/queryRuntime")
     @ApiOperation(value = "查询单个实例")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
+            @ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
     })
-    public RuntimeEntity queryRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity){
+    public RuntimeEntity queryRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity) {
         try {
             return runtimeService.queryRuntimeEntity(runtimeEntity);
         } catch (Exception e) {

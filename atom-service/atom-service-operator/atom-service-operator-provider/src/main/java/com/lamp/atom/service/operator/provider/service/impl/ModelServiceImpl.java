@@ -48,8 +48,8 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public List<ModelEntity> queryModelEntitys(ModelEntity modelEntity) {
-        return modelMapper.queryModelEntitys(modelEntity);
+    public List<ModelEntity> queryModelEntitys() {
+        return modelMapper.queryModelEntitys();
     }
 
     @Override

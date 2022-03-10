@@ -23,6 +23,7 @@ import java.util.List;
 public interface OperatorMapper {
     /**
      * 添加算子
+     *
      * @param operatorEntity
      */
     @Insert("insert into operator" +
@@ -38,6 +39,7 @@ public interface OperatorMapper {
 
     /**
      * 修改算子
+     *
      * @param operatorEntity
      * @return
      */
@@ -53,6 +55,7 @@ public interface OperatorMapper {
 
     /**
      * 模糊查询多个算子
+     *
      * @param keyword
      * @return
      */
@@ -73,24 +76,16 @@ public interface OperatorMapper {
 
     /**
      * 查询多个算子
-     * @param operatorEntity
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from operator " +
-            "<where>" +
-            "<if test = 'spaceId != null'>space_id = #{spaceId} </if>" +
-            "<if test = 'sceneId != null'>and scene_id = #{sceneId} </if>" +
-            "<if test = 'experimentId != null'>and experiment_id = #{experimentId} </if>" +
-            "<if test = 'resourcesAccountId != null'>and resources_account_id = #{resourcesAccountId} </if>" +
-            "<if test = 'operatorEpoch != null'>and operator_epoch = #{operatorEpoch} </if>" +
-            "<if test = 'operatorPriority != null'>and operator_priority = #{operatorPriority} </if>" +
-            "</where>" +
-            "</script>"})
-    List<OperatorEntity> queryOperatorEntitys(OperatorEntity operatorEntity);
+    @Select("select * from operator " +
+            "where delete_flag = 0")
+    List<OperatorEntity> queryOperatorEntitys();
 
     /**
      * 查询单个算子
+     *
      * @param operatorEntity
      * @return
      */
