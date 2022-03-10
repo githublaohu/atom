@@ -18,12 +18,14 @@ import java.util.List;
 public interface DataSourceService {
     /**
      * 添加数据源
+     *
      * @param dataSourceEntity
      */
     Integer insertDataSourceEntity(DataSourceEntity dataSourceEntity);
 
     /**
      * 修改数据源
+     *
      * @param dataSourceEntity
      * @return
      */
@@ -31,6 +33,7 @@ public interface DataSourceService {
 
     /**
      * 模糊查询多个数据源
+     *
      * @param keyword
      * @return
      */
@@ -38,13 +41,14 @@ public interface DataSourceService {
 
     /**
      * 查询多个数据源
-     * @param dataSourceEntity
+     *
      * @return
      */
-    List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity);
+    List<DataSourceEntity> queryDataSourceEntitys();
 
     /**
      * 查询单个数据源
+     *
      * @param dataSourceEntity
      * @return
      */

@@ -48,8 +48,8 @@ public class ResourceRelationServiceImpl implements ResourceRelationService {
     }
 
     @Override
-    public List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity) {
-        return resourceRelationMapper.queryResourceRelationEntitys(resourceRelationEntity);
+    public List<ResourceRelationEntity> queryResourceRelationEntitys() {
+        return resourceRelationMapper.queryResourceRelationEntitys();
     }
 
     @Override

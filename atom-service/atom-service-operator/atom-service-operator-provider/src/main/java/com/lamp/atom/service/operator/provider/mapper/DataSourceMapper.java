@@ -23,6 +23,7 @@ import java.util.List;
 public interface DataSourceMapper {
     /**
      * 添加数据源
+     *
      * @param dataSourceEntity
      */
     @Insert("insert into datasource" +
@@ -36,6 +37,7 @@ public interface DataSourceMapper {
 
     /**
      * 修改数据源
+     *
      * @param dataSourceEntity
      * @return
      */
@@ -46,6 +48,7 @@ public interface DataSourceMapper {
 
     /**
      * 模糊查询多个数据源
+     *
      * @param keyword
      * @return
      */
@@ -61,20 +64,16 @@ public interface DataSourceMapper {
 
     /**
      * 查询多个数据源
-     * @param dataSourceEntity
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from datasource " +
-            "<where>" +
-            "<if test = 'operatorId != null'>operator_id = #{operatorId} </if>" +
-            "<if test = 'connectionId != null'>and connection_id = #{connectionId} </if>" +
-            "</where>" +
-            "</script>"})
-    List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity);
+    @Select("select * from datasource " +
+            "where delete_flag = 0")
+    List<DataSourceEntity> queryDataSourceEntitys();
 
     /**
      * 查询单个数据源
+     *
      * @param dataSourceEntity
      * @return
      */

@@ -12,10 +12,14 @@
 package com.lamp.atom.service.operator.entity;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel("资源关系类")
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value="ResourceRelationEntity",description="资源关系类")
 public class ResourceRelationEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3149595542813993064L;

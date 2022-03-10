@@ -9,7 +9,7 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.space.consumer.utils;
+package com.lamp.atom.service.space.consumers.utils;
 
 import com.lamp.decoration.core.result.ResultObject;
 

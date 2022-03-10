@@ -43,8 +43,8 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     @Override
-    public List<OperatorEntity> queryOperatorEntitys(OperatorEntity operatorEntity) {
-        return operatorMapper.queryOperatorEntitys(operatorEntity);
+    public List<OperatorEntity> queryOperatorEntitys() {
+        return operatorMapper.queryOperatorEntitys();
     }
 
     @Override

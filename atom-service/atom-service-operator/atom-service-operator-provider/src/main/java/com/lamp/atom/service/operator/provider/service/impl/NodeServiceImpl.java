@@ -48,8 +48,8 @@ public class NodeServiceImpl implements NodeService {
     }
 
     @Override
-    public List<NodeEntity> queryNodeEntitys(NodeEntity nodeEntity) {
-        return nodeMapper.queryNodeEntitys(nodeEntity);
+    public List<NodeEntity> queryNodeEntitys() {
+        return nodeMapper.queryNodeEntitys();
     }
 
     @Override

@@ -18,12 +18,14 @@ import java.util.List;
 public interface ConnectionService {
     /**
      * 添加连接
+     *
      * @param connectionEntity
      */
     Integer insertConnectionEntity(ConnectionEntity connectionEntity);
 
     /**
      * 修改连接
+     *
      * @param connectionEntity
      * @return
      */
@@ -31,6 +33,7 @@ public interface ConnectionService {
 
     /**
      * 模糊查询多个连接
+     *
      * @param keyword
      * @return
      */
@@ -38,13 +41,14 @@ public interface ConnectionService {
 
     /**
      * 查询多个连接
-     * @param connectionEntity
+     *
      * @return
      */
-    List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity);
+    List<ConnectionEntity> queryConnectionEntitys();
 
     /**
      * 查询单个连接
+     *
      * @param connectionEntity
      * @return
      */
