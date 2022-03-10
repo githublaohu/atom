@@ -12,15 +12,17 @@
 package com.lamp.atom.schedule.api;
 
 /**
- * 1. 
+ * 1.
+ * 
  * @author laohu
  *
  */
 public interface AtomServiceShedule {
 
-	public void createService(Shedule shedule);
-	
-	
-	public void closeService(Shedule shedule);
-	
+	public default void createService(Shedule shedule) {
+	}
+
+	public default void closeService(Shedule shedule) {
+	}
+
 }

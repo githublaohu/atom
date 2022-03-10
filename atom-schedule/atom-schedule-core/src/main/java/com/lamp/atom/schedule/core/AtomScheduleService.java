@@ -34,7 +34,9 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	
 	public AtomScheduleService(OperatorSheduleConfig operatorSheduleConfig) throws Exception {
 		this.operatorSheduleConfig = operatorSheduleConfig;
-		kubernetesSchedule = new OperatorKubernetesSchedule(this.operatorSheduleConfig.getOperatorKubernetesConfig());
+		if(operatorSheduleConfig.getOperatorKubernetesConfig().isUser()) {
+			kubernetesSchedule = new OperatorKubernetesSchedule(this.operatorSheduleConfig.getOperatorKubernetesConfig());
+		}
 		rpcSchedule = new OperatorRpcSchedule(this.operatorSheduleConfig.getOperatorShedeleRpcConfig());
 	}
 	

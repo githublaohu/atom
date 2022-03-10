@@ -30,7 +30,7 @@ try:
     print(meminfo.free) #第二块显卡剩余显存大小
 except Exception as e:
     traceback.print_exc()
-    logging.error(e)
+    #logging.error(e)
 
 
 name_atom = "atom"

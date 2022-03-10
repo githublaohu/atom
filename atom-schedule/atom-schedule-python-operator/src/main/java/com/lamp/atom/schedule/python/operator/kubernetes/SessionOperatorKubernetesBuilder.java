@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import com.alibaba.fastjson.JSON;
 import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
 
@@ -86,7 +87,9 @@ public class SessionOperatorKubernetesBuilder {
 		for(Entry<String, String> e : shedule.getEnvs().entrySet()) {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
-		envList.add(new EnvVar("runtime_model", "standalone", null));
+		envList.add(new EnvVar("docker", "true", null));
+		envList.add(new EnvVar("runtime_model", "session", null));
+		envList.add(new EnvVar("operator-data", JSON.toJSONString(shedule.getObject()), null));
 		ObjectFieldSelector podId = new ObjectFieldSelector();
 		podId.setFieldPath("status.podIP");
 		EnvVarSource nodeIp = new EnvVarSource();

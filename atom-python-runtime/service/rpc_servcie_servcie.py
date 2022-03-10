@@ -23,10 +23,11 @@ class HttpClient():
     register_servcie:RegisterService
     
 
-    def send(slef,url:str , data:map):
+    def send(self,url:str , data:map):
         for i in range(0,5):
+            instance = self.getAddress()
             try:
-                connection = http.client.HTTPSConnection('api.github.com')
+                connection = http.client.HTTPConnection(host= instance["ip"], port =instance["port"])
                 headers = {'Content-type': 'application/json'}
                 json_foo = json.dumps(data)
                 connection.request('POST', url, json_foo, headers)
@@ -40,10 +41,8 @@ class HttpClient():
     
     def getAddress(self):
         instances = self.register_servcie.get_instance()
-        index = random.randint(0, len(instances));
-        instance = instances[index]
-        return instance["ip"]+":"+instance["port"]
-
+        index = random.randint(0, len(instances) - 1);
+        return instances[index]
 class RpcServcieServcie():
     register_servcie:RegisterService
     http_client:HttpClient

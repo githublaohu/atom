@@ -87,6 +87,7 @@ public class StandaloneOperatorKubernetesBuilder {
 		for(Entry<String, String> e : shedule.getEnvs().entrySet()) {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
+		envList.add(new EnvVar("docker", "true", null));
 		envList.add(new EnvVar("runtime_model", "standalone", null));
 		ObjectFieldSelector podId = new ObjectFieldSelector();
 		podId.setFieldPath("status.podIP");

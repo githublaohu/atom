@@ -17,6 +17,7 @@ import lombok.Data;
 @Data
 public class OperatorShedeleKubernetesConfig {
 
+	private boolean isUser = false;
 	
 	private String masterUrl;
 	
@@ -27,8 +28,6 @@ public class OperatorShedeleKubernetesConfig {
 	private String cpuContainerName = "githublaohu/atom-base-cpu:tf1.15-cpu";
 	
 	private String gpcContainerName = "githublaohu/atom-base-cpu:tf1.15-gpu";
-	
-	private String getPortMode;
 	
 	private String namespace = "default";
 }

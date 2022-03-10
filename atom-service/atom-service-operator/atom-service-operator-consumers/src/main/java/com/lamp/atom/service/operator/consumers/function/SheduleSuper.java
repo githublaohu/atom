@@ -13,11 +13,11 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.ConfigFactory;
@@ -25,23 +25,23 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.lamp.atom.schedule.api.config.OperatorSheduleConfig;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 
+import lombok.Setter;
+
 /**
  * 1. 从本地读取配置 2. 从nacos读取配置 3.
  * 
  * @author laohu
  *
  */
-@ConfigurationProperties("shedule")
+@Component
+@ConfigurationProperties(prefix="atom.shedule")
 public class SheduleSuper implements BeanFactoryAware {
-
-	@Value("${shedule.masterUrl}")
-	private String masterUrl;
 
 	private BeanFactory beanFactory;
 
-
+	@Setter
 	private OperatorSheduleConfig operatorSheduleConfig;
-
+	
 	private AtomScheduleService atomScheduleService;
 
 	@PostConstruct

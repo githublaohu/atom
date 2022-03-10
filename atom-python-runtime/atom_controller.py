@@ -54,8 +54,8 @@ class AtomController():
         self.__init_code__()
         self.__init_source_servcie__()
         self.__init_connect_service__()
-        self.__init_rpc_servcie__()
         self.__init_register_service__()
+        self.__init_rpc_servcie__()
         self.__init_operator_service__()
         # 注意 rpc_controller 会启动http servier
         self.__init_rpc_controller__()
@@ -91,10 +91,10 @@ class AtomController():
 
         self.rpc_operator_servcie:RpcOperatorServcie = RpcOperatorServcie()
         self.rpc_operator_servcie.client = http_client
-        if self.atom_config.docker_model : 
-            self.rpcRuntimeService:RpcRuntimeService = RpcRuntimeService()
-            self.rpcRuntimeService.client = http_client;
-            self.atom_config.rpc_controller_port = self.rpcRuntimeService.get_internet_protocol_address()
+        self.rpcRuntimeService:RpcRuntimeService = RpcRuntimeService()
+        self.rpcRuntimeService.client = http_client;
+        if self.atom_config.docker_model :
+           self.atom_config.rpc_controller_port = self.rpcRuntimeService.get_internet_protocol_address()
 
     def __init_operator_service__(self):
         self.operator_service = OperatorService()

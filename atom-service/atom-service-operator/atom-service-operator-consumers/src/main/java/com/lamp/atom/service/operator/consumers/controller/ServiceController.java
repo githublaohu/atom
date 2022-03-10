@@ -11,6 +11,7 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 推理
+ * 
  * @author laohu
  *
  */
@@ -43,13 +45,13 @@ public class ServiceController {
     @Autowired
     private AtomScheduleService atomScheduleService;
     
-    @Autowired
+    @Reference
     private ServiceInfoService serviceInfoService;
     
 
     @PostMapping("/getServicePort")
-    public Integer getServicePort(@RequestBody String ip) {
-        return portCreatingFunction.getPort(ip);
+    public Long getServicePort(@RequestBody String ip) {
+        return portCreatingFunction.getPort(ip).longValue();
     }
     
     @RequestMapping("/createRuntime")
@@ -63,12 +65,14 @@ public class ServiceController {
     	// 如果是等待运行，
     	Shedule shedule = new Shedule();
     	atomScheduleService.createService(shedule);
+    	// 修改name 与 状态
     	return 0;
     }
     
     @RequestMapping("/dropRuntime")
     public Integer dropRuntime(ServiceInfo serviceInfo) {
     	Shedule shedule = new Shedule();
+    	//
     	atomScheduleService.closeService(shedule);
     	return 0;
     }

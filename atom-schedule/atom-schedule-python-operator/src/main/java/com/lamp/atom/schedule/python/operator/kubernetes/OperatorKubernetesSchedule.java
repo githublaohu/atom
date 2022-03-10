@@ -18,7 +18,6 @@ import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
 
-import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -37,7 +36,7 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 
 	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
 
-	public  OperatorKubernetesSchedule(OperatorShedeleKubernetesConfig operatorKubernetesConfig) throws Exception {
+	public OperatorKubernetesSchedule(OperatorShedeleKubernetesConfig operatorKubernetesConfig) throws Exception {
 		this.operatorKubernetesConfig = operatorKubernetesConfig;
 		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
 			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());
@@ -58,7 +57,7 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 
 	@Override
 	public void closeService(Shedule shedule) {
-
+		client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace()).withName(shedule.getNoteName()).delete();
 	}
 
 	@Override
@@ -66,24 +65,13 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setShedule(shedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+		client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getJob());
-		job.getKind();
-	}
-
-	@Override
-	public void startOperators(Shedule shedule) {
-
-	}
-
-	@Override
-	public void suspendOperators(Shedule shedule) {
 
 	}
 
 	@Override
 	public void uninstallPperators(Shedule shedule) {
-		this.closeService(shedule);
-
+		client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace()).withName(shedule.getNoteName()).delete();
 	}
 }

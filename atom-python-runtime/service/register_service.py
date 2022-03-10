@@ -27,7 +27,7 @@ class RegisterService():
     net_address: str
     atom_config:AtomConfig
     nacso_client : nacos.NacosClient
-    service_instance:list
+    service_instances:list
 
     def __init__(self, atom_config:AtomConfig) :
         self.atom_config = atom_config
@@ -69,7 +69,7 @@ class RegisterService():
             如果不可变是否加入groupid 用于区别
         """
         self.nacso_client.add_naming_instance("atom-runtime-python-service-"+self.atom_config.runtime_model, self.net_address,  self.atom_config.rpc_controller_port)
-        result = self.nacso_client.list_naming_instance("atom-service" , healthy_only = True)
+        result = self.nacso_client.list_naming_instance("atom-operator-service" , healthy_only = True)
         self.service_instances = result["hosts"]
         self.__heartbeat__()
 
@@ -78,4 +78,4 @@ class RegisterService():
         t.start()
     
     def  get_instance(self):
-        return self.service_instance
+        return self.service_instances
