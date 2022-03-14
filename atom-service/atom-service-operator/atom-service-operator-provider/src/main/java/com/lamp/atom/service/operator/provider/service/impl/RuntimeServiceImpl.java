@@ -42,13 +42,15 @@ public class RuntimeServiceImpl implements RuntimeService {
         return runtimeMapper.queryRuntimeEntitysByKeyword(keyword);
     }
 
-    @Override
-    public List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity) {
-        return runtimeMapper.queryRuntimeEntitys(runtimeEntity);
-    }
 
     @Override
     public RuntimeEntity queryRuntimeEntity(RuntimeEntity runtimeEntity) {
         return runtimeMapper.queryRuntimeEntity(runtimeEntity);
     }
+
+	@Override
+	public List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity) {
+		// TODO Auto-generated method stub
+		return runtimeMapper.queryRuntimeEntitys(runtimeEntity);
+	}
 }

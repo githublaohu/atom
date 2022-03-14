@@ -27,7 +27,6 @@ import com.lamp.atom.service.operator.service.OperatorService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequestMapping("/operator")
 @RestController("operatorEventController")
 @Api(hidden = true)
@@ -88,6 +87,7 @@ public class OperatorEventController {
         // 2、修改状态
         //operatorEntity.setOperatorStatus(RuntimeStatus.QUEUING);
         this.atomScheduleService.createOperators(null);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
