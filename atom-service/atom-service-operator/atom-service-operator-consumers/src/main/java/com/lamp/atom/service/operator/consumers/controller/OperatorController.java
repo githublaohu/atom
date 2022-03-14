@@ -38,7 +38,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 @RequestMapping("/operator")
 @RestController("operatorController")
-@Api(tags={"算子操作接口"})
+@Api(tags = {"算子操作接口"})
 public class OperatorController {
 
     @Reference
@@ -48,11 +48,12 @@ public class OperatorController {
 
     /**
      * 添加算子
+     *
      * @param operatorEntity
      */
     @PostMapping("/insertOperator")
     @ApiOperation(value = "添加算子")
-    public ResultObject<String> insertOperator(@RequestBody OperatorEntity operatorEntity){
+    public ResultObject<String> insertOperator(@RequestBody OperatorEntity operatorEntity) {
         //字段判空
         if (Objects.isNull(operatorEntity.getSpaceId())) {
             log.info("参数校验失败 {}", operatorEntity);
@@ -69,16 +70,17 @@ public class OperatorController {
 
     /**
      * 修改算子
+     *
      * @param operatorEntity
      * @return
      */
     @PostMapping("/updateOperator")
     @ApiOperation(value = "修改算子")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
-            @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
+            @ApiImplicitParam(name = "id", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long"),
+            @ApiImplicitParam(name = "deleteFlag", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long")
     })
-    public ResultObject<String> updateOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity){
+    public ResultObject<String> updateOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity) {
         try {
             operatorService.updateOperatorEntity(operatorEntity);
         } catch (Exception e) {
@@ -90,12 +92,13 @@ public class OperatorController {
 
     /**
      * 模糊查询多个算子
+     *
      * @param params
      * @return
      */
     @PostMapping("/queryOperatorsByKeyword")
     @ApiOperation(value = "模糊查询多个算子")
-    public List<OperatorEntity> queryOperatorsByKeyword(@RequestBody HashMap<String, String> params){
+    public List<OperatorEntity> queryOperatorsByKeyword(@RequestBody HashMap<String, String> params) {
         try {
             return operatorService.queryOperatorEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
@@ -106,14 +109,14 @@ public class OperatorController {
 
     /**
      * 查询多个算子
-     * @param operatorEntity
+     *
      * @return
      */
     @PostMapping("/queryOperators")
     @ApiOperation(value = "查询多个算子")
-    public List<OperatorEntity> queryOperators(@RequestBody OperatorEntity operatorEntity){
+    public List<OperatorEntity> queryOperators() {
         try {
-            return operatorService.queryOperatorEntitys(operatorEntity);
+            return operatorService.queryOperatorEntitys();
         } catch (Exception e) {
             log.warn("算子查询失败 {}", e);
             return null;
@@ -122,24 +125,23 @@ public class OperatorController {
 
     /**
      * 查询单个算子
+     *
      * @param operatorEntity
      * @return
      */
     @PostMapping("/queryOperator")
     @ApiOperation(value = "查询单个算子")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
+            @ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
     })
-    public OperatorCreateTo queryOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity){
+    public OperatorCreateTo queryOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity) {
         try {
             OperatorEntity operatorEntity1 = operatorService.queryOperatorEntity(operatorEntity);
             //查出算子的数据
             OperatorCreateTo operatorCreateTo = new OperatorCreateTo();
 
 
-
             operatorCreateTo.setOperatorTo(operatorEntity1);
-
 
 
             return operatorCreateTo;

@@ -19,18 +19,21 @@ public interface NodeService {
 
     /**
      * 创建节点
+     *
      * @param nodeEntity
      */
     Integer createNodeEntity(NodeEntity nodeEntity);
 
     /**
      * 添加节点
+     *
      * @param nodeEntity
      */
     Integer insertNodeEntity(NodeEntity nodeEntity);
 
     /**
      * 模糊查询多个节点
+     *
      * @param keyword
      * @return
      */
@@ -38,6 +41,7 @@ public interface NodeService {
 
     /**
      * 修改节点
+     *
      * @param nodeEntity
      * @return
      */
@@ -45,13 +49,14 @@ public interface NodeService {
 
     /**
      * 查询多个节点
-     * @param nodeEntity
+     *
      * @return
      */
-    List<NodeEntity> queryNodeEntitys(NodeEntity nodeEntity);
+    List<NodeEntity> queryNodeEntitys();
 
     /**
      * 查询单个节点
+     *
      * @param nodeEntity
      * @return
      */

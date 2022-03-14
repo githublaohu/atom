@@ -18,9 +18,11 @@ import com.lamp.atom.service.domain.OperatorResult;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@ApiModel("模型类")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value="ModelEntity",description="模型类")
 public class ModelEntity extends BaseEntity {
 
     private static final long serialVersionUID = 4378966092513467540L;
@@ -120,7 +122,4 @@ public class ModelEntity extends BaseEntity {
      */
     private String produceWay;
 
-    public ModelEntity(Long id) {
-        super(id);
-    }
 }

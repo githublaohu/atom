@@ -59,14 +59,13 @@ class UploadCommand(Command):
 
 
 packages = find_packages()
-packages.append(".")
 setup(
     name="atom-runtime",
     packages=packages,
     include_package_data=True,
     zip_safe=False,
-    version= "0.0.2",
-    entry_points={"console_scripts": ["atom=atom_controller:main"]},
+    version= "0.0.3",
+    entry_points={"console_scripts": ["atom=atom_runtime.atom_controller:main"]},
 
     url="https://github.com/githublaohu/atom",
     license="Mulan PubL 2",
@@ -79,7 +78,7 @@ setup(
     keywords=['lamp', 'lampup','atom'],
     author="laohu",
     author_email="2372554140@qq.com",
-    description="atom runtime api.",
+    description="atom runtime ",
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[

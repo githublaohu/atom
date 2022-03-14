@@ -19,18 +19,21 @@ public interface ModelService {
 
     /**
      * 创建模型
+     *
      * @param modelEntity
      */
     Integer createModelEntity(ModelEntity modelEntity);
 
     /**
      * 添加模型
+     *
      * @param modelEntity
      */
     Integer insertModelEntity(ModelEntity modelEntity);
 
     /**
      * 模糊查询多个模型
+     *
      * @param keyword
      * @return
      */
@@ -38,6 +41,7 @@ public interface ModelService {
 
     /**
      * 修改模型
+     *
      * @param modelEntity
      * @return
      */
@@ -45,13 +49,14 @@ public interface ModelService {
 
     /**
      * 查询多个模型
-     * @param modelEntity
+     *
      * @return
      */
-    List<ModelEntity> queryModelEntitys(ModelEntity modelEntity);
+    List<ModelEntity> queryModelEntitys();
 
     /**
      * 查询单个模型
+     *
      * @param modelEntity
      * @return
      */

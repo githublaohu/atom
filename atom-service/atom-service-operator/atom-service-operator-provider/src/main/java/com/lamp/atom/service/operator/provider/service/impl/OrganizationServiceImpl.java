@@ -48,8 +48,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<OrganizationEntity> queryOrganizationEntitys(OrganizationEntity organizationEntity) {
-        return organizationMapper.queryOrganizationEntitys(organizationEntity);
+    public List<OrganizationEntity> queryOrganizationEntitys() {
+        return organizationMapper.queryOrganizationEntitys();
     }
 
     @Override

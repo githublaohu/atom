@@ -39,8 +39,8 @@ public class ServiceInfoServiceImpl implements ServiceInfoService {
     }
 
     @Override
-    public List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity) {
-        return serviceInfoMapper.queryServiceInfoEntitys(serviceInfoEntity);
+    public List<ServiceInfoEntity> queryServiceInfoEntitys() {
+        return serviceInfoMapper.queryServiceInfoEntitys();
     }
 
     @Override

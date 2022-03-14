@@ -23,6 +23,7 @@ import java.util.List;
 public interface RuntimeMapper {
     /**
      * 添加实例
+     *
      * @param runtimeEntity
      */
     @Insert("insert into runtime" +
@@ -36,6 +37,7 @@ public interface RuntimeMapper {
 
     /**
      * 修改实例
+     *
      * @param runtimeEntity
      * @return
      */
@@ -46,6 +48,7 @@ public interface RuntimeMapper {
 
     /**
      * 模糊查询多个实例
+     *
      * @param keyword
      * @return
      */
@@ -58,23 +61,16 @@ public interface RuntimeMapper {
 
     /**
      * 查询多个实例
-     * @param runtimeEntity
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from runtime " +
-            "<where>" +
-            "<if test = 'operatorId != null'>operator_id = #{operatorId} </if>" +
-            "<if test = 'startTime != null'>and start_time &gt; #{startTime} </if>" +
-            "<if test = 'endTime != null'>and end_time &lt; #{endTime} </if>" +
-            "<if test = 'estimateStartTime != null'>and estimate_start_time &gt; #{estimateStartTime} </if>" +
-            "<if test = 'estimateEndTime != null'>and estimate_end_time &lt; #{estimateEndTime} </if>" +
-            "</where>" +
-            "</script>"})
+    @Select("select * from runtime " +
+            "where space_id = #{spaceId} and delete_flag = 0")
     List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity);
 
     /**
      * 查询单个实例
+     *
      * @param runtimeEntity
      * @return
      */

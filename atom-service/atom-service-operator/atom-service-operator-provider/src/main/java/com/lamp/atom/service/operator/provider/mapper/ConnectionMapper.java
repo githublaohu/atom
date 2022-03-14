@@ -24,19 +24,19 @@ import com.lamp.atom.service.operator.entity.ConnectionEntity;
 public interface ConnectionMapper {
     /**
      * 添加连接
+     *
      * @param connectionEntity
      */
     @Insert("insert into connection" +
-            "(space_id,space_name,space_alias,scene_id,scene_name,scene_alias,experiment_id,experiment_name,experiment_alias," +
-            "operation_type,source_type,source_name,source_addr,source_account,source_password,source_space," +
+            "(space_id,operation_type,source_type,source_name,source_addr,source_account,source_password,source_space," +
             "mode,colony_type,source_conf,source_route,source_size,source_count) " +
-            "values(#{spaceId},#{spaceName},#{spaceAlias},#{sceneId},#{sceneName},#{sceneAlias},#{experimentId},#{experimentName},#{experimentAlias}," +
-            "#{operationType},#{sourceType},#{sourceName},#{sourceAddr},#{sourceAccount},#{sourcePassword},#{sourceSpace}," +
+            "values(#{spaceId},#{operationType},#{sourceType},#{sourceName},#{sourceAddr},#{sourceAccount},#{sourcePassword},#{sourceSpace}," +
             "#{mode},#{colonyType},#{sourceConf},#{sourceRoute},#{sourceSize},#{sourceCount})")
     Integer insertConnectionEntity(ConnectionEntity connectionEntity);
 
     /**
      * 修改连接
+     *
      * @param connectionEntity
      * @return
      */
@@ -47,38 +47,32 @@ public interface ConnectionMapper {
 
     /**
      * 模糊查询多个连接
+     *
      * @param keyword
      * @return
      */
     @Select("select * from connection " +
             "where delete_flag = 0 and " +
-            "(id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
-            "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
-            "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
-            "or operation_type like #{keyword} or source_type like #{keyword} or source_name like #{keyword} " +
-            "or source_addr like #{keyword} or source_account like #{keyword} or source_password like #{keyword} " +
-            "or source_space like #{keyword} or mode like #{keyword} or colony_type like #{keyword} " +
+            "(id like #{keyword} or space_id like #{keyword} or operation_type like #{keyword} " +
+            "or source_type like #{keyword} or source_name like #{keyword} or source_addr like #{keyword} " +
+            "or source_account like #{keyword} or source_password like #{keyword} or source_space like #{keyword} " +
+            "or mode like #{keyword} or colony_type like #{keyword} " +
             "or source_conf like #{keyword} or source_route like #{keyword} or source_size like #{keyword} or source_count like #{keyword})")
     List<ConnectionEntity> queryConnectionEntitysByKeyword(String keyword);
 
     /**
      * 查询多个连接
-     * @param connectionEntity
+     * 查询未被删除的
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from connection " +
-            "<where>" +
-            "<if test = 'spaceId != null'>space_id = #{spaceId} </if>" +
-            "<if test = 'sceneId != null'>and scene_id = #{sceneId} </if>" +
-            "<if test = 'experimentId != null'>and experiment_id = #{experimentId} </if>" +
-            "<if test = 'colonyType != null'>and colony_type = #{colonyType} </if>" +
-            "</where>" +
-            "</script>"})
-    List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity);
+    @Select("select * from connection " +
+            "where delete_flag = 0")
+    List<ConnectionEntity> queryConnectionEntitys();
 
     /**
      * 查询单个连接
+     *
      * @param connectionEntity
      * @return
      */

@@ -13,6 +13,7 @@ import com.lamp.atom.service.operator.entity.ServiceInfoEntity;
 public interface ServiceInfoMapper {
     /**
      * 添加服务配置
+     *
      * @param serviceInfoEntity
      */
     @Insert("insert into service_info" +
@@ -24,6 +25,7 @@ public interface ServiceInfoMapper {
 
     /**
      * 修改服务配置
+     *
      * @param serviceInfoEntity
      * @return
      */
@@ -34,6 +36,7 @@ public interface ServiceInfoMapper {
 
     /**
      * 模糊查询多个服务配置
+     *
      * @param keyword
      * @return
      */
@@ -46,19 +49,16 @@ public interface ServiceInfoMapper {
 
     /**
      * 查询多个服务配置
-     * @param serviceInfoEntity
+     *
      * @return
      */
-    @Select({"<script>" +
-            "select * from service_info " +
-            "<where>" +
-            "<if test = 'spaceId != null'>space_id = #{spaceId} </if>" +
-            "</where>" +
-            "</script>"})
-    List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
+    @Select("select * from service_info " +
+            "where delete_flag = 0")
+    List<ServiceInfoEntity> queryServiceInfoEntitys();
 
     /**
      * 查询单个服务配置
+     *
      * @param serviceInfoEntity
      * @return
      */

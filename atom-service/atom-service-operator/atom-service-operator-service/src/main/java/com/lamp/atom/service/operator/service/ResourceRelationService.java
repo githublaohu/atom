@@ -19,18 +19,21 @@ public interface ResourceRelationService {
 
     /**
      * 创建资源关系
+     *
      * @param resourceRelationEntity
      */
     Integer createResourceRelationEntity(ResourceRelationEntity resourceRelationEntity);
 
     /**
      * 添加资源关系
+     *
      * @param resourceRelationEntity
      */
     Integer insertResourceRelationEntity(ResourceRelationEntity resourceRelationEntity);
 
     /**
      * 模糊查询多个资源关系
+     *
      * @param keyword
      * @return
      */
@@ -38,6 +41,7 @@ public interface ResourceRelationService {
 
     /**
      * 修改资源关系
+     *
      * @param resourceRelationEntity
      * @return
      */
@@ -45,13 +49,14 @@ public interface ResourceRelationService {
 
     /**
      * 查询多个资源关系
-     * @param resourceRelationEntity
+     *
      * @return
      */
-    List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity);
+    List<ResourceRelationEntity> queryResourceRelationEntitys();
 
     /**
      * 查询单个资源关系
+     *
      * @param resourceRelationEntity
      * @return
      */
