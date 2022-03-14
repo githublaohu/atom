@@ -11,8 +11,18 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
-import java.util.HashMap;
-import java.util.List;
+
+import com.lamp.atom.service.operator.entity.RuntimeEntity;
+import com.lamp.atom.service.operator.service.RuntimeService;
+import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
+import com.lamp.decoration.core.result.ResultObject;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,83 +30,107 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lamp.atom.service.operator.entity.RuntimeEntity;
-import com.lamp.atom.service.operator.service.RuntimeService;
+import java.util.HashMap;
+import java.util.List;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
-
+@Slf4j
 @RequestMapping("/runtime")
 @RestController("runtimeController")
-@Api(tags = { "运行实例操作接口" })
+@Api(tags = {"运行实例操作接口"})
 public class RuntimeController {
 
-	@Reference
-	private RuntimeService runtimeService;
+    @Reference
+    private RuntimeService runtimeService;
 
-	/**
-	 * 添加实例
-	 *
-	 * @param runtimeEntity
-	 */
-	@PostMapping("/insertRuntime")
-	@ApiOperation(value = "添加实例")
-	public void insertRuntime(@RequestBody RuntimeEntity runtimeEntity) {
-		runtimeService.insertRuntimeEntity(runtimeEntity);
-	}
+    /**
+     * 添加实例
+     *
+     * @param runtimeEntity
+     */
+    @PostMapping("/insertRuntime")
+    @ApiOperation(value = "添加实例")
+    public ResultObject<String> insertRuntime(@RequestBody RuntimeEntity runtimeEntity) {
+        try {
+            runtimeService.insertRuntimeEntity(runtimeEntity);
+        } catch (Exception e) {
+            log.warn("实例插入失败 {}", e);
+            return ResultObjectEnums.FAIL.getResultObject();
+        }
+        return ResultObjectEnums.SUCCESS.getResultObject();
+    }
 
-	/**
-	 * 修改实例
-	 *
-	 * @param runtimeEntity
-	 * @return
-	 */
-	@PostMapping("/updateRuntime")
-	@ApiOperation(value = "修改实例")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long"),
-			@ApiImplicitParam(name = "deleteFlag", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long") })
-	public Integer updateRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity) {
-		return runtimeService.updateRuntimeEntity(runtimeEntity);
-	}
+    /**
+     * 修改实例
+     *
+     * @param runtimeEntity
+     * @return
+     */
+    @PostMapping("/updateRuntime")
+    @ApiOperation(value = "修改实例")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long"),
+            @ApiImplicitParam(name = "deleteFlag", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long")
+    })
+    public ResultObject<String> updateRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity) {
+        try {
+            runtimeService.updateRuntimeEntity(runtimeEntity);
+        } catch (Exception e) {
+            log.warn("实例修改失败 {}", e);
+            return ResultObjectEnums.FAIL.getResultObject();
+        }
+        return ResultObjectEnums.SUCCESS.getResultObject();
+    }
 
-	/**
-	 * 模糊查询多个实例
-	 *
-	 * @param params
-	 * @return
-	 */
-	@PostMapping("/queryRuntimesByKeyword")
-	@ApiOperation(value = "模糊查询多个实例")
-	public List<RuntimeEntity> queryRuntimesByKeyword(@RequestBody HashMap<String, String> params) {
-		return runtimeService.queryRuntimeEntitysByKeyword(params.get("keyword"));
-	}
+    /**
+     * 模糊查询多个实例
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping("/queryRuntimesByKeyword")
+    @ApiOperation(value = "模糊查询多个实例")
+    public List<RuntimeEntity> queryRuntimesByKeyword(@RequestBody HashMap<String, String> params) {
+        try {
+            return runtimeService.queryRuntimeEntitysByKeyword(params.get("keyword"));
+        } catch (Exception e) {
+            log.warn("实例查询失败 {}", e);
+            return null;
+        }
+    }
 
-	/**
-	 * 查询多个实例
-	 *
-	 * @return
-	 */
-	@PostMapping("/queryRuntimes")
-	@ApiOperation(value = "查询多个实例")
-	public List<RuntimeEntity> queryRuntimes(@RequestBody RuntimeEntity runtimeEntity) {
-		return runtimeService.queryRuntimeEntitys(runtimeEntity);
-	}
+    /**
+     * 查询多个实例
+     *
+     * @return
+     */
+    @PostMapping("/queryRuntimes")
+    @ApiOperation(value = "查询多个实例")
+    public List<RuntimeEntity> queryRuntimes(RuntimeEntity runtimeEntity) {
+        try {
+            return runtimeService.queryRuntimeEntitys(runtimeEntity);
+        } catch (Exception e) {
+            log.warn("实例查询失败 {}", e);
+            return null;
+        }
+    }
 
-	/**
-	 * 查询单个实例
-	 *
-	 * @param runtimeEntity
-	 * @return
-	 */
-	@PostMapping("/queryRuntime")
-	@ApiOperation(value = "查询单个实例")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1") })
-	public RuntimeEntity queryRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity) {
-		return runtimeService.queryRuntimeEntity(runtimeEntity);
-	}
+    /**
+     * 查询单个实例
+     *
+     * @param runtimeEntity
+     * @return
+     */
+    @PostMapping("/queryRuntime")
+    @ApiOperation(value = "查询单个实例")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
+    })
+    public RuntimeEntity queryRuntime(@ApiIgnore @RequestBody RuntimeEntity runtimeEntity) {
+        try {
+            return runtimeService.queryRuntimeEntity(runtimeEntity);
+        } catch (Exception e) {
+            log.warn("实例查询失败 {}", e);
+            return null;
+        }
+    }
 }

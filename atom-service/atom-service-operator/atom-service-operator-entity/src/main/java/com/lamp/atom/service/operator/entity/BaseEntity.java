@@ -51,5 +51,4 @@ public class BaseEntity implements Serializable {
      */
 //    @JsonIgnore
     private Integer deleteFlag;
-
 }

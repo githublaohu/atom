@@ -39,7 +39,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author laohu
  *
  */
-@Slf4j
 @RequestMapping("/service")
 @RestController("serviceController")
 @Api(hidden = true)
