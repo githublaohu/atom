@@ -13,11 +13,14 @@ package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.OrganizationStatus;
 import com.lamp.atom.service.domain.OrganizationType;
+
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@ApiModel("组织类")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value="OrganizationEntity",description="组织类")
 public class OrganizationEntity extends BaseEntity {
 
     private static final long serialVersionUID = 8141439293056173411L;
@@ -72,7 +75,4 @@ public class OrganizationEntity extends BaseEntity {
      */
     private OrganizationStatus organizationStatus;
 
-    public OrganizationEntity(Long id) {
-        super(id);
-    }
 }

@@ -37,7 +37,7 @@ import java.util.Objects;
 @Slf4j
 @RequestMapping("/connection")
 @RestController("connectionController")
-@Api(tags={"连接操作接口"})
+@Api(tags = {"连接操作接口"})
 public class ConnectionController {
 
     @Reference
@@ -45,11 +45,12 @@ public class ConnectionController {
 
     /**
      * 添加连接
+     *
      * @param connectionEntity
      */
     @PostMapping("/insertConnection")
     @ApiOperation(value = "添加连接")
-    public ResultObject<String> insertConnection(@RequestBody ConnectionEntity connectionEntity){
+    public ResultObject<String> insertConnection(@RequestBody ConnectionEntity connectionEntity) {
         //字段判空
         if (Objects.isNull(connectionEntity.getSpaceId())) {
             log.info("参数校验失败 {}", connectionEntity);
@@ -66,16 +67,17 @@ public class ConnectionController {
 
     /**
      * 修改连接
+     *
      * @param connectionEntity
      * @return
      */
     @PostMapping("/updateConnection")
     @ApiOperation(value = "修改连接")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
-            @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
+            @ApiImplicitParam(name = "id", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long"),
+            @ApiImplicitParam(name = "deleteFlag", dataTypeClass = java.lang.Long.class, paramType = "body", dataType = "Long")
     })
-    public ResultObject<String> updateConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity){
+    public ResultObject<String> updateConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity) {
         try {
             connectionService.updateConnectionEntity(connectionEntity);
         } catch (Exception e) {
@@ -87,12 +89,13 @@ public class ConnectionController {
 
     /**
      * 模糊查询多个连接
+     *
      * @param params
      * @return
      */
     @PostMapping("/queryConnectionsByKeyword")
     @ApiOperation(value = "模糊查询多个连接")
-    public List<ConnectionEntity> queryConnectionsByKeyword(@RequestBody HashMap<String, String> params){
+    public List<ConnectionEntity> queryConnectionsByKeyword(@RequestBody HashMap<String, String> params) {
         try {
             return connectionService.queryConnectionEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
@@ -103,14 +106,14 @@ public class ConnectionController {
 
     /**
      * 查询多个连接
-     * @param connectionEntity
+     *
      * @return
      */
     @PostMapping("/queryConnections")
     @ApiOperation(value = "查询多个连接")
-    public List<ConnectionEntity> queryConnections(@RequestBody ConnectionEntity connectionEntity){
+    public List<ConnectionEntity> queryConnections() {
         try {
-            return connectionService.queryConnectionEntitys(connectionEntity);
+            return connectionService.queryConnectionEntitys();
         } catch (Exception e) {
             log.warn("连接查询失败 {}", e);
             return null;
@@ -119,15 +122,16 @@ public class ConnectionController {
 
     /**
      * 查询单个连接
+     *
      * @param connectionEntity
      * @return
      */
     @PostMapping("/queryConnection")
     @ApiOperation(value = "查询单个连接")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
+            @ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
     })
-    public ConnectionEntity queryConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity){
+    public ConnectionEntity queryConnection(@ApiIgnore @RequestBody ConnectionEntity connectionEntity) {
         try {
             return connectionService.queryConnectionEntity(connectionEntity);
         } catch (Exception e) {

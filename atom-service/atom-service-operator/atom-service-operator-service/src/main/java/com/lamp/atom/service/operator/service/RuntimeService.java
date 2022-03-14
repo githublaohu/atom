@@ -18,12 +18,14 @@ import java.util.List;
 public interface RuntimeService {
     /**
      * 添加运行实例
+     *
      * @param runtimeEntity
      */
     Integer insertRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
      * 修改运行实例
+     *
      * @param runtimeEntity
      * @return
      */
@@ -31,6 +33,7 @@ public interface RuntimeService {
 
     /**
      * 模糊查询多个运行实例
+     *
      * @param keyword
      * @return
      */
@@ -38,13 +41,14 @@ public interface RuntimeService {
 
     /**
      * 查询多个运行实例
-     * @param runtimeEntity
+     *
      * @return
      */
     List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity);
 
     /**
      * 查询单个运行实例
+     *
      * @param runtimeEntity
      * @return
      */

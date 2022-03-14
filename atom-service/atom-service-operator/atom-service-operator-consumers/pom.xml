@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>cn.lampup</groupId>
@@ -22,11 +25,18 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>atom-service-operator-common</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>atom-schedule-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>cn.lampup</groupId>
+			<artifactId>decoration-core</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>dubbo-springmvc</artifactId>
@@ -51,7 +61,7 @@
 			<artifactId>test-mock-dependent</artifactId>
 			<version>0.1.4</version>
 		</dependency>
-		<!-- 添加swagger-->
+		<!-- 添加swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>

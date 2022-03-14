@@ -104,14 +104,13 @@ public class NodeController {
     /**
      * 查询多个节点
      *
-     * @param nodeEntity
      * @return
      */
     @PostMapping("/queryNodes")
     @ApiOperation(value = "查询多个节点")
-    public List<NodeEntity> queryNodes(@RequestBody NodeEntity nodeEntity) {
+    public List<NodeEntity> queryNodes() {
         try {
-            return nodeService.queryNodeEntitys(nodeEntity);
+            return nodeService.queryNodeEntitys();
         } catch (Exception e) {
             log.warn("节点查询失败 {}", e);
             return null;

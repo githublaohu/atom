@@ -59,19 +59,11 @@ public interface ResourceRelationMapper {
     /**
      * 查询多个资源关系
      *
-     * @param resourceRelationEntity
      * @return
      */
-    @Select({"<script>" +
-            "select * from resource_relation " +
-            "<where>" +
-            "<if test = 'relationId != null'>relation_id = #{relationId} </if>" +
-            "<if test = 'relationType != null'>relation_type = #{relationType} </if>" +
-            "<if test = 'beRelationId != null'>be_relation_id = #{beRelationId} </if>" +
-            "<if test = 'beRelationType != null'>be_relation_type = #{beRelationType} </if>" +
-            "</where>" +
-            "</script>"})
-    List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity);
+    @Select("select * from resource_relation " +
+            "where delete_flag = 0")
+    List<ResourceRelationEntity> queryResourceRelationEntitys();
 
     /**
      * 查询单个资源关系

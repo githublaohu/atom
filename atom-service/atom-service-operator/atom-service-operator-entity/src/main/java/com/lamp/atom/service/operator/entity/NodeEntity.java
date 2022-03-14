@@ -14,11 +14,14 @@ package com.lamp.atom.service.operator.entity;
 import com.lamp.atom.service.domain.NodeModel;
 import com.lamp.atom.service.domain.NodeStatus;
 import com.lamp.atom.service.domain.NodeType;
+
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@ApiModel("节点类")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value="NodeEntity",description="节点类")
 public class NodeEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2786281072838530374L;
@@ -68,7 +71,4 @@ public class NodeEntity extends BaseEntity {
      */
     private Integer operatorPriority;
 
-    public NodeEntity(Long id) {
-        super(id);
-    }
 }

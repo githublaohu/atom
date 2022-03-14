@@ -4,20 +4,28 @@ server:
     context-path: "/lamp/atom/service/space"
 
 dubbo:
+  protocol:
+    name: dubbo
+    port: 20881
+    accesslog: true
+  consume:
+    timeout: 30000
+    retries: 0
+  registry:
+    address: nacos://127.0.0.1:8848
+    register: true
+    subscribe: true
+  scan:
+    base-packages: com.lamp.atom.service.space.consumer.controller
   application:
     name: lamp-atom-service-space
     owner: dome
+    logger: slf4j
 
-  protocol:
-    name: dubbo
-    port: 19002
-    accesslog: true
-
-  provider:
-    timeout: 30000
-    retries: 0
-
-  registry:
-    address: N/A
-    register: false
-    subscribe: true
+nacos:
+  config:
+    bootstrap:
+      enable: true
+      logEnable: true
+    server-addr: 127.0.0.1:8848
+    namespace: atom.service.space

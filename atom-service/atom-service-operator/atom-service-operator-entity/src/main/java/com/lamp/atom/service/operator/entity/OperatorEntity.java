@@ -11,15 +11,21 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import com.lamp.atom.service.domain.*;
+import com.lamp.atom.service.domain.CodeMode;
+import com.lamp.atom.service.domain.DeployType;
+import com.lamp.atom.service.domain.OperatorModel;
+import com.lamp.atom.service.domain.OperatorRuntimeType;
+import com.lamp.atom.service.domain.OperatorSourceType;
 import com.lamp.atom.service.domain.RuntimeStatus;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 @Data
-@ApiModel("算子类")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value="OperatorEntity",description="算子类")
 public class OperatorEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3837234206057086494L;
@@ -45,7 +51,7 @@ public class OperatorEntity extends BaseEntity {
      * 算子源id
      */
     @NonNull
-    private String operatorSourceId;
+    private Long operatorSourceId;
 
     /**
      * 算子来源类型
@@ -169,7 +175,4 @@ public class OperatorEntity extends BaseEntity {
      */
     private DeployType deployType;
 
-    public OperatorEntity(Long id) {
-        super(id);
-    }
 }

@@ -9,8 +9,7 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
-
-from atom_controller import main
+from atom_runtime.atom_controller import main
 
 
 if __name__ == "__main__":
