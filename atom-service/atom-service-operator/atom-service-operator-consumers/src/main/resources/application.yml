@@ -13,6 +13,7 @@ dubbo:
     retries: 0
   registry:
     address: nacos://127.0.0.1:8848
+    parmeters[namespace]: atom-dev
     register: true
     subscribe: true
   scan:
@@ -28,7 +29,18 @@ nacos:
       enable: true
       logEnable: true
     server-addr: 127.0.0.1:8848
-    namespace: atom.service.operator
+    namespace: atom-dev
 
 decoration:
   defaultExceptionResult: com.lamp.atom.service.operator.consumers.utils.AtomConsumerExceptionResult
+
+atom:
+   shedule:
+      operatorSheduleConfig:
+         operatorKubernetesConfig:
+            isUser: false
+            configName: kubernetesConfig.yaml
+         operatorShedeleRpcConfig:
+            namespace: atom-dev
+            serverAddr: 127.0.0.1:8848
+

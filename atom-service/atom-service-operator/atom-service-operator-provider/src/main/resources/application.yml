@@ -40,6 +40,7 @@ dubbo:
     retries: 0
   registry:
     address: nacos://127.0.0.1:8848
+    parmeters[namespace]: atom-dev
     register: true
     subscribe: false
 

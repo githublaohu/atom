@@ -1,0 +1,14 @@
+FROM bitnami/pytorch:1.8.1
+
+ENV docker yes
+# Install git
+RUN apt update && \
+         apt install -y git python3.7 python3.7-dev build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev&& \
+          /usr/bin/python3.7 -m pip install --upgrade pip && \
+          pip install pynvml && \
+          pip install boto3 && \
+          pip install oss2 && \
+          pip install crcmod && \
+          pip install atom-runtime  && \
+          mkdir -p ~/atom/{download_catalogue,code_directory,model_directory,public}
+CMD atom

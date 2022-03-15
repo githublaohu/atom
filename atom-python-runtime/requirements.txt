@@ -1,11 +1,40 @@
-nacos-sdk-python==0.1.62
-rook-client==1.0.0
-hdfs3==0.3.1
-pyyaml==5.4.1
-drpc==0.1.1
-aio-ceph-api==0.0.2
-tensorflow==1.15
+# 算法依赖
+## tensorflow
+#tensorflow==1.15
+#tensorflow
+#pytorch
+#torch===1.7.0
+#torchvision===0.8.1 
+#torchaudio===0.7.0
+#lightgbm
+#xgboost
+## 数据处理库
 pandas
-gitpython
-tqdm
 pydantic
+
+# 功能依赖
+pyyaml==5.4.1
+## 注册与配置中心
+nacos-sdk-python==0.1.6
+## git功能
+gitpython
+## web 服务
+Flask
+
+## gpu
+nvidia-ml-py
+
+# 连接依赖
+hdfs3==0.3.1
+## 阿里云oss
+oss2
+crcmod
+
+## ceph，minio ，亚马逊 ，微软 boto3
+boto3
+
+## mysql
+pymysql
+
+## hbase
+happybase

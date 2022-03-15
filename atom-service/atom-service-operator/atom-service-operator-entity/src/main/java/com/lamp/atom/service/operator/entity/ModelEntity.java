@@ -17,13 +17,11 @@ import com.lamp.atom.service.domain.ModelType;
 import com.lamp.atom.service.domain.OperatorResult;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="ModelEntity",description="模型类")
 public class ModelEntity extends BaseEntity {
 
@@ -124,7 +122,4 @@ public class ModelEntity extends BaseEntity {
      */
     private String produceWay;
 
-    public ModelEntity(Long id) {
-        super(id);
-    }
 }

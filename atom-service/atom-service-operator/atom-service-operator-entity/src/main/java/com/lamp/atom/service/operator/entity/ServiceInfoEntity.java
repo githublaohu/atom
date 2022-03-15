@@ -11,15 +11,14 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import com.lamp.atom.service.domain.SiRuntimePattern;
+import com.lamp.atom.service.domain.ServiceRuntimePattern;
+
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="ServiceInfoEntity",description="服务配置类")
 public class ServiceInfoEntity extends BaseEntity {
 
@@ -43,7 +42,7 @@ public class ServiceInfoEntity extends BaseEntity {
     /**
      * 服务运行模式
      */
-    private SiRuntimePattern siRuntimePattern;
+    private ServiceRuntimePattern siRuntimePattern;
 
     /**
      * 节点数量
@@ -80,7 +79,4 @@ public class ServiceInfoEntity extends BaseEntity {
      */
     private String siLabel;
 
-    public ServiceInfoEntity(Long id) {
-        super(id);
-    }
 }

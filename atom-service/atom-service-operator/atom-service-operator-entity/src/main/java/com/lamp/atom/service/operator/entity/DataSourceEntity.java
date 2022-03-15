@@ -14,13 +14,11 @@ package com.lamp.atom.service.operator.entity;
 import com.lamp.atom.service.domain.DataSourceType;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="DataSourceEntity",description="数据源类")
 public class DataSourceEntity extends BaseEntity {
 
@@ -116,7 +114,4 @@ public class DataSourceEntity extends BaseEntity {
      */
     private Integer order;
 
-    public DataSourceEntity(Long id) {
-        super(id);
-    }
 }

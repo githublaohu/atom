@@ -14,12 +14,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.githublaohu</groupId>
-            <artifactId>dubbo-springmvc</artifactId>
-            <version>0.0.6</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
             <version>2.0.4</version>

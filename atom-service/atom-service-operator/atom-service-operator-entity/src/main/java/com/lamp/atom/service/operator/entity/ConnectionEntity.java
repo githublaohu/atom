@@ -17,10 +17,10 @@ import com.lamp.atom.service.domain.SourceType;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @ApiModel(value="ConnectionEntity",description="连接实体")
 public class ConnectionEntity extends BaseEntity {
@@ -96,8 +96,4 @@ public class ConnectionEntity extends BaseEntity {
      * 源数据条数
      */
     private Long sourceCount;
-
-    public ConnectionEntity(Long id) {
-        super(id);
-    }
 }

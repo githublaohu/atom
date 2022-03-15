@@ -11,18 +11,19 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import com.lamp.atom.service.domain.*;
-import com.lamp.atom.service.domain.OperatorRuntimeStatus;
+import com.lamp.atom.service.domain.CodeMode;
+import com.lamp.atom.service.domain.DeployType;
+import com.lamp.atom.service.domain.OperatorModel;
+import com.lamp.atom.service.domain.OperatorRuntimeType;
+import com.lamp.atom.service.domain.OperatorSourceType;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="OperatorEntity",description="算子类")
 public class OperatorEntity extends BaseEntity {
 
@@ -173,7 +174,4 @@ public class OperatorEntity extends BaseEntity {
      */
     private DeployType deployType;
 
-    public OperatorEntity(Long id) {
-        super(id);
-    }
 }

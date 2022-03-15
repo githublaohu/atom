@@ -16,13 +16,11 @@ import java.util.Date;
 import com.lamp.atom.service.domain.CaseSourceType;
 import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="RuntimeEntity",description="运行实例类")
 public class RuntimeEntity extends BaseEntity {
 
@@ -108,7 +106,4 @@ public class RuntimeEntity extends BaseEntity {
      */
     private String endName;
 
-    public RuntimeEntity(Long id) {
-        super(id);
-    }
 }

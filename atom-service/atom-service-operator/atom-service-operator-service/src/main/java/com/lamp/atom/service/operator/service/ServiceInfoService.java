@@ -17,35 +17,35 @@ import java.util.List;
 
 public interface ServiceInfoService {
 
-    /**
-     * 创建服务配置
-     *
-     * @param serviceInfoEntity
-     */
-    Integer createServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+	/**
+	 * 创建服务配置
+	 *
+	 * @param serviceInfoEntity
+	 */
+	Integer createServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 
-    /**
-     * 添加服务配置
-     *
-     * @param serviceInfoEntity
-     */
-    Integer insertServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+	/**
+	 * 添加服务配置
+	 *
+	 * @param serviceInfoEntity
+	 */
+	Integer insertServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 
-    /**
-     * 模糊查询多个服务配置
-     *
-     * @param keyword
-     * @return
-     */
-    List<ServiceInfoEntity> queryServiceInfoEntitysByKeyword(String keyword);
+	/**
+	 * 模糊查询多个服务配置
+	 *
+	 * @param keyword
+	 * @return
+	 */
+	List<ServiceInfoEntity> queryServiceInfoEntitysByKeyword(String keyword);
 
-    /**
-     * 修改服务配置
-     *
-     * @param serviceInfoEntity
-     * @return
-     */
-    Integer updateServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+	/**
+	 * 修改服务配置
+	 *
+	 * @param serviceInfoEntity
+	 * @return
+	 */
+	Integer updateServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 
     /**
      * 查询多个服务配置
@@ -55,11 +55,11 @@ public interface ServiceInfoService {
      */
     List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
 
-    /**
-     * 查询单个服务配置
-     *
-     * @param serviceInfoEntity
-     * @return
-     */
-    ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+	/**
+	 * 查询单个服务配置
+	 *
+	 * @param serviceInfoEntity
+	 * @return
+	 */
+	ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 }

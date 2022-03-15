@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: atom-runtime-session
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: atom-runtime-session
+        image: atom-base-cpu
+        imagePullPolicy: IfNotPresent
+        command: [‘sh‘,‘-c‘]
+        args: [‘echo "start job";sleep 20;echo "job end"‘]

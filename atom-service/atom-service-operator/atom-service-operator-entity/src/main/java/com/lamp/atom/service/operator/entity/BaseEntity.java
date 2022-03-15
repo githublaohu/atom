@@ -14,8 +14,6 @@ package com.lamp.atom.service.operator.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,8 +51,4 @@ public class BaseEntity implements Serializable {
      */
 //    @JsonIgnore
     private Integer deleteFlag;
-
-    public BaseEntity(Long id) {
-        this.id = id;
-    }
 }

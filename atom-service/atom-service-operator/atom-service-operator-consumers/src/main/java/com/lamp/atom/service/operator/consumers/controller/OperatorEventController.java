@@ -11,6 +11,14 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.service.domain.DeployType;
 import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
@@ -18,13 +26,7 @@ import com.lamp.atom.service.operator.service.OperatorService;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RequestMapping("/operator")
 @RestController("operatorEventController")
 @Api(hidden = true)
@@ -32,6 +34,12 @@ public class OperatorEventController {
 
     @Reference
     private OperatorService operatorService;
+
+    @Autowired
+    private AtomScheduleService atomScheduleService;
+
+
+
 
     /**
      * console：算子编辑中
@@ -57,18 +65,6 @@ public class OperatorEventController {
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
-//    /**
-//     * console：算子编辑完成
-//     * @param operatorEntity
-//     * @return
-//     */
-//    @PostMapping("/editFinish")
-//    public Integer editFinish(@RequestBody OperatorEntity operatorEntity) {
-//        //1、修改状态
-//        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDIT_FINISH);
-//        return operatorService.updateOperatorEntity(operatorEntity);
-//    }
-
     /**
      * console：排队
      */
@@ -77,23 +73,25 @@ public class OperatorEventController {
         // 1、调度schedule
 
         // 2、修改状态
-        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUING);
+        //operatorEntity.setOperatorStatus(RuntimeStatus.QUEUING);
+        this.atomScheduleService.createOperators(null);
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUING);
         return operatorService.updateOperatorEntity(operatorEntity);
     }
 
-//    /**
-//     * console：排队取消中
-//     * @param operatorEntity
-//     * @return
-//     */
-//    @PostMapping("/queueCanceling")
-//    public Integer queueCanceling(@RequestBody OperatorEntity operatorEntity) {
-//        // 1、调度schedule
-//
-//        // 2、修改状态
-//        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUE_CANCELING);
-//        return operatorService.updateOperatorEntity(operatorEntity);
-//    }
+    /**
+     * console：排队取消中
+     * @param operatorEntity
+     * @return
+     */
+    @PostMapping("/queueCanceling")
+    public Integer queueCanceling(@RequestBody OperatorEntity operatorEntity) {
+        // 1、调度schedule
+
+        // 2、修改状态
+        operatorEntity.setRuntimeStatus(RuntimeStatus.QUEUE_CANCELING);
+        return operatorService.updateOperatorEntity(operatorEntity);
+    }
 
     /**
      * schedule 排队取消完成
@@ -174,8 +172,8 @@ public class OperatorEventController {
      * @param operatorEntity
      * @return
      */
-    @PostMapping("/training")
-    public Integer training(@RequestBody OperatorEntity operatorEntity) {
+    @PostMapping("/running")
+    public Integer running(@RequestBody OperatorEntity operatorEntity) {
         //1、修改状态
         operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAINING);
         Integer status = operatorService.updateOperatorEntity(operatorEntity);

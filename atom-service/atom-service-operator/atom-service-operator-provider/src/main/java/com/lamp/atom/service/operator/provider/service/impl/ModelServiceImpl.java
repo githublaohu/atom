@@ -27,10 +27,6 @@ public class ModelServiceImpl implements ModelService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public Integer createModelEntity(ModelEntity modelEntity) {
-        return null;
-    }
 
     @Override
     public Integer insertModelEntity(ModelEntity modelEntity) {
@@ -56,4 +52,9 @@ public class ModelServiceImpl implements ModelService {
     public ModelEntity queryModelEntity(ModelEntity modelEntity) {
         return modelMapper.queryModelEntity(modelEntity);
     }
+
+	@Override
+	public Integer createModelEntity(ModelEntity modelEntity) {
+		return null;
+	}
 }

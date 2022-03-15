@@ -71,8 +71,8 @@ public class PortCreatingFunction {
             public void run() {
                 PortCreatingFunction.this.registerService();
                 List<String> serviceNames = new ArrayList<>();
-                serviceNames.add("session");
-                serviceNames.add("standalone");
+                serviceNames.add("atom-runtime-python-service-session");
+                serviceNames.add("atom-runtime-python-service-standalone");
                 Map<String, ServiceAndPort> newServiceAndPortMap = new HashMap<>();
 
                 for (String serviceName : serviceNames) {
@@ -117,7 +117,7 @@ public class PortCreatingFunction {
     }
 
     public static class ServiceAndPort {
-        private String ip;
+        String ip;
         private AtomicInteger port = new AtomicInteger();
         private ConcurrentHashMap<Integer, Integer> portMap = new ConcurrentHashMap<>();
     }

@@ -5,8 +5,8 @@
 	<parent>
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-<!--		<relativePath>../pom.xml</relativePath>-->
+		<version>${reversion}</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>atom-service</artifactId>
 	<packaging>pom</packaging>
@@ -14,6 +14,8 @@
 		<module>atom-service-common</module>
 		<module>atom-service-operator</module>
 		<module>atom-service-reasoning</module>
+		<module>atom-service-recommend</module>
+		<module>atom-service-task</module>
 		<module>atom-service-space</module>
 	</modules>
 

@@ -12,13 +12,11 @@
 package com.lamp.atom.service.operator.entity;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="ResourceRelationEntity",description="资源关系类")
 public class ResourceRelationEntity extends BaseEntity {
 
@@ -54,7 +52,4 @@ public class ResourceRelationEntity extends BaseEntity {
      */
     private Integer order;
 
-    public ResourceRelationEntity(Long id) {
-        super(id);
-    }
 }
