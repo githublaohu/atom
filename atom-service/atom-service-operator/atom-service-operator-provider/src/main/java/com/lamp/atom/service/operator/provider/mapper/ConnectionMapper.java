@@ -65,9 +65,18 @@ public interface ConnectionMapper {
      *
      * @return
      */
-    @Select("select * from connection " +
-            "where delete_flag = 0")
-    List<ConnectionEntity> queryConnectionEntitys();
+    @Select({"<script>" +
+            "select * from connection " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'sourceType != null'>and source_type = #{sourceType} </if>" +
+            "<if test = 'sourceAddr != null'>and source_addr = #{sourceAddr} </if>" +
+            "<if test = 'sourceAccount != null'>and source_account = #{sourceAccount} </if>" +
+            "<if test = 'sourceSpace != null'>and source_space = #{sourceSpace} </if>" +
+            "<if test = 'mode != null'>and mode = #{mode} </if>" +
+            "<if test = 'colonyType != null'>and colony_type = #{colonyType} </if>" +
+            "</script>"})
+    List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity);
 
     /**
      * 查询单个连接

@@ -60,11 +60,18 @@ public interface ServiceInfoMapper {
     /**
      * 查询多个服务配置
      *
+     * @param serviceInfoEntity
      * @return
      */
-    @Select("select * from service_info " +
-            "where delete_flag = 0")
-    List<ServiceInfoEntity> queryServiceInfoEntitys();
+    @Select({"<script>" +
+            "select * from service_info " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'siRuntimePattern != null'>and si_runtime_pattern = #{siRuntimePattern} </if>" +
+            "<if test = 'siImageName != null'>and si_image_name = #{siImageName} </if>" +
+            "<if test = 'siLabel != null'>and si_label = #{siLabel} </if>" +
+            "</script>"})
+    List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
 
     /**
      * 查询单个服务配置

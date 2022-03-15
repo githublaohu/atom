@@ -42,9 +42,10 @@ public interface ConnectionService {
     /**
      * 查询多个连接
      *
+     * @param connectionEntity
      * @return
      */
-    List<ConnectionEntity> queryConnectionEntitys();
+    List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity);
 
     /**
      * 查询单个连接

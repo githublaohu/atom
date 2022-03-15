@@ -29,3 +29,6 @@ nacos:
       logEnable: true
     server-addr: 127.0.0.1:8848
     namespace: atom.service.operator
+
+decoration:
+  defaultExceptionResult: com.lamp.atom.service.operator.consumers.utils.AtomConsumerExceptionResult

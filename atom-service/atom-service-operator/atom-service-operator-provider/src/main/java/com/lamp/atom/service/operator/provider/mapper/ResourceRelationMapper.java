@@ -53,17 +53,26 @@ public interface ResourceRelationMapper {
     @Select("select * from resource_relation " +
             "where delete_flag = 0 and " +
             "(id like #{keyword} or relation_id like #{keyword} or relation_type like #{keyword} or be_relation_id like #{keyword} or be_relation_type like #{keyword} " +
-            "or relation_status like #{keyword} or order like #{keyword})")
+            "or relation_status like #{keyword} or 'order' like #{keyword})")
     List<ResourceRelationEntity> queryResourceRelationEntitysByKeyword(String keyword);
 
     /**
      * 查询多个资源关系
      *
+     * @param resourceRelationEntity
      * @return
      */
-    @Select("select * from resource_relation " +
-            "where delete_flag = 0")
-    List<ResourceRelationEntity> queryResourceRelationEntitys();
+    @Select({"<script>" +
+            "select * from resource_relation " +
+            "where delete_flag = 0" +
+            "<if test = 'relationId != null'>and relation_id = #{relationId} </if>" +
+            "<if test = 'relationType != null'>and relation_type = #{relationType} </if>" +
+            "<if test = 'beRelationId != null'>and be_relation_id = #{beRelationId} </if>" +
+            "<if test = 'beRelationType != null'>and be_relation_type = #{beRelationType} </if>" +
+            "<if test = 'relationStatus != null'>and relation_status = #{relationStatus} </if>" +
+            "<if test = 'order != null'>and 'order' = #{order} </if>" +
+            "</script>"})
+    List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity);
 
     /**
      * 查询单个资源关系

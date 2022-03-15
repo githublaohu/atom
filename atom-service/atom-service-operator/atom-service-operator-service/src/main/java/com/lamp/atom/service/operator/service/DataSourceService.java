@@ -42,9 +42,10 @@ public interface DataSourceService {
     /**
      * 查询多个数据源
      *
+     * @param dataSourceEntity
      * @return
      */
-    List<DataSourceEntity> queryDataSourceEntitys();
+    List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity);
 
     /**
      * 查询单个数据源

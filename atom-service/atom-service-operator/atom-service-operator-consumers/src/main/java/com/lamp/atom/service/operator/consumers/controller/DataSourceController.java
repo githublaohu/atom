@@ -107,13 +107,14 @@ public class DataSourceController {
     /**
      * 查询多个数据源
      *
+     * @param dataSourceEntity
      * @return
      */
     @PostMapping("/queryDataSources")
     @ApiOperation(value = "查询多个数据源")
-    public List<DataSourceEntity> queryDataSources() {
+    public List<DataSourceEntity> queryDataSources(@RequestBody(required = false) DataSourceEntity dataSourceEntity) {
         try {
-            return dataSourceService.queryDataSourceEntitys();
+            return dataSourceService.queryDataSourceEntitys(dataSourceEntity);
         } catch (Exception e) {
             log.warn("数据源查询失败 {}", e);
             return null;

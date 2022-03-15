@@ -12,7 +12,7 @@
 package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.*;
-import com.lamp.atom.service.domain.RuntimeStatus;
+import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -72,7 +72,7 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 细化级别
      */
-    private Integer level = 3;
+    private Integer level;
 
     /**
      * 资源账户id
@@ -156,7 +156,7 @@ public class OperatorEntity extends BaseEntity {
      * 训练状态
      */
     @NonNull
-    private RuntimeStatus runtimeStatus;
+    private OperatorRuntimeStatus operatorRuntimeStatus;
 
     /**
      * 训练优先级

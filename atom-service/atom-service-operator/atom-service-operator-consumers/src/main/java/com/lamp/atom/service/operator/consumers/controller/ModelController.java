@@ -103,14 +103,15 @@ public class ModelController {
 
 	/**
 	 * 查询多个模型
-	 * 
+	 *
+	 * @param modelEntity
 	 * @return
 	 */
 	@PostMapping("/queryModels")
 	@ApiOperation(value = "查询多个模型")
-	public List<ModelEntity> queryModels() {
+	public List<ModelEntity> queryModels(@RequestBody(required = false) ModelEntity modelEntity) {
 		try {
-			return modelService.queryModelEntitys();
+			return modelService.queryModelEntitys(modelEntity);
 		} catch (Exception e) {
 			log.warn("模型查询失败 {}", e);
 			return null;

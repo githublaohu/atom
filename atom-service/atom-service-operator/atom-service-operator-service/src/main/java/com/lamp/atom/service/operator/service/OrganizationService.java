@@ -50,9 +50,10 @@ public interface OrganizationService {
     /**
      * 查询多个组织
      *
+     * @param organizationEntity
      * @return
      */
-    List<OrganizationEntity> queryOrganizationEntitys();
+    List<OrganizationEntity> queryOrganizationEntitys(OrganizationEntity organizationEntity);
 
     /**
      * 查询单个组织

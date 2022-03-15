@@ -42,9 +42,10 @@ public interface RuntimeService {
     /**
      * 查询多个运行实例
      *
+     * @param runtimeEntity
      * @return
      */
-    List<RuntimeEntity> queryRuntimeEntitys();
+    List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity);
 
     /**
      * 查询单个运行实例

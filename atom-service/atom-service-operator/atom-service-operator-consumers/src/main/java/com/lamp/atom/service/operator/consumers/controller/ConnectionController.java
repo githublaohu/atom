@@ -107,13 +107,14 @@ public class ConnectionController {
     /**
      * 查询多个连接
      *
+     * @param connectionEntity
      * @return
      */
     @PostMapping("/queryConnections")
     @ApiOperation(value = "查询多个连接")
-    public List<ConnectionEntity> queryConnections() {
+    public List<ConnectionEntity> queryConnections(@RequestBody(required = false) ConnectionEntity connectionEntity) {
         try {
-            return connectionService.queryConnectionEntitys();
+            return connectionService.queryConnectionEntitys(connectionEntity);
         } catch (Exception e) {
             log.warn("连接查询失败 {}", e);
             return null;

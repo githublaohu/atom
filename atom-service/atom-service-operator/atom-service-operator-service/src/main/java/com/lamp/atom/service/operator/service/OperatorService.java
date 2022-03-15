@@ -42,9 +42,10 @@ public interface OperatorService {
     /**
      * 查询多个算子
      *
+     * @param operatorEntity
      * @return
      */
-    List<OperatorEntity> queryOperatorEntitys();
+    List<OperatorEntity> queryOperatorEntitys(OperatorEntity operatorEntity);
 
     /**
      * 查询单个算子

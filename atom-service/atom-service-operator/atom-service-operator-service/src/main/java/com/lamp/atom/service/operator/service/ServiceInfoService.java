@@ -50,9 +50,10 @@ public interface ServiceInfoService {
     /**
      * 查询多个服务配置
      *
+     * @param serviceInfoEntity
      * @return
      */
-    List<ServiceInfoEntity> queryServiceInfoEntitys();
+    List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
 
     /**
      * 查询单个服务配置

@@ -59,11 +59,19 @@ public interface NodeMapper {
     /**
      * 查询多个节点
      *
+     * @param nodeEntity
      * @return
      */
-    @Select("select * from node " +
-            "where delete_flag = 0")
-    List<NodeEntity> queryNodeEntitys();
+    @Select({"<script>" +
+            "select * from node " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'nodeTemplateId != null'>and node_template_id = #{nodeTemplateId} </if>" +
+            "<if test = 'nodeType != null'>and node_type = #{nodeType} </if>" +
+            "<if test = 'nodeModel != null'>and node_model = #{nodeModel} </if>" +
+            "<if test = 'nodeStatus != null'>and node_status = #{nodeStatus} </if>" +
+            "</script>"})
+    List<NodeEntity> queryNodeEntitys(NodeEntity nodeEntity);
 
     /**
      * 查询单个节点

@@ -50,9 +50,10 @@ public interface ResourceRelationService {
     /**
      * 查询多个资源关系
      *
+     * @param resourceRelationEntity
      * @return
      */
-    List<ResourceRelationEntity> queryResourceRelationEntitys();
+    List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity);
 
     /**
      * 查询单个资源关系

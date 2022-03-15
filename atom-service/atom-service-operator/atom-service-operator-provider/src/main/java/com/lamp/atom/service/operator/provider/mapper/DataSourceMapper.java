@@ -65,11 +65,21 @@ public interface DataSourceMapper {
     /**
      * 查询多个数据源
      *
+     * @param dataSourceEntity
      * @return
      */
-    @Select("select * from datasource " +
-            "where delete_flag = 0")
-    List<DataSourceEntity> queryDataSourceEntitys();
+    @Select({"<script>" +
+            "select * from datasource " +
+            "where delete_flag = 0 " +
+            "<if test = 'operatorId != null'>and operator_id = #{operatorId} </if>" +
+            "<if test = 'connectionId != null'>and connection_id = #{connectionId} </if>" +
+            "<if test = 'dataSourceType != null'>and dataSource_type = #{dataSourceType} </if>" +
+            "<if test = 'sourceSpace != null'>and source_space = #{sourceSpace} </if>" +
+            "<if test = 'disposable != null'>and disposable = #{disposable} </if>" +
+            "<if test = 'asyncLoad != null'>and async_load = #{asyncLoad} </if>" +
+            "<if test = 'order != null'>and 'order' = #{order} </if>" +
+            "</script>"})
+    List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity);
 
     /**
      * 查询单个数据源

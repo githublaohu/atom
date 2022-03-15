@@ -104,13 +104,14 @@ public class ResourceRelationController {
     /**
      * 查询多个资源关系
      *
+     * @param resourceRelationEntity
      * @return
      */
     @PostMapping("/queryResourceRelations")
     @ApiOperation(value = "查询多个资源关系")
-    public List<ResourceRelationEntity> queryResourceRelations() {
+    public List<ResourceRelationEntity> queryResourceRelations(@RequestBody(required = false) ResourceRelationEntity resourceRelationEntity) {
         try {
-            return resourceRelationService.queryResourceRelationEntitys();
+            return resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
         } catch (Exception e) {
             log.warn("资源关系查询失败 {}", e);
             return null;

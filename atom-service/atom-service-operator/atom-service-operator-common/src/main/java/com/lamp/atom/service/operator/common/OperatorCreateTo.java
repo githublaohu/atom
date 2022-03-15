@@ -15,6 +15,7 @@ import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import com.lamp.atom.service.operator.entity.DataSourceEntity;
 import com.lamp.atom.service.operator.entity.ModelEntity;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
+import com.lamp.atom.service.space.entity.ResourceAccountEntity;
 import lombok.Data;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class OperatorCreateTo {
 
     private ModelEntity modelTo;
 
-    private DataSourceEntity sourceAccountTo;
+    private ResourceAccountEntity resourceAcountTo;
 
     private OperatorEntity operatorTo;
 
