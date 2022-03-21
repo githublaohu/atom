@@ -20,30 +20,30 @@ import com.lamp.atom.schedule.api.strategy.Strategy;
 import lombok.Data;
 
 @Data
-public class Shedule {
+public class Schedule {
 
-	private Strategy strategy;
-	
-	private Deploy deploy;
-	
-	private Map<String ,String> limits = new HashMap<String, String>();
-	
-	private Map<String,String> hardwareConfig = new HashMap<String, String>();
-	
-	private Map<String,String> runParameter = new HashMap<String, String>();
-	
-	private Map<String,String> envs = new HashMap<String, String>();
-	
-	/**
-	 * 
-	 */
-	private Map<String,String> labels;
-	
-	private Object object;
-	
-	private String noteId;
-	
-	private String noteName;
-	
-	private String namespace = "default";
+    private Strategy strategy;
+
+    private Deploy deploy;
+
+    private Map<String, String> limits = new HashMap<String, String>();
+
+    private Map<String, String> hardwareConfig = new HashMap<String, String>();
+
+    private Map<String, String> runParameter = new HashMap<String, String>();
+
+    private Map<String, String> envs = new HashMap<String, String>();
+
+    /**
+     * 调度服务的标签
+     */
+    private Map<String, String> label;
+
+    private Object object;
+
+    private Long nodeId;
+
+    private String nodeName;
+
+    private String namespace = "default";
 }

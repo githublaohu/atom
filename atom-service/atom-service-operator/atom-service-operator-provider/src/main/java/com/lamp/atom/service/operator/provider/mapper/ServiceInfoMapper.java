@@ -77,4 +77,13 @@ public interface ServiceInfoMapper {
 	 */
 	@Select("select * from service_info " + "where id = #{id}")
 	ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+
+	/**
+	 * 查询单个服务配置
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Select("select * from service_info " + "where id = #{id}")
+	ServiceInfoEntity queryServiceInfoEntityById(Long id);
 }

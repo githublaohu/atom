@@ -29,7 +29,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SheduleStrategyType {
+public enum ScheduleStrategyType {
 	
 	DEFAULT_RONDOM("default","default","rondom"),
 	DEFAULT_TOTAL_QUANTITY("default","default","total quantity"),

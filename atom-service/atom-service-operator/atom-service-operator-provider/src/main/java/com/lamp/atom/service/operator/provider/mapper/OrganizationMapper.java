@@ -64,7 +64,7 @@ public interface OrganizationMapper {
      */
     @Select({"<script>" +
             "select * from organization " +
-            "where delete_flag = 0" +
+            "where delete_flag = 0 " +
             "<if test = 'parentId != null'>and parent_id = #{parentId} </if>" +
             "<if test = 'organizationType != null'>and organization_type = #{organizationType} </if>" +
             "<if test = 'organizationStatus != null'>and organization_status = #{organizationStatus} </if>" +
@@ -82,4 +82,26 @@ public interface OrganizationMapper {
     @Select("select * from organization " +
             "where id = #{id}")
     OrganizationEntity queryOrganizationEntity(OrganizationEntity organizationEntity);
+
+    /**
+     * 查询单个组织
+     *
+     * @param id
+     * @return
+     */
+    @Select("select * from organization " +
+            "where id = #{id}")
+    OrganizationEntity queryOrganizationById(Long id);
+
+    /**
+     * 根据实验查询空间
+     *
+     * @param organizationEntity
+     * @return
+     */
+    @Select("select * from organization " +
+            "where id = (select parent_id from organization " +
+            "where id = (select parent_id from organization where id = #{parentId}))")
+    OrganizationEntity querySpace(OrganizationEntity organizationEntity);
+
 }

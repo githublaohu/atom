@@ -19,6 +19,9 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "NodeEntity", description = "节点类")
@@ -70,5 +73,10 @@ public class NodeEntity extends BaseEntity {
 	 * 训练优先级
 	 */
 	private Integer operatorPriority;
+
+	/**
+	 * 服务配置
+	 */
+	private Map<String ,String> limits = new HashMap<String, String>();
 
 }

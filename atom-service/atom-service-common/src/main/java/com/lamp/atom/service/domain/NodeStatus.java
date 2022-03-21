@@ -16,5 +16,24 @@ package com.lamp.atom.service.domain;
  */
 public enum NodeStatus {
 
-    EDITING
+    /**
+     * 创建完成
+     */
+    CREATE("创建完成"),
+
+    /**
+     * 编辑中
+     */
+    EDITING("编辑中"),
+
+    /**
+     * 编辑完成
+     */
+    EDIT_FINISH("编辑完成");
+
+    private String name;
+
+    NodeStatus(String name) {
+        this.name = name;
+    }
 }

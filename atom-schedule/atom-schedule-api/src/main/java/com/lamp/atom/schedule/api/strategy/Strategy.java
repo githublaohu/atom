@@ -18,9 +18,12 @@ import lombok.Data;
 @Data
 public class Strategy {
 
-	private SheduleStrategyType sheduleStrategyType;
-	
-	private Map<String,String> label;
-	
-	private String timing;
+    private ScheduleStrategyType scheduleStrategyType;
+
+    /**
+     * 策略的标签
+     */
+    private Map<String, String> label;
+
+    private String timing;
 }

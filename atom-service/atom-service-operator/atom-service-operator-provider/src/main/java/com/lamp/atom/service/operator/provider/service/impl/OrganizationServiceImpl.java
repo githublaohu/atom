@@ -56,4 +56,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationEntity queryOrganizationEntity(OrganizationEntity organizationEntity) {
         return organizationMapper.queryOrganizationEntity(organizationEntity);
     }
+
+    @Override
+    public OrganizationEntity queryOrganizationById(Long id) {
+        return organizationMapper.queryOrganizationById(id);
+    }
+
+    @Override
+    public OrganizationEntity querySpace(OrganizationEntity organizationEntity) {
+        return organizationMapper.querySpace(organizationEntity);
+    }
 }

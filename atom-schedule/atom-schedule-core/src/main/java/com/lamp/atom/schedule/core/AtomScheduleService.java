@@ -13,7 +13,7 @@ package com.lamp.atom.schedule.core;
 
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
-import com.lamp.atom.schedule.api.Shedule;
+import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.config.OperatorSheduleConfig;
 import com.lamp.atom.schedule.python.operator.kubernetes.OperatorKubernetesSchedule;
 import com.lamp.atom.schedule.python.operator.rpc.OperatorRpcSchedule;
@@ -42,33 +42,33 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	
 	
 	@Override
-	public void createService(Shedule shedule) {
-		kubernetesSchedule.createService(shedule);
+	public void createService(Schedule schedule) {
+		kubernetesSchedule.createService(schedule);
 	}
 
 	@Override
-	public void closeService(Shedule shedule) {
-		kubernetesSchedule.closeService(shedule);
+	public void closeService(Schedule schedule) {
+		kubernetesSchedule.closeService(schedule);
 	}
 
 	@Override
-	public void createOperators(Shedule shedule) {
-		rpcSchedule.createOperators(shedule);
+	public void createOperators(Schedule schedule) {
+		rpcSchedule.createOperators(schedule);
 	}
 
 	@Override
-	public void startOperators(Shedule shedule) {
-		rpcSchedule.startOperators(shedule);
+	public void startOperators(Schedule schedule) {
+		rpcSchedule.startOperators(schedule);
 	}
 
 	@Override
-	public void suspendOperators(Shedule shedule) {
-		rpcSchedule.suspendOperators(shedule);
+	public void suspendOperators(Schedule schedule) {
+		rpcSchedule.suspendOperators(schedule);
 	}
 
 	@Override
-	public void uninstallPperators(Shedule shedule) {
-		rpcSchedule.uninstallPperators(shedule);
+	public void uninstallOperators(Schedule schedule) {
+		rpcSchedule.uninstallOperators(schedule);
 	}
 
 }

@@ -36,6 +36,25 @@ public interface RuntimeMapper {
     Integer insertRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
+     * 批量添加运行实例
+     *
+     * @param runtimeEntityList
+     */
+    @Insert("<script>" +
+            "insert into runtime" +
+            "(space_id,case_source_type,source_id,node_id," +
+            "server_ip,server_port,start_time,end_time,estimate_start_time,estimate_end_time," +
+            "operator_runtime_status,label,start_id,start_name,end_id,end_name) " +
+            "values " +
+            "<foreach collection='runtimeEntityList' item='item' index='index' separator=','>" +
+            "(#{item.spaceId},#{item.caseSourceType},#{item.sourceId},#{item.nodeId}," +
+            "#{item.serverIp},#{item.serverPort},#{item.startTime},#{item.endTime},#{item.estimateStartTime},#{item.estimateEndTime}," +
+            "#{item.operatorRuntimeStatus},#{item.label},#{item.startId},#{item.startName},#{item.endId},#{item.endName})" +
+            "</foreach>" +
+            "</script>")
+    Integer batchInsertRuntimeEntity(List<RuntimeEntity> runtimeEntityList);
+
+    /**
      * 修改实例
      *
      * @param runtimeEntity
@@ -45,6 +64,23 @@ public interface RuntimeMapper {
             "delete_flag = #{deleteFlag} " +
             "where id = #{id}")
     Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
+
+    /**
+     * 批量修改运行实例
+     *
+     * @param runtimeEntityList
+     * @return
+     */
+    @Update({"<script>" +
+            "<foreach collection='runtimeEntityList' item='item' index='index' separator=';'>" +
+            "update runtime " +
+            "<set>" +
+            "<if test = 'item.OperatorRuntimeStatus != null'>operator_runtime_status = #{item.OperatorRuntimeStatus}</if>" +
+            "</set>" +
+            "where id = #{item.id} and delete_flag = 0" +
+            "</foreach>" +
+            "</script>"})
+    Integer batchUpdateRuntimeEntity(List<RuntimeEntity> runtimeEntityList);
 
     /**
      * 模糊查询多个实例

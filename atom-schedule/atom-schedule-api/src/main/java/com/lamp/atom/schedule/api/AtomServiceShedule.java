@@ -19,10 +19,10 @@ package com.lamp.atom.schedule.api;
  */
 public interface AtomServiceShedule {
 
-	public default void createService(Shedule shedule) {
+	public default void createService(Schedule schedule) {
 	}
 
-	public default void closeService(Shedule shedule) {
+	public default void closeService(Schedule schedule) {
 	}
 
 }

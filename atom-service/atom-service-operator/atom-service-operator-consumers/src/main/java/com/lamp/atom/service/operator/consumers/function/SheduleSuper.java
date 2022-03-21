@@ -34,7 +34,7 @@ import lombok.Setter;
  *
  */
 @Component
-@ConfigurationProperties(prefix="atom.shedule")
+@ConfigurationProperties(prefix="atom.schedule")
 public class SheduleSuper implements BeanFactoryAware {
 
 	private BeanFactory beanFactory;

@@ -62,4 +62,12 @@ public interface ServiceInfoService {
 	 * @return
 	 */
 	ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+
+	/**
+	 * 查询单个服务配置
+	 *
+	 * @param id
+	 * @return
+	 */
+	ServiceInfoEntity queryServiceInfoEntityById(Long id);
 }

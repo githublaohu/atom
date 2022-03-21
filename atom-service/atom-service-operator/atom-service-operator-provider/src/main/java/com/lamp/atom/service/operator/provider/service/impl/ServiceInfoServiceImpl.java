@@ -57,4 +57,9 @@ public class ServiceInfoServiceImpl implements ServiceInfoService {
     public ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity) {
         return serviceInfoMapper.queryServiceInfoEntity(serviceInfoEntity);
     }
+
+    @Override
+    public ServiceInfoEntity queryServiceInfoEntityById(Long id) {
+        return serviceInfoMapper.queryServiceInfoEntityById(id);
+    }
 }

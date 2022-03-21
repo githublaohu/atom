@@ -39,9 +39,14 @@ public interface NodeMapper {
      * @param nodeEntity
      * @return
      */
-    @Update("update node set " +
-            "delete_flag = #{deleteFlag} " +
-            "where id = #{id}")
+    @Update({"<script>" +
+            "update node " +
+            "<set>" +
+            "<if test = 'nodeStatus != null'>node_status = #{nodeStatus},</if>" +
+            "<if test = 'deleteFlag != null'>delete_flag = #{deleteFlag}</if>" +
+            "</set>" +
+            "where id = #{id}" +
+            "</script>"})
     Integer updateNodeEntity(NodeEntity nodeEntity);
 
     /**

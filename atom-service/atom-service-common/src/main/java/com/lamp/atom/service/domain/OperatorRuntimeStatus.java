@@ -26,6 +26,11 @@ public enum OperatorRuntimeStatus {
     QUEUING("排队中"),
 
     /**
+     * console 排队取消中
+     */
+    QUEUE_CANCELING("排队取消中"),
+
+    /**
      * console 训练中
      */
     TRAINING("训练中"),

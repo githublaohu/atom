@@ -4,31 +4,31 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lamp.atom.schedule.api.Schedule;
 import org.junit.Test;
 
-import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
 
 public class TestOperatorKubernetesSchedule {
 
-	Shedule shedule = new Shedule();
+	Schedule schedule = new Schedule();
 
 	OperatorShedeleKubernetesConfig operatorShedeleKubernetesConfig;
 
 	private String nacosAddress = "172.19.75.218:8848";
 
 	{
-		shedule.setNoteName("test");
+		schedule.setNodeName("test");
 		Map<String, String> labels = new HashMap<>();
 		labels.put("test", "test");
-		shedule.setLabels(labels);
+		schedule.setLabels(labels);
 		Map<String, String> hardwareConfig = new HashMap<>();
 		hardwareConfig.put("cpu", "2");
 		hardwareConfig.put("memory", "1Gi");
-		shedule.setHardwareConfig(hardwareConfig);
+		schedule.setHardwareConfig(hardwareConfig);
 		Map<String, String> envs = new HashMap<>();
 		envs.put("nacos_config", "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}");
-		shedule.setEnvs(envs);
+		schedule.setEnvs(envs);
 
 		operatorShedeleKubernetesConfig = new OperatorShedeleKubernetesConfig();
 		try {
@@ -46,13 +46,13 @@ public class TestOperatorKubernetesSchedule {
 	public void testCreateService() throws Exception {
 		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
 
-		kubernetesSchedule.createService(shedule);
+		kubernetesSchedule.createService(schedule);
 	}
 	
 	@Test
 	public void testCreateOperators() throws Exception {
 		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
 
-		kubernetesSchedule.createOperators(shedule);
+		kubernetesSchedule.createOperators(schedule);
 	}
 }

@@ -24,12 +24,27 @@ public interface RuntimeService {
     Integer insertRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
+     * 批量添加运行实例
+     *
+     * @param runtimeEntityList
+     */
+    Integer batchInsertRuntimeEntity(List<RuntimeEntity> runtimeEntityList);
+
+    /**
      * 修改运行实例
      *
      * @param runtimeEntity
      * @return
      */
     Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
+
+    /**
+     * 批量修改运行实例
+     *
+     * @param runtimeEntityList
+     * @return
+     */
+    Integer batchUpdateRuntimeEntity(List<RuntimeEntity> runtimeEntityList);
 
     /**
      * 模糊查询多个运行实例
