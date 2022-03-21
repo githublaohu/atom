@@ -14,7 +14,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<kubernetes.client.version>5.5.0</kubernetes.client.version>
+		<kubernetes.client.version>5.12.1</kubernetes.client.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>test-mock-dependent</artifactId>
-			<version>0.0.10</version>
+			<version>0.1.4</version>
 			<type>pom</type>
 		</dependency>
 

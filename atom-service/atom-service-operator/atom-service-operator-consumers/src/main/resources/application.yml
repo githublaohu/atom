@@ -44,3 +44,14 @@ atom:
             namespace: atom-dev
             serverAddr: 127.0.0.1:8848
 
+mvc:
+  favicon:
+    #关闭默认favicon.ico
+    enabled: false
+  #jsp配置
+  view:
+    prefix: /WEB-INF/view/
+    suffix: .jsp
+  static-path-pattern: /fromDisk/**
+  resources:
+    static-locations: file:/www/wwwroot/

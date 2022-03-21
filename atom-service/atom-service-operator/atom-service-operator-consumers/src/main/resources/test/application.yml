@@ -3,4 +3,4 @@ server:
 
 spring:
   application:
-    name: atom-space-operato-consumer
+    name: atom-space-operator-consumer
