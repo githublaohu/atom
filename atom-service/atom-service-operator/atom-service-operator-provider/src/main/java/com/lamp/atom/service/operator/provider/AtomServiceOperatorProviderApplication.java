@@ -11,7 +11,7 @@
  */
 package com.lamp.atom.service.operator.provider;
 
-
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Slf4j
 @SpringBootApplication
 @EnableTransactionManagement
+@NacosPropertySource(dataId = "atom-dev", autoRefreshed = true)
 public class AtomServiceOperatorProviderApplication {
 
     public static void main(String[] args) {

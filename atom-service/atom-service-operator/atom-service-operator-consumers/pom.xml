@@ -51,6 +51,10 @@
 					<groupId>com.fasterxml.jackson.core</groupId>
 					<artifactId>jackson-annotations</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba.nacos</groupId>
+					<artifactId>nacos-client</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -98,10 +102,57 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Nacos -->
+		<dependency>
+			<groupId>com.alibaba.boot</groupId>
+			<artifactId>nacos-config-spring-boot-starter</artifactId>
+			<version>0.2.10</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba.nacos</groupId>
+					<artifactId>nacos-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+<!--				<exclusion>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--					<artifactId>spring-aop</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--					<artifactId>spring-beans</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--					<artifactId>spring-core</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--					<artifactId>spring-expression</artifactId>-->
+<!--				</exclusion>-->
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.boot</groupId>
+			<artifactId>nacos-config-spring-boot-actuator</artifactId>
+			<version>0.2.10</version>
+		</dependency>
 		<dependency>
 			<groupId>cn.lampup</groupId>
 			<artifactId>atom-schedule-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+<!--			<scope>compile</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.7</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

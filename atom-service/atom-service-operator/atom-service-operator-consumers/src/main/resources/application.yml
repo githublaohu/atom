@@ -3,55 +3,22 @@ server:
   servlet:
     context-path: "/lamp/atom/service/operator"
 
-dubbo:
-  protocol:
-    name: dubbo
-    port: 20880
-    accesslog: true
-  consume:
-    timeout: 30000
-    retries: 0
-  registry:
-    address: nacos://127.0.0.1:8848
-    parmeters[namespace]: atom-dev
-    register: true
-    subscribe: true
-  scan:
-    base-packages: com.lamp.atom.service.operator.consumer.controller
+spring:
   application:
-    name: lamp-atom-service-operator
-    owner: dome
-    logger: slf4j
+    name: atom-service-operator-consumer
 
 nacos:
   config:
+    server-addr: 124.223.198.143:8848
+    namespace: c5881a50-da93-4446-aad9-853da64c92b6
+    data-id: operator-consumer-dev
     bootstrap:
       enable: true
       logEnable: true
-    server-addr: 127.0.0.1:8848
-    namespace: atom-dev
-
-decoration:
-  defaultExceptionResult: com.lamp.atom.service.operator.consumers.utils.AtomConsumerExceptionResult
-
-atom:
-   shedule:
-      operatorSheduleConfig:
-         operatorKubernetesConfig:
-            isUser: false
-            configName: kubernetesConfig.yaml
-         operatorShedeleRpcConfig:
-            namespace: atom-dev
-            serverAddr: 127.0.0.1:8848
-
-mvc:
-  favicon:
-    #关闭默认favicon.ico
-    enabled: false
-  #jsp配置
-  view:
-    prefix: /WEB-INF/view/
-    suffix: .jsp
-  static-path-pattern: /fromDisk/**
-  resources:
-    static-locations: file:/www/wwwroot/
+    remote-first: true
+    type: yaml
+    auto-refresh: true
+    max-retry: 10
+    config-retry-time: 2333
+    config-long-poll-timeout: 46000
+    enable-remote-sync-config: true

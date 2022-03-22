@@ -33,25 +33,25 @@
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>dubbo-springmvc</artifactId>
-                <version>0.0.6</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>dubbo-provider</artifactId>
-                <version>0.0.6</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>shardingsphere-dependent</artifactId>
-                <version>0.0.6</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>logback-dependent</artifactId>
-                <version>0.0.10</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
         </dependencies>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
+            <version>1.18.22</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -77,8 +77,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.7.0</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>17</source>
+                        <target>17</target>
                         <encoding>UTF-8</encoding>
                         <testIncludes>
                             <testInclude>none</testInclude>
