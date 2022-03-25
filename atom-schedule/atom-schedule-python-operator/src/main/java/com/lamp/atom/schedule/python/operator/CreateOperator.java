@@ -11,6 +11,10 @@
  */
 package com.lamp.atom.schedule.python.operator;
 
+import lombok.Data;
+
+@Data
 public class CreateOperator {
 
+    private Operator operator;
 }

@@ -7,7 +7,8 @@
 	<parent>
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom-schedule</artifactId>
-		<version>${reversion}</version>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>atom-schedule-api</artifactId>
 	<name>atom-schedule-api</name>
@@ -16,5 +17,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
+		</dependency>
 	</dependencies>
 </project>

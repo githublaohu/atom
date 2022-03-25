@@ -29,12 +29,10 @@ public interface OperatorMapper {
     @Insert("insert into operator" +
             "(space_id,operator_template_id,operator_name,operator_source_id,operator_source_type,operator_runtime_type,operator_model," +
             "level,resources_account_id,code_mode,code_address,code_version,module_name,execute_object,environment_conf,operator_conf,model_conf," +
-            "cpu,gpu,men,display_card," +
-            "operator_epoch,operator_plan_runtimes,operator_runtime_status,operator_priority,case_id,deploy_type) " +
+            "operator_epoch,operator_plan_runtimes,operator_priority,deploy_type) " +
             "values(#{spaceId},#{operatorTemplateId},#{operatorName},#{operatorSourceId},#{operatorSourceType},#{operatorRuntimeType},#{operatorModel}," +
             "#{level},#{resourcesAccountId},#{codeMode},#{codeAddress},#{codeVersion},#{moduleName},#{executeObject},#{operatorConf},#{environmentConf},#{modelConf}," +
-            "#{cpu},#{gpu},#{men},#{displayCard}," +
-            "#{operatorEpoch},#{operatorPlanRuntimes},#{operatorRuntimeStatus},#{operatorPriority},#{caseId},#{deployType})")
+            "#{operatorEpoch},#{operatorPlanRuntimes},#{operatorPriority},#{deployType})")
     Integer insertOperatorEntity(OperatorEntity operatorEntity);
 
     /**
@@ -66,9 +64,8 @@ public interface OperatorMapper {
             "or level like #{keyword} or resources_account_id like #{keyword} or code_mode like #{keyword} or code_address like #{keyword} " +
             "or code_version like #{keyword} or module_name like #{keyword} or execute_object like #{keyword} " +
             "or operator_conf like #{keyword} or environment_conf like #{keyword} or model_conf like #{keyword} " +
-            "or cpu like #{keyword} or gpu like #{keyword} or men like #{keyword} or display_card like #{keyword} " +
             "or operator_epoch like #{keyword} or operator_plan_runtimes like #{keyword} " +
-            "or operator_runtime_status like #{keyword} or operator_priority like #{keyword} or case_id like #{keyword} or deploy_type like #{keyword})")
+            "or operator_runtime_status like #{keyword} or operator_priority like #{keyword} or deploy_type like #{keyword})")
     List<OperatorEntity> queryOperatorEntitysByKeyword(String keyword);
 
     /**
@@ -94,7 +91,6 @@ public interface OperatorMapper {
             "<if test = 'operatorEpoch != null'>and operator_epoch = #{operatorEpoch} </if>" +
             "<if test = 'operatorRuntimeStatus != null'>and operator_runtime_status = #{operatorRuntimeStatus} </if>" +
             "<if test = 'operatorPriority != null'>and operator_priority = #{operatorPriority} </if>" +
-            "<if test = 'caseId != null'>and case_id = #{caseId} </if>" +
             "<if test = 'deployType != null'>and deploy_type = #{deployType} </if>" +
             "</script>"})
     List<OperatorEntity> queryOperatorEntitys(OperatorEntity operatorEntity);

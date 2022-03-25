@@ -13,21 +13,11 @@ package com.lamp.atom.schedule.api.config;
 
 import lombok.Data;
 
-
 @Data
-public class OperatorShedeleKubernetesConfig {
+public class OperatorScheduleConfig {
 
-	private boolean isUser = false;
-	
-	private String masterUrl;
-	
-	private String configName  = "kubernetesConfig.yaml";
-	
-	private String configYaml;
-		
-	private String cpuContainerName = "githublaohu/atom-base-cpu:tf1.15-cpu";
-	
-	private String gpcContainerName = "githublaohu/atom-base-cpu:tf1.15-gpu";
-	
-	private String namespace = "default";
+	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
+
+	private OperatorScheduleRpcConfig operatorScheduleRpcConfig;
+
 }

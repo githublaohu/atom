@@ -19,7 +19,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.EnvVarSource;
@@ -40,7 +40,7 @@ import lombok.Setter;
 public class StandaloneOperatorKubernetesBuilder {
 
 	@Setter
-	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
+	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 	
 	@Setter
 	private Schedule schedule;

@@ -27,7 +27,7 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleRpcConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleRpcConfig;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.ScheduleStrategyType;
@@ -52,7 +52,7 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 
 	private NamingService namingService;
 
-	private OperatorShedeleRpcConfig operatorShedeleRpcConfig;
+	private OperatorScheduleRpcConfig operatorScheduleRpcConfig;
 
 	/**
 	 * 重试是否需要
@@ -62,10 +62,10 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 
 	private Map<Instance, AtomOperatorRPCServier> runtimeClient = new ConcurrentHashMap<>();
 	
-	public OperatorRpcSchedule(OperatorShedeleRpcConfig operatorShedeleRpcConfig) throws NacosException {
-		this.operatorShedeleRpcConfig = operatorShedeleRpcConfig;
+	public OperatorRpcSchedule(OperatorScheduleRpcConfig operatorScheduleRpcConfig) throws NacosException {
+		this.operatorScheduleRpcConfig = operatorScheduleRpcConfig;
 		Properties properties = new Properties();
-		JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(this.operatorShedeleRpcConfig));
+		JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(this.operatorScheduleRpcConfig));
 		properties.putAll(jsonObject);
 		namingService = NamingFactory.createNamingService(properties);
 	}

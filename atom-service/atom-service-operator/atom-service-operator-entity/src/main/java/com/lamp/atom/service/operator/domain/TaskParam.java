@@ -26,5 +26,5 @@ public class TaskParam {
     /**
      * 最大最小配置
      */
-    private Map<String, String> limits = new HashMap<String, String>();
+//    private Map<String, String> limits = new HashMap<String, String>();
 }

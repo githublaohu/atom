@@ -40,12 +40,12 @@ public enum ResourceType {
     /**
      * 服务配置最大值
      */
-    MAX_SERVICE_CONFIG("服务配置最大值"),
+    MAX_SERVICE_INFO("服务配置最大值"),
 
     /**
      * 服务配置最小值
      */
-    MIN_SERVICE_CONFIG("服务配置最小值"),
+    MIN_SERVICE_INFO("服务配置最小值"),
 
     /**
      * 部署

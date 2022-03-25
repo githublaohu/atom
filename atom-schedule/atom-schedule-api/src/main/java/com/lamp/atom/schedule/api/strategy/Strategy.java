@@ -23,7 +23,7 @@ public class Strategy {
     /**
      * 策略的标签
      */
-    private Map<String, String> label;
+    private Map<String, String> labels;
 
     private String timing;
 }

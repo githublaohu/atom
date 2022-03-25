@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import com.alibaba.fastjson.JSON;
 import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.EnvVarSource;
@@ -41,7 +41,7 @@ import lombok.Setter;
 public class SessionOperatorKubernetesBuilder {
 
 	@Setter
-	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
+	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 	
 	@Setter
 	private Schedule schedule;

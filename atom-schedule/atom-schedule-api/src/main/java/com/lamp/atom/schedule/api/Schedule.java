@@ -37,7 +37,7 @@ public class Schedule {
     /**
      * 调度服务的标签
      */
-    private Map<String, String> label;
+    private Map<String, String> labels;
 
     private Object object;
 

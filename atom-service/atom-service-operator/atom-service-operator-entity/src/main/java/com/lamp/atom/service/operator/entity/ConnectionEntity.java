@@ -15,13 +15,11 @@ import com.lamp.atom.service.domain.ColonyType;
 import com.lamp.atom.service.domain.SourceType;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @ApiModel(value="ConnectionEntity",description="连接实体")
 public class ConnectionEntity extends BaseEntity {
 

@@ -25,7 +25,7 @@ public class ServiceInfo {
 
 	private Date siRuntimeStartTime;
 
-	private Data siRuntimeEndTime;
+	private Date siRuntimeEndTime;
 
 	private Integer siCpu;
 

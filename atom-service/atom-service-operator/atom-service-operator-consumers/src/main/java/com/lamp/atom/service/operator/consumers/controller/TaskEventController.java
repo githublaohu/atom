@@ -11,9 +11,14 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.JsonObject;
 import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.deploy.AtomInstances;
+import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.ScheduleStrategyType;
 import com.lamp.atom.schedule.api.strategy.Strategy;
+import com.lamp.atom.schedule.python.operator.CreateOperator;
 import com.lamp.atom.service.domain.*;
 import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
@@ -35,7 +40,7 @@ import java.util.*;
 @Slf4j
 @RequestMapping("/operator")
 @RestController("operatorEventController")
-@Api(hidden = true)
+@Api(tags = {"任务事件操作接口"})
 public class TaskEventController {
 
     @Reference
@@ -48,8 +53,6 @@ public class TaskEventController {
     private ServiceInfoService serviceInfoService;
     @Reference
     private DataSourceService dataSourceService;
-    @Reference
-    private DeployService deployService;
     @Reference
     private RuntimeService runtimeService;
     @Reference
@@ -101,7 +104,8 @@ public class TaskEventController {
             Schedule schedule = new Schedule();
             Map<String, String> hardwareConfig = new HashMap<String, String>();
             schedule.setHardwareConfig(hardwareConfig);
-            schedule.setLimits(taskParam.getLimits());
+            Map<String, String> limits = new HashMap<String, String>();
+            schedule.setLimits(limits);
             schedule.setRunParameter(taskParam.getRunParameter());
             schedule.setEnvs(taskParam.getEnvs());
 
@@ -110,7 +114,7 @@ public class TaskEventController {
             schedule.setNodeId(node.getId());
             schedule.setNodeName(node.getNodeName());
             schedule.setStrategy(strategy);
-            schedule.setLabel(labelMap);
+            schedule.setLabels(labelMap);
             strategy.setScheduleStrategyType(ScheduleStrategyType.DEFAULT_LABEL);
             strategy.setTiming("0");
             //todo 策略的标签
@@ -125,8 +129,8 @@ public class TaskEventController {
             //todo runtime的启动/关闭人需要用户管理模块的字段
 
             for (ResourceRelationEntity resourceRelation : resourceRelations) {
+                //服务配置信息
                 if (resourceRelation.getBeRelatedType() == ResourceType.SERVICE_INFO) {
-                    //服务配置信息
                     ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
                     hardwareConfig.put("cpu", String.valueOf(serviceInfo.getSiCpu()));
                     hardwareConfig.put("gpu", String.valueOf(serviceInfo.getSiGpu()));
@@ -135,6 +139,16 @@ public class TaskEventController {
                     labelMap.put(serviceInfo.getSiName(), serviceInfo.getSiLabel());
 
                     runtime.setLabel(serviceInfo.getSiLabel());
+                }
+                //服务最大配置信息
+                if (resourceRelation.getBeRelatedType() == ResourceType.MAX_SERVICE_INFO) {
+                    ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                    limits.put("max_service_config", JSON.toJSONString(serviceInfo));
+                }
+                //服务最小配置信息
+                if (resourceRelation.getBeRelatedType() == ResourceType.MIN_SERVICE_INFO) {
+                    ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                    limits.put("min_service_config", JSON.toJSONString(serviceInfo));
                 }
                 if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
                     runtime.setSourceId(resourceRelation.getBeRelatedId());
@@ -230,9 +244,25 @@ public class TaskEventController {
 
         // 3、封装Schedule数据和Runtime数据
         Schedule schedule = new Schedule();
+
+        // 设置部署实例和调度的object
+        Deploy deploy = new Deploy();
+        schedule.setDeploy(deploy);
+        List<AtomInstances> instancesList = new ArrayList<>();
+        deploy.setInstancesList(instancesList);
+        AtomInstances atomInstances = new AtomInstances();
+        atomInstances.setIp("127.0.0.1");
+        atomInstances.setPort(30000);
+        instancesList.add(atomInstances);
+
+        // todo 设置createOperator属性
+        CreateOperator createOperator = new CreateOperator();
+        schedule.setObject(createOperator);
+
         Map<String, String> hardwareConfig = new HashMap<String, String>();
         schedule.setHardwareConfig(hardwareConfig);
-        schedule.setLimits(taskParam.getLimits());
+        Map<String, String> limits = new HashMap<String, String>();
+        schedule.setLimits(limits);
         schedule.setRunParameter(taskParam.getRunParameter());
         schedule.setEnvs(taskParam.getEnvs());
 
@@ -241,7 +271,7 @@ public class TaskEventController {
         schedule.setNodeId(node.getId());
         schedule.setNodeName(node.getNodeName());
         schedule.setStrategy(strategy);
-        schedule.setLabel(labelMap);
+        schedule.setLabels(labelMap);
         strategy.setScheduleStrategyType(ScheduleStrategyType.DEFAULT_LABEL);
         strategy.setTiming("0");
         //todo 策略的标签
@@ -256,8 +286,8 @@ public class TaskEventController {
         //todo runtime的启动/关闭人需要用户管理模块的字段
 
         for (ResourceRelationEntity resourceRelation : resourceRelations) {
+            //服务配置信息
             if (resourceRelation.getBeRelatedType() == ResourceType.SERVICE_INFO) {
-                //服务配置信息
                 ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
                 hardwareConfig.put("cpu", String.valueOf(serviceInfo.getSiCpu()));
                 hardwareConfig.put("gpu", String.valueOf(serviceInfo.getSiGpu()));
@@ -267,14 +297,24 @@ public class TaskEventController {
 
                 runtime.setLabel(serviceInfo.getSiLabel());
             }
+            //服务最大配置信息
+            if (resourceRelation.getBeRelatedType() == ResourceType.MAX_SERVICE_INFO) {
+                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                limits.put("max_service_config", JSON.toJSONString(serviceInfo));
+            }
+            //服务最小配置信息
+            if (resourceRelation.getBeRelatedType() == ResourceType.MIN_SERVICE_INFO) {
+                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                limits.put("min_service_config", JSON.toJSONString(serviceInfo));
+            }
             if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
                 runtime.setSourceId(resourceRelation.getBeRelatedId());
             }
         }
 
         // 4、保存Runtime信息，开启调度
-        runtimeService.insertRuntimeEntity(runtime);
         atomScheduleService.createOperators(schedule);
+        runtimeService.insertRuntimeEntity(runtime);
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }

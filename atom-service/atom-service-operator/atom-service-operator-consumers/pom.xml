@@ -22,18 +22,15 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>atom-service-operator-common</artifactId>
 		</dependency>
-
-		<dependency>
+        <dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>atom-schedule-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>cn.lampup</groupId>
 			<artifactId>decoration-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>dubbo-springmvc</artifactId>
@@ -52,10 +49,23 @@
 					<artifactId>jackson-annotations</artifactId>
 				</exclusion>
 				<exclusion>
+					<groupId>javax.annotation</groupId>
+					<artifactId>javax.annotation-api</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>com.alibaba.nacos</groupId>
 					<artifactId>nacos-client</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>fastjson</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-actuator-autoconfigure</artifactId>
+			<version>2.1.7.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
@@ -69,8 +79,16 @@
 			<version>2.9.2</version>
 			<exclusions>
 				<exclusion>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-models</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.springframework</groupId>
@@ -84,6 +102,14 @@
 					<groupId>io.swagger</groupId>
 					<artifactId>swagger-annotations</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -94,13 +120,7 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-models</artifactId>
-			<version>1.5.22</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>1.5.21</version>
 		</dependency>
 		<!-- Nacos -->
 		<dependency>
@@ -120,28 +140,42 @@
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-context</artifactId>
 				</exclusion>
-<!--				<exclusion>-->
-<!--					<groupId>org.springframework</groupId>-->
-<!--					<artifactId>spring-aop</artifactId>-->
-<!--				</exclusion>-->
-<!--				<exclusion>-->
-<!--					<groupId>org.springframework</groupId>-->
-<!--					<artifactId>spring-beans</artifactId>-->
-<!--				</exclusion>-->
-<!--				<exclusion>-->
-<!--					<groupId>org.springframework</groupId>-->
-<!--					<artifactId>spring-core</artifactId>-->
-<!--				</exclusion>-->
-<!--				<exclusion>-->
-<!--					<groupId>org.springframework</groupId>-->
-<!--					<artifactId>spring-expression</artifactId>-->
-<!--				</exclusion>-->
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-expression</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang3</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba.boot</groupId>
 			<artifactId>nacos-config-spring-boot-actuator</artifactId>
 			<version>0.2.10</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.lampup</groupId>
@@ -155,6 +189,11 @@
 			<version>2.7</version>
 			<scope>compile</scope>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.aspectj</groupId>-->
+<!--			<artifactId>aspectjweaver</artifactId>-->
+<!--			<version>1.8.13</version>-->
+<!--		</dependency>-->
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}-${project.version}</finalName>

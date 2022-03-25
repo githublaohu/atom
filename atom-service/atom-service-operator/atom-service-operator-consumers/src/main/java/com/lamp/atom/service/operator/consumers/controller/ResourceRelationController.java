@@ -49,7 +49,7 @@ public class ResourceRelationController {
     @ApiOperation(value = "添加资源关系")
     public ResultObject<String> insertResourceRelation(@RequestBody ResourceRelationEntity resourceRelationEntity) {
         // 字段判空
-        if (Objects.isNull(resourceRelationEntity.getRelationId()) || Objects.isNull(resourceRelationEntity.getBeRelationId())) {
+        if (Objects.isNull(resourceRelationEntity.getRelateId()) || Objects.isNull(resourceRelationEntity.getBeRelatedId())) {
             log.info("参数校验失败 {}", resourceRelationEntity);
             return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }

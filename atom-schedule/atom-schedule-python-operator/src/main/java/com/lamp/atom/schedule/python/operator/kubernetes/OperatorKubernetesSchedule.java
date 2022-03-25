@@ -16,7 +16,7 @@ import java.util.Objects;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
@@ -34,9 +34,9 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 
 	private KubernetesClient client;
 
-	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
+	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 
-	public OperatorKubernetesSchedule(OperatorShedeleKubernetesConfig operatorKubernetesConfig) throws Exception {
+	public OperatorKubernetesSchedule(OperatorScheduleKubernetesConfig operatorKubernetesConfig) throws Exception {
 		this.operatorKubernetesConfig = operatorKubernetesConfig;
 		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
 			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());

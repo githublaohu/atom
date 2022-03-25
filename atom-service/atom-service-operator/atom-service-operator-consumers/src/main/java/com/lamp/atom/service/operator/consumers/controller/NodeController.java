@@ -131,10 +131,11 @@ public class NodeController {
     public ResultObject<String> createNodeRelation(@RequestBody NodeRelation nodeRelation) {
         // 1、字段判空
         if (Objects.isNull(nodeRelation.getNodeId())
-                || Objects.isNull(nodeRelation.getOperatorId())
-                || Objects.isNull(nodeRelation.getConnectionId())
-                || Objects.isNull(nodeRelation.getModelId())
-                || Objects.isNull(nodeRelation.getServiceInfoId())) {
+                || Objects.isNull(nodeRelation.getModelID())
+                || Objects.isNull(nodeRelation.getDataSourceId())
+                || Objects.isNull(nodeRelation.getServiceInfoId())
+                || Objects.isNull(nodeRelation.getMaxServiceInfoId())
+                || Objects.isNull(nodeRelation.getMinServiceInfoId())) {
             log.info("参数校验失败 {}", nodeRelation);
             return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
@@ -145,27 +146,24 @@ public class NodeController {
         node.setNodeStatus(NodeStatus.EDIT_FINISH);
         nodeService.updateNodeEntity(node);
 
-        // 3、创建依赖关系（算子、数据源、模型、服务信息）
+        // 3、创建依赖关系（模型（包含算子）、数据源（包含连接）、服务信息、服务最大配置、服务最小配置）
         ResourceRelationEntity operatorRelationEntity = new ResourceRelationEntity();
         operatorRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
         operatorRelationEntity.setRelateId(node.getId());
         operatorRelationEntity.setRelateType(ResourceType.NODE);
-        operatorRelationEntity.setBeRelatedId(nodeRelation.getOperatorId());
-        operatorRelationEntity.setBeRelatedType(ResourceType.OPERATOR);
+        operatorRelationEntity.setBeRelatedId(nodeRelation.getModelID());
+        operatorRelationEntity.setBeRelatedType(ResourceType.MODEL);
+        operatorRelationEntity.setRelationStatus("relate");
+        operatorRelationEntity.setOrder(1);
 
         ResourceRelationEntity dataSourceRelationEntity = new ResourceRelationEntity();
         dataSourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
         dataSourceRelationEntity.setRelateId(node.getId());
         dataSourceRelationEntity.setRelateType(ResourceType.NODE);
-        dataSourceRelationEntity.setBeRelatedId(nodeRelation.getConnectionId());
+        dataSourceRelationEntity.setBeRelatedId(nodeRelation.getDataSourceId());
         dataSourceRelationEntity.setBeRelatedType(ResourceType.DATASOURCE);
-
-        ResourceRelationEntity modelRelationEntity = new ResourceRelationEntity();
-        modelRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        modelRelationEntity.setRelateId(node.getId());
-        modelRelationEntity.setRelateType(ResourceType.NODE);
-        modelRelationEntity.setBeRelatedId(nodeRelation.getModelId());
-        modelRelationEntity.setBeRelatedType(ResourceType.MODEL);
+        dataSourceRelationEntity.setRelationStatus("relate");
+        dataSourceRelationEntity.setOrder(1);
 
         ResourceRelationEntity serviceInfoEntity = new ResourceRelationEntity();
         serviceInfoEntity.setRelationType(RelationType.RESOURCE_RELATION);
@@ -173,10 +171,32 @@ public class NodeController {
         serviceInfoEntity.setRelateType(ResourceType.NODE);
         serviceInfoEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
         serviceInfoEntity.setBeRelatedType(ResourceType.SERVICE_INFO);
+        serviceInfoEntity.setRelationStatus("relate");
+        serviceInfoEntity.setOrder(1);
+
+        ResourceRelationEntity maxServiceInfoEntity = new ResourceRelationEntity();
+        maxServiceInfoEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        maxServiceInfoEntity.setRelateId(node.getId());
+        maxServiceInfoEntity.setRelateType(ResourceType.NODE);
+        maxServiceInfoEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
+        maxServiceInfoEntity.setBeRelatedType(ResourceType.MAX_SERVICE_INFO);
+        maxServiceInfoEntity.setRelationStatus("relate");
+        maxServiceInfoEntity.setOrder(1);
+
+        ResourceRelationEntity minServiceInfoEntity = new ResourceRelationEntity();
+        minServiceInfoEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        minServiceInfoEntity.setRelateId(node.getId());
+        minServiceInfoEntity.setRelateType(ResourceType.NODE);
+        minServiceInfoEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
+        minServiceInfoEntity.setBeRelatedType(ResourceType.MIN_SERVICE_INFO);
+        minServiceInfoEntity.setRelationStatus("relate");
+        minServiceInfoEntity.setOrder(1);
 
         resourceRelationService.insertResourceRelationEntity(operatorRelationEntity);
         resourceRelationService.insertResourceRelationEntity(dataSourceRelationEntity);
-        resourceRelationService.insertResourceRelationEntity(modelRelationEntity);
+        resourceRelationService.insertResourceRelationEntity(serviceInfoEntity);
+        resourceRelationService.insertResourceRelationEntity(maxServiceInfoEntity);
+        resourceRelationService.insertResourceRelationEntity(minServiceInfoEntity);
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }

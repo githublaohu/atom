@@ -46,7 +46,7 @@ public class ServiceController {
     @Autowired
     private PortCreatingFunction portCreatingFunction;
     
-    @Autowired
+    @Autowired(required = false)
     private AtomScheduleService atomScheduleService;
     
     @Reference

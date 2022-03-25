@@ -7,13 +7,13 @@ import java.util.Map;
 import com.lamp.atom.schedule.api.Schedule;
 import org.junit.Test;
 
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 public class TestOperatorKubernetesSchedule {
 
 	Schedule schedule = new Schedule();
 
-	OperatorShedeleKubernetesConfig operatorShedeleKubernetesConfig;
+	OperatorScheduleKubernetesConfig operatorScheduleKubernetesConfig;
 
 	private String nacosAddress = "172.19.75.218:8848";
 
@@ -30,12 +30,12 @@ public class TestOperatorKubernetesSchedule {
 		envs.put("nacos_config", "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}");
 		schedule.setEnvs(envs);
 
-		operatorShedeleKubernetesConfig = new OperatorShedeleKubernetesConfig();
+		operatorScheduleKubernetesConfig = new OperatorScheduleKubernetesConfig();
 		try {
 			InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("kubernetesConfig.yaml");
 			byte[] data = new byte[inputStream.available()];
 			inputStream.read(data);
-			operatorShedeleKubernetesConfig.setConfigYaml(new String(data));
+			operatorScheduleKubernetesConfig.setConfigYaml(new String(data));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -44,14 +44,14 @@ public class TestOperatorKubernetesSchedule {
 
 	@Test
 	public void testCreateService() throws Exception {
-		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
+		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
 
 		kubernetesSchedule.createService(schedule);
 	}
 	
 	@Test
 	public void testCreateOperators() throws Exception {
-		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
+		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
 
 		kubernetesSchedule.createOperators(schedule);
 	}
