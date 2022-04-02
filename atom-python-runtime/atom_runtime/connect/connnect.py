@@ -34,7 +34,10 @@ class Connect():
 
     connect_to:ConnectTo
 
-
+    def __init__(self, data):
+        if len(data) == 0:
+            return
+        self.connect_to = ConnectTo(data)
 
     def __file_path__(self,content:str ,data):
         return data["file"]+content

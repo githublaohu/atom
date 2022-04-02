@@ -6,7 +6,8 @@ Python 3.7
 
 ## Installation
 ```shell
-pip install atrom-runtime
+pip install flask python-sdk-nacos boto3 tensorflow
+pip install atom-runtime
 ```
 ### start-up
 

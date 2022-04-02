@@ -12,7 +12,10 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.JsonObject;
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.NamingFactory;
+import com.alibaba.nacos.api.naming.NamingService;
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
@@ -22,12 +25,14 @@ import com.lamp.atom.schedule.python.operator.CreateOperator;
 import com.lamp.atom.service.domain.*;
 import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
+import com.lamp.atom.service.operator.domain.SourceAndConnect;
 import com.lamp.atom.service.operator.domain.TaskParam;
 import com.lamp.atom.service.operator.entity.*;
 import com.lamp.atom.service.operator.service.*;
 import com.lamp.decoration.core.result.ResultObject;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import com.lamp.atom.schedule.core.AtomScheduleService;
@@ -35,6 +40,7 @@ import com.lamp.atom.schedule.core.AtomScheduleService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
@@ -48,11 +54,15 @@ public class TaskEventController {
     @Reference
     private OperatorService operatorService;
     @Reference
+    private ModelService modelService;
+    @Reference
     private OrganizationService organizationService;
     @Reference
     private ServiceInfoService serviceInfoService;
     @Reference
     private DataSourceService dataSourceService;
+    @Reference
+    private ConnectionService connectionService;
     @Reference
     private RuntimeService runtimeService;
     @Reference
@@ -61,6 +71,24 @@ public class TaskEventController {
     private PortCreatingFunction portCreatingFunction;
     @Autowired
     private AtomScheduleService atomScheduleService;
+
+    @Value("${nacos.config.server-addr}")
+    private String nacosAddr;
+    @Value("${nacos.config.namespace}")
+    private String namespace;
+    NamingService namingService = null;
+
+    /**
+     * 获取nacos连接
+     * @throws NacosException
+     */
+    @PostConstruct
+    public void init() throws NacosException {
+        Properties properties = new Properties();
+        properties.put("serverAddr", this.nacosAddr);
+        properties.put("namespace", this.namespace);
+        namingService = NamingFactory.createNamingService(properties);
+    }
 
     /**
      * console：开始实验任务
@@ -223,7 +251,7 @@ public class TaskEventController {
      * @return
      */
     @PostMapping("/startNodeTask")
-    public ResultObject<String> startNodeTask(@RequestBody TaskParam taskParam) {
+    public ResultObject<String> startNodeTask(@RequestBody TaskParam taskParam) throws NacosException {
         // 1、查出节点信息
         NodeEntity node = new NodeEntity();
         node.setId(taskParam.getTaskId());
@@ -250,14 +278,22 @@ public class TaskEventController {
         schedule.setDeploy(deploy);
         List<AtomInstances> instancesList = new ArrayList<>();
         deploy.setInstancesList(instancesList);
-        AtomInstances atomInstances = new AtomInstances();
-        atomInstances.setIp("127.0.0.1");
-        atomInstances.setPort(30000);
-        instancesList.add(atomInstances);
 
-        // todo 设置createOperator属性
-        CreateOperator createOperator = new CreateOperator();
-        schedule.setObject(createOperator);
+        // 获取runtime部署实例
+        List<String> serviceNames = new ArrayList<>();
+        serviceNames.add("atom-runtime-python-service-standalone");
+        for (String serviceName : serviceNames) {
+            List<Instance> allInstances = namingService.getAllInstances(serviceName);
+            for (Instance instance : allInstances) {
+                AtomInstances atomInstances = new AtomInstances();
+                atomInstances.setIp(instance.getIp());
+                atomInstances.setPort(instance.getPort());
+                instancesList.add(atomInstances);
+            }
+        }
+
+        CreateOperator operatorCreateTo = new CreateOperator();
+        schedule.setObject(operatorCreateTo);
 
         Map<String, String> hardwareConfig = new HashMap<String, String>();
         schedule.setHardwareConfig(hardwareConfig);
@@ -284,9 +320,52 @@ public class TaskEventController {
         runtime.setStartTime(new Date());
         runtime.setEstimateStartTime(new Date());
         //todo runtime的启动/关闭人需要用户管理模块的字段
+        runtime.setStartId(1L);
+        runtime.setStartName("");
+        runtime.setEndId(1L);
+        runtime.setEndName("");
 
         for (ResourceRelationEntity resourceRelation : resourceRelations) {
-            //服务配置信息
+            // 模型
+            if (resourceRelation.getBeRelatedType() == ResourceType.MODEL) {
+                ModelEntity model = new ModelEntity();
+                model.setId(resourceRelation.getBeRelatedId());
+                model = modelService.queryModelEntity(model);
+                operatorCreateTo.setModelTo(model);
+            }
+            // 算子
+            if (resourceRelation.getBeRelatedType() == ResourceType.OPERATOR) {
+                OperatorEntity operator = new OperatorEntity();
+                operator.setId(resourceRelation.getBeRelatedId());
+                operator = operatorService.queryOperatorEntity(operator);
+                operatorCreateTo.setOperatorTo(operator);
+
+                // 调度的算子类型
+                schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
+            }
+            // 数据源
+            if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
+                DataSourceEntity dataSource = new DataSourceEntity();
+                dataSource.setId(resourceRelation.getBeRelatedId());
+                dataSource = dataSourceService.queryDataSourceEntity(dataSource);
+                ConnectionEntity connection = new ConnectionEntity();
+                connection.setId(dataSource.getConnectionId());
+                connection = connectionService.queryConnectionEntity(connection);
+                operatorCreateTo.setModelConnect(connection);
+
+                SourceAndConnect sourceAndConnect = new SourceAndConnect();
+                sourceAndConnect.setSourceTo(dataSource);
+                sourceAndConnect.setConnectTo(connection);
+                List<SourceAndConnect> sourceAndConnects = new ArrayList<>();
+                sourceAndConnects.add(sourceAndConnect);
+                operatorCreateTo.setSourceAndConnects(sourceAndConnects);
+
+                runtime.setSourceId(resourceRelation.getBeRelatedId());
+            }
+
+            // todo operatorCreateTo设置的SourceAccountTo需要用户管理模块提供
+
+            // 服务配置信息
             if (resourceRelation.getBeRelatedType() == ResourceType.SERVICE_INFO) {
                 ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
                 hardwareConfig.put("cpu", String.valueOf(serviceInfo.getSiCpu()));
@@ -297,18 +376,15 @@ public class TaskEventController {
 
                 runtime.setLabel(serviceInfo.getSiLabel());
             }
-            //服务最大配置信息
+            // 服务最大配置信息
             if (resourceRelation.getBeRelatedType() == ResourceType.MAX_SERVICE_INFO) {
                 ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
                 limits.put("max_service_config", JSON.toJSONString(serviceInfo));
             }
-            //服务最小配置信息
+            // 服务最小配置信息
             if (resourceRelation.getBeRelatedType() == ResourceType.MIN_SERVICE_INFO) {
                 ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
                 limits.put("min_service_config", JSON.toJSONString(serviceInfo));
-            }
-            if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
-                runtime.setSourceId(resourceRelation.getBeRelatedId());
             }
         }
 

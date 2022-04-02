@@ -18,7 +18,6 @@ import java.util.Objects;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;
 
-import com.lamp.atom.service.operator.common.OperatorCreateTo;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.AvaliablePortService;
@@ -135,32 +134,6 @@ public class OperatorController {
     public OperatorEntity queryOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity) {
         try {
             return operatorService.queryOperatorEntity(operatorEntity);
-        } catch (Exception e) {
-            log.warn("算子查询失败 {}", e);
-            return null;
-        }
-    }
-
-    /**
-     * 查询算子信息
-     *
-     * @param operatorEntity
-     * @return
-     */
-    @PostMapping("/queryOperatorData")
-    @ApiOperation(value = "查询单个算子")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
-    })
-    public OperatorCreateTo queryOperatorData(@ApiIgnore @RequestBody OperatorEntity operatorEntity) {
-        try {
-            OperatorCreateTo operatorCreateTo = new OperatorCreateTo();
-
-            OperatorEntity operatorEntity1 = operatorService.queryOperatorEntity(operatorEntity);
-            operatorCreateTo.setOperatorTo(operatorEntity1);
-
-
-            return operatorCreateTo;
         } catch (Exception e) {
             log.warn("算子查询失败 {}", e);
             return null;

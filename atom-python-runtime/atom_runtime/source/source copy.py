@@ -108,7 +108,7 @@ class Source(SourceBase):
         self.__write_data_()
     
     def download(self,url,path):
-        self.connect.download(url,path)
+        self.connect.download(url,path,None)
 
     def __write_data_(self):
         if self.source_to.connect_read_num == -1 :

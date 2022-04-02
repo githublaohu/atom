@@ -89,7 +89,7 @@ public class RuntimeEntity extends BaseEntity {
     /**
      * 启动人ID
      */
-    private Integer startId;
+    private Long startId;
 
     /**
      * 启动人名
@@ -99,7 +99,7 @@ public class RuntimeEntity extends BaseEntity {
     /**
      * 关闭人ID
      */
-    private Integer endId;
+    private Long endId;
 
     /**
      * 关闭人名

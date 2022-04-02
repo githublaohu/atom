@@ -7,11 +7,15 @@ import pickle
 
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
 
-import tensorflow as tf
-
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 class TrainExample(TrainOperatorApi):
 
+    def __init__(self) -> None:
+        super().__init__()
+    
     def _init_session(self):
         self.saver = tf.train.Saver(max_to_keep=1)
         config = tf.ConfigProto()
@@ -37,8 +41,8 @@ class TrainExample(TrainOperatorApi):
         # Gradient Descent
         self.optimizer = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
 
-    def initialization(self):  
-        super().initialization()
+    def initialization(self):
+        super().initialization(self)
         self.avg_cost = 0
         self.total_batch = 0
         self.learning_rate = 0.01
@@ -46,9 +50,9 @@ class TrainExample(TrainOperatorApi):
         self.batch_size = 1024
         self.display_step = 1
         self.training_epochs = 100
-        self.build_model()
+        self.build_model(self)
         self.display_step = 10
-        self._init_session()
+        self._init_session(self)
 
     def execute(self , data):
         self.total_batch += + len(data)

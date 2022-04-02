@@ -146,13 +146,22 @@ public class NodeController {
         node.setNodeStatus(NodeStatus.EDIT_FINISH);
         nodeService.updateNodeEntity(node);
 
-        // 3、创建依赖关系（模型（包含算子）、数据源（包含连接）、服务信息、服务最大配置、服务最小配置）
+        // 3、创建依赖关系（模型、算子、数据源（包含连接）、服务信息、服务最大配置、服务最小配置）
+        ResourceRelationEntity modelRelationEntity = new ResourceRelationEntity();
+        modelRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        modelRelationEntity.setRelateId(node.getId());
+        modelRelationEntity.setRelateType(ResourceType.NODE);
+        modelRelationEntity.setBeRelatedId(nodeRelation.getModelID());
+        modelRelationEntity.setBeRelatedType(ResourceType.MODEL);
+        modelRelationEntity.setRelationStatus("relate");
+        modelRelationEntity.setOrder(1);
+
         ResourceRelationEntity operatorRelationEntity = new ResourceRelationEntity();
         operatorRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
         operatorRelationEntity.setRelateId(node.getId());
         operatorRelationEntity.setRelateType(ResourceType.NODE);
         operatorRelationEntity.setBeRelatedId(nodeRelation.getModelID());
-        operatorRelationEntity.setBeRelatedType(ResourceType.MODEL);
+        operatorRelationEntity.setBeRelatedType(ResourceType.OPERATOR);
         operatorRelationEntity.setRelationStatus("relate");
         operatorRelationEntity.setOrder(1);
 
@@ -192,6 +201,7 @@ public class NodeController {
         minServiceInfoEntity.setRelationStatus("relate");
         minServiceInfoEntity.setOrder(1);
 
+        resourceRelationService.insertResourceRelationEntity(modelRelationEntity);
         resourceRelationService.insertResourceRelationEntity(operatorRelationEntity);
         resourceRelationService.insertResourceRelationEntity(dataSourceRelationEntity);
         resourceRelationService.insertResourceRelationEntity(serviceInfoEntity);

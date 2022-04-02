@@ -81,11 +81,12 @@ public class ServiceController {
     	runtimeEntity.setEstimateStartTime(new Date());
     	runtimeEntity.setEstimateEndTime(new Date());
     	runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUING);
-    	
-    	runtimeEntity.setStartId(1);
-    	runtimeEntity.setStartName("start");
-    	runtimeEntity.setEndId(0);
-    	runtimeEntity.setEndName("end");
+
+		//todo runtime的启动/关闭人需要用户管理模块的字段
+    	runtimeEntity.setStartId(1L);
+    	runtimeEntity.setStartName("");
+    	runtimeEntity.setEndId(1L);
+    	runtimeEntity.setEndName("");
     	
     	
     	runtimeService.insertRuntimeEntity(runtimeEntity);

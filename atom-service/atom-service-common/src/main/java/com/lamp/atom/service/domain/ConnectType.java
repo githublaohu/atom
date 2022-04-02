@@ -9,16 +9,15 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.operator.common;
+package com.lamp.atom.service.domain;
 
-import com.lamp.atom.service.operator.entity.ConnectionEntity;
-import com.lamp.atom.service.operator.entity.DataSourceEntity;
-import lombok.Data;
-
-@Data
-public class SourceAndConnect {
-
-    private DataSourceEntity sourceTo;
-
-    private ConnectionEntity connectTo;
+/**
+ * 数据源类型
+ */
+public enum ConnectType {
+    FILE,
+    MYSQL,
+    REDIS,
+    S3,
+    ALIYUNOSS
 }

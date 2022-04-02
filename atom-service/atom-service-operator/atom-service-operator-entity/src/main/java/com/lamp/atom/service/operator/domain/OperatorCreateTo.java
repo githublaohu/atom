@@ -9,25 +9,24 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.schedule.python.operator;
+package com.lamp.atom.service.operator.domain;
 
-import com.lamp.atom.service.operator.domain.SourceAndConnect;
 import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import com.lamp.atom.service.operator.entity.ModelEntity;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
-import com.lamp.atom.service.space.entity.ResourceAccountEntity;
+//import com.lamp.atom.service.space.entity.ResourceAccountEntity;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class CreateOperator {
+public class OperatorCreateTo {
 
     private List<SourceAndConnect> sourceAndConnects;
 
     private ModelEntity modelTo;
 
-    private ResourceAccountEntity resourceAccountTo;
+//    private ResourceAccountEntity resourceAcountTo;//todo 用户管理模块的字段
 
     private OperatorEntity operatorTo;
 

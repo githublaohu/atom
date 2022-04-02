@@ -44,9 +44,9 @@ class CodeLoad():
             logging.error(e)
 
     def __load__object__(self):
-        self.improt_object=__import__(self.operator_to.module_name,globals(),locals(),["*"],0)
-        self.executeObject = self.improt_object.__dict__[self.operator_to.execute_object]
-        self.object = self.executeObject()
+        self.import_object=__import__(self.operator_to.module_name,globals(),locals(),["*"],0)
+        self.executeObject = self.import_object.__dict__[self.operator_to.execute_object]
+        self.object = self.executeObject
         
 
     def get_object(self):

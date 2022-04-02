@@ -57,10 +57,10 @@ class RpcOperatorServcie(RpcService):
 
     def  create_train_operator(self):
         operator_create_to = OperatorCreateTo()
-        operator_to = OperatorTo()
+        operator_to = OperatorTo({})
         operator_create_to.operator_to = operator_to
         operator_to.operator_runtime_type = "train"
-        operator_to.module_name="atom_example.train_example"
+        operator_to.module_name="atom_runtime.example.train_example"
         operator_to.execute_object="TrainExample"
         operator_to.environment_conf="{}"
         operator_to.operator_conf="{}"
@@ -71,38 +71,38 @@ class RpcOperatorServcie(RpcService):
         operator_create_to.source_and_connects = source_and_connects
         source_and_connect = SourceAndConnect()
         source_and_connects.append(source_and_connect)
-        source_to = SourceTo()
+        source_to = SourceTo({})
         source_and_connect.source_to = source_to
         source_to.source_type = "source"
-        source_to.operate_exectute = "./atom_example/train.pkl"
+        source_to.operate_exectute = "/atom_runtime/example/train.pkl"
         source_to.data_format = "labelsCSV"
-        connect_to = ConnectTo()
+        connect_to = ConnectTo({})
         source_and_connect.connect_to = connect_to
         connect_to.connect_id = -1
         connect_to.connect_type = "file"
 
         source_and_connect = SourceAndConnect()
         source_and_connects.append(source_and_connect)
-        source_to = SourceTo()
+        source_to = SourceTo({})
         source_and_connect.source_to = source_to
         source_to.data_format = "labelsCSV"
         source_to.source_type = "test_source"
-        source_to.operate_exectute = "./atom_example/val.pkl"
-        connect_to = ConnectTo()
+        source_to.operate_exectute = "/atom_runtime/example/val.pkl"
+        connect_to = ConnectTo({})
         source_and_connect.connect_to = connect_to
         connect_to.connect_id = -1
         connect_to.connect_type = "file"
 
         source_and_connect = SourceAndConnect()
         source_and_connects.append(source_and_connect)
-        source_to = SourceTo()
+        source_to = SourceTo({})
         source_to.space_name = "space"
         source_to.scene_name = "scene"
         source_to.experiment_name = "experiment"
         source_and_connect.source_to = source_to
         source_to.source_type = "sink"
-        source_to.operate_exectute = "./atom_example/"
-        connect_to = ConnectTo()
+        source_to.operate_exectute = "/atom_runtime/example/"
+        connect_to = ConnectTo({})
         source_and_connect.connect_to = connect_to
         connect_to.connect_id = -1
         connect_to.connect_type = "file"

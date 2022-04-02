@@ -23,9 +23,15 @@ class SourceAndConnect():
     source_to:SourceTo
     connect_to:ConnectTo
 
+    def __init__(self, data):
+        if len(data) == 0:
+            return
+        self.source_to = SourceTo(data['source_to'])
+        self.connect_to = ConnectTo(data['connect_to'])
+
 
 class OperatorCreateTo():
-    source_and_connects:List[SourceAndConnect]
+    source_and_connects:List[SourceAndConnect] = list
     model_to:ModelTo= None
     source_account:SourceAccountTo = None
     operator_to:OperatorTo= None
@@ -33,3 +39,16 @@ class OperatorCreateTo():
     model_connect:Connect = None
 
 
+
+    def __init__(self, data:dict):
+        if len(data) == 0:
+            return
+        source_and_connect_list = list(data['source_and_connects'])
+        self.source_and_connects = list()
+        for item in source_and_connect_list:
+            source_and_connect = SourceAndConnect(item)
+            self.source_and_connects.append(source_and_connect)
+        self.model_to = ModelTo(data['model_to'])
+        # self.source_account = SourceAccountTo(data['source_account'])
+        self.operator_to = OperatorTo(data['operator_to'])
+        self.model_connect = Connect(data['model_connect'])

@@ -12,7 +12,7 @@
 package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.ColonyType;
-import com.lamp.atom.service.domain.SourceType;
+import com.lamp.atom.service.domain.ConnectType;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class ConnectionEntity extends BaseEntity {
     /**
      * 数据源类型
      */
-    private SourceType sourceType;
+    private ConnectType connectType;
 
     /**
      * 数据源名
@@ -78,7 +78,7 @@ public class ConnectionEntity extends BaseEntity {
     /**
      * 源数据配置
      */
-    private String sourceConf;
+    private Object sourceConf;
 
     /**
      * 源数据路径

@@ -17,6 +17,10 @@ import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.config.OperatorScheduleConfig;
 import com.lamp.atom.schedule.python.operator.kubernetes.OperatorKubernetesSchedule;
 import com.lamp.atom.schedule.python.operator.rpc.OperatorRpcSchedule;
+import com.lamp.atom.service.domain.OperatorRuntimeType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 上层决定调用那个
@@ -31,13 +35,20 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	private OperatorRpcSchedule rpcSchedule;
 	
 	private OperatorScheduleConfig operatorScheduleConfig;
-	
+
+
+	private Map<String,AtomOperatorShedule> atomOperatorScheduleMap = new HashMap<>();
+
 	public AtomScheduleService(OperatorScheduleConfig operatorScheduleConfig) throws Exception {
 		this.operatorScheduleConfig = operatorScheduleConfig;
 		if(operatorScheduleConfig.getOperatorKubernetesConfig().isUser()) {
 			kubernetesSchedule = new OperatorKubernetesSchedule(this.operatorScheduleConfig.getOperatorKubernetesConfig());
 		}
 		rpcSchedule = new OperatorRpcSchedule(this.operatorScheduleConfig.getOperatorScheduleRpcConfig());
+
+		atomOperatorScheduleMap.put("",kubernetesSchedule);
+		atomOperatorScheduleMap.put("",rpcSchedule);
+
 	}
 	
 	
@@ -53,7 +64,14 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 
 	@Override
 	public void createOperators(Schedule schedule) {
-		rpcSchedule.createOperators(schedule);
+		OperatorRuntimeType operatorRuntimeType = schedule.getOperatorRuntimeType();
+		if (operatorRuntimeType == OperatorRuntimeType.REASONING) {
+			// 1、推理 =》 RPC调度
+			rpcSchedule.createOperators(schedule);
+		} else {
+			// 2、其他 =》 k8s调度
+			// todo
+		}
 	}
 
 	@Override

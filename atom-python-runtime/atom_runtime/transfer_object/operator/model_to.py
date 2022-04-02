@@ -12,3 +12,9 @@
 class ModelTo():
     model_id:int
     model_address:str
+
+    def __init__(self, data:dict):
+        if len(data) == 0:
+            return
+        self.model_id = data['id']
+        self.model_address = data['model_address']

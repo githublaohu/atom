@@ -115,14 +115,16 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 	@Override
 	public void createOperators(Schedule schedule) {
 		try {
-
+			// 获取部署实例信息
 			List<Instance> instanceList = this.getInstance(schedule);
+
 			// 创建对象
 			CreateOperator object = (CreateOperator) schedule.getObject();
 			for (Instance instance : instanceList) {
 				this.createClient(instance)
 					.createOperators(object);
 			}
+
 			// 发送请求
 
 		} catch (Exception e) {
