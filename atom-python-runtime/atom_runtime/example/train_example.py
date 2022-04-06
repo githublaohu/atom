@@ -63,7 +63,7 @@ class TrainExample(TrainOperatorApi):
         pass
 
     def result(self):
-          return  convert_variables_to_constants(self.sess, self.sess.graph_def, output_node_names=['output']).SerializeToString()
+        return  convert_variables_to_constants(self.sess, self.sess.graph_def, output_node_names=['output']).SerializeToString()
     
     def comparision_execute(self,data):
         self.total_batch += + len(data)

@@ -15,6 +15,7 @@ public enum RelationType {
     /**
      * 配置关系
      */
+    CONFIG_RELATION("配置关系"),
 
     /**
      * 训练与推理关系

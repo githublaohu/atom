@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="ResourceRelationEntity",description="资源关系类")
+@ApiModel(value="ResourceRelationEntity",description="关联关系类")
 public class ResourceRelationEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3149595542813993064L;

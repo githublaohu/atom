@@ -36,34 +36,34 @@ public class ConnectionEntity extends BaseEntity {
     private String operationType;
 
     /**
+     * 数据源名
+     */
+    private String connectName;
+
+    /**
      * 数据源类型
      */
     private ConnectType connectType;
 
     /**
-     * 数据源名
-     */
-    private String sourceName;
-
-    /**
      * 源数据地址
      */
-    private String sourceAddr;
+    private String connectAddr;
 
     /**
      * 源登录账户
      */
-    private String sourceAccount;
+    private String connectAccount;
 
     /**
      * 源登录密码
      */
-    private String sourcePassword;
+    private String connectPassword;
 
     /**
      * 源登录空间：关系型数据库的数据库，oss的bucket,redis的index,es的index
      */
-    private String sourceSpace;
+    private String connectSpace;
 
     /**
      * 模式

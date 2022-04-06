@@ -63,7 +63,7 @@ public class DataSourceController {
         ConnectionEntity connection = new ConnectionEntity();
         connection.setId(dataSourceEntity.getConnectionId());
         connection = connectionService.queryConnectionEntity(connection);
-        dataSourceEntity.setConnectionName(connection.getSourceName());
+        dataSourceEntity.setConnectionName(connection.getConnectName());
         try {
             dataSourceService.insertDataSourceEntity(dataSourceEntity);
         } catch (Exception e) {

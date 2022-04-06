@@ -17,6 +17,7 @@ import java.util.Map;
 import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.Strategy;
 
+import com.lamp.atom.service.domain.OperatorRuntimeType;
 import lombok.Data;
 
 @Data
@@ -44,6 +45,11 @@ public class Schedule {
     private Long nodeId;
 
     private String nodeName;
+
+    /**
+     * 算子类型
+     */
+    private OperatorRuntimeType operatorRuntimeType;
 
     private String namespace = "default";
 }

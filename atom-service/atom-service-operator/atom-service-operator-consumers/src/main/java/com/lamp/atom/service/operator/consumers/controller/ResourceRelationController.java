@@ -34,19 +34,19 @@ import java.util.Objects;
 @Slf4j
 @RequestMapping("/resourceRelation")
 @RestController("resourceRelationController")
-@Api(tags = {"资源关系操作接口"})
+@Api(tags = {"关联关系操作接口"})
 public class ResourceRelationController {
 
     @Reference
     private ResourceRelationService resourceRelationService;
 
     /**
-     * 添加资源关系
+     * 添加关联关系
      *
      * @param resourceRelationEntity
      */
     @PostMapping("/insertResourceRelation")
-    @ApiOperation(value = "添加资源关系")
+    @ApiOperation(value = "添加关联关系")
     public ResultObject<String> insertResourceRelation(@RequestBody ResourceRelationEntity resourceRelationEntity) {
         // 字段判空
         if (Objects.isNull(resourceRelationEntity.getRelateId()) || Objects.isNull(resourceRelationEntity.getBeRelatedId())) {
@@ -56,20 +56,20 @@ public class ResourceRelationController {
         try {
             resourceRelationService.insertResourceRelationEntity(resourceRelationEntity);
         } catch (Exception e) {
-            log.warn("资源关系插入失败 {}", e);
+            log.warn("关联关系插入失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 修改资源关系
+     * 修改关联关系
      *
      * @param resourceRelationEntity
      * @return
      */
     @PostMapping("/updateResourceRelation")
-    @ApiOperation(value = "修改资源关系")
+    @ApiOperation(value = "修改关联关系")
     @ApiImplicitParams({
             @ApiImplicitParam(name="id",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long"),
             @ApiImplicitParam(name="deleteFlag",dataTypeClass = java.lang.Long.class,paramType="body" ,dataType = "Long")
@@ -78,63 +78,60 @@ public class ResourceRelationController {
         try {
             resourceRelationService.updateResourceRelationEntity(resourceRelationEntity);
         } catch (Exception e) {
-            log.warn("资源关系修改失败 {}", e);
+            log.warn("关联关系修改失败 {}", e);
             return ResultObjectEnums.FAIL.getResultObject();
         }
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
-     * 模糊查询多个资源关系
+     * 模糊查询多个关联关系
      *
      * @param params
      * @return
      */
     @PostMapping("/queryResourceRelationsByKeyword")
-    @ApiOperation(value = "模糊查询多个资源关系")
+    @ApiOperation(value = "模糊查询多个关联关系")
     public List<ResourceRelationEntity> queryResourceRelationsByKeyword(@RequestBody HashMap<String, String> params) {
         try {
             return resourceRelationService.queryResourceRelationEntitysByKeyword(params.get("keyword"));
         } catch (Exception e) {
-            log.warn("资源关系查询失败 {}", e);
+            log.warn("关联关系查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询多个资源关系
+     * 查询多个关联关系
      *
      * @param resourceRelationEntity
      * @return
      */
     @PostMapping("/queryResourceRelations")
-    @ApiOperation(value = "查询多个资源关系")
+    @ApiOperation(value = "查询多个关联关系")
     public List<ResourceRelationEntity> queryResourceRelations(@RequestBody(required = false) ResourceRelationEntity resourceRelationEntity) {
         try {
             return resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
         } catch (Exception e) {
-            log.warn("资源关系查询失败 {}", e);
+            log.warn("关联关系查询失败 {}", e);
             return null;
         }
     }
 
     /**
-     * 查询单个资源关系
+     * 查询单个关联关系
      *
      * @param resourceRelationEntity
      * @return
      */
     @PostMapping("/queryResourceRelation")
-    @ApiOperation(value = "查询单个资源关系")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", paramType = "body" ,dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
-    })
-    public ResourceRelationEntity queryResourceRelation(@ApiIgnore @RequestBody ResourceRelationEntity resourceRelationEntity) {
+    @ApiOperation(value = "查询单个关联关系")
+    public ResourceRelationEntity queryResourceRelation(@RequestBody ResourceRelationEntity resourceRelationEntity) {
         try {
             ResourceRelationEntity resourceRelationEntity1 = resourceRelationService.queryResourceRelationEntity(resourceRelationEntity);
             return resourceRelationEntity1;
         } catch (Exception e) {
-            log.warn("资源关系查询失败 {}", e);
+            log.warn("关联关系查询失败 {}", e);
             return null;
         }
     }

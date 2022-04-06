@@ -66,6 +66,15 @@ public interface RuntimeMapper {
     Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
+     * 根据节点ID和模型创建类型修改状态
+     */
+    @Update("update runtime set " +
+            "operator_runtime_status = #{operatorRuntimeStatus}," +
+            "end_time = now()" +
+            "where node_id = #{nodeId} and model_create_type = #{modelCreateType}")
+    Integer updateRuntimeStatus(RuntimeEntity runtimeEntity);
+
+    /**
      * 批量修改运行实例
      *
      * @param runtimeEntityList
@@ -75,7 +84,7 @@ public interface RuntimeMapper {
             "<foreach collection='runtimeEntityList' item='item' index='index' separator=';'>" +
             "update runtime " +
             "<set>" +
-            "<if test = 'item.OperatorRuntimeStatus != null'>operator_runtime_status = #{item.OperatorRuntimeStatus}</if>" +
+            "<if test = 'item.OperatorRuntimeStatus != null'>operator_runtime_status = #{item.OperatorRuntimeStatus} </if>" +
             "</set>" +
             "where id = #{item.id} and delete_flag = 0" +
             "</foreach>" +

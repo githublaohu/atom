@@ -15,6 +15,11 @@ from pydantic import BaseModel
 class OperatorTo(BaseModel):
     operator_id:int= -1
     space_id:int= -1
+    space_name:str = 'space1'
+    scene_id:int= -1
+    scene_name:str = 'scene1'
+    experiment_id:int = -1
+    experiment_name:str = 'experiment1'
     operator_template_id:int = -1
     operator_name:str = None
     operator_source_id:int = -1

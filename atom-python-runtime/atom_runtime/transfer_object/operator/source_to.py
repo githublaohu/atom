@@ -16,6 +16,12 @@ class SourceTo():
     source_id:int = -1
     # 空间ID
     space_id:int= -1
+
+    space_name:str = 'space1'
+    scene_id:int= -1
+    scene_name:str = 'scene1'
+    experiment_id:int = -1
+    experiment_name:str = 'experiment1'
     # 连接ID
     connect_id:int
     # 连接名

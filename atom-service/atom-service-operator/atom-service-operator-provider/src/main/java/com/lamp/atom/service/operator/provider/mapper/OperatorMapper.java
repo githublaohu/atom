@@ -29,10 +29,10 @@ public interface OperatorMapper {
     @Insert("insert into operator" +
             "(space_id,operator_template_id,operator_name,operator_source_id,operator_source_type,operator_runtime_type,operator_model," +
             "level,resources_account_id,code_mode,code_address,code_version,module_name,execute_object,environment_conf,operator_conf,model_conf," +
-            "operator_epoch,operator_plan_runtimes,operator_priority,deploy_type) " +
+            "operator_epoch,operator_priority,deploy_type) " +
             "values(#{spaceId},#{operatorTemplateId},#{operatorName},#{operatorSourceId},#{operatorSourceType},#{operatorRuntimeType},#{operatorModel}," +
             "#{level},#{resourcesAccountId},#{codeMode},#{codeAddress},#{codeVersion},#{moduleName},#{executeObject},#{operatorConf},#{environmentConf},#{modelConf}," +
-            "#{operatorEpoch},#{operatorPlanRuntimes},#{operatorPriority},#{deployType})")
+            "#{operatorEpoch},#{operatorPriority},#{deployType})")
     Integer insertOperatorEntity(OperatorEntity operatorEntity);
 
     /**
@@ -89,7 +89,6 @@ public interface OperatorMapper {
             "<if test = 'codeAddress != null'>and code_address = #{codeAddress} </if>" +
             "<if test = 'codeVersion != null'>and code_version = #{codeVersion} </if>" +
             "<if test = 'operatorEpoch != null'>and operator_epoch = #{operatorEpoch} </if>" +
-            "<if test = 'operatorRuntimeStatus != null'>and operator_runtime_status = #{operatorRuntimeStatus} </if>" +
             "<if test = 'operatorPriority != null'>and operator_priority = #{operatorPriority} </if>" +
             "<if test = 'deployType != null'>and deploy_type = #{deployType} </if>" +
             "</script>"})

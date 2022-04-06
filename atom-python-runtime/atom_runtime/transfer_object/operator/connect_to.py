@@ -18,16 +18,17 @@ class ConnectTo():
     connect_type:str
     connect_name:str
     connect_addr:str
+    connect_port:int
     connect_account:str
     connect_password:str
     connect_space:str
 
     mode:str
     colony_type:str
-    connect_conf:map
-    connect_route:str
-    connect_size:str #++
-    connect_count:str #++
+    source_conf:map
+    source_route:str
+    source_size:str
+    source_count:str
 
     def __init__(self, data):
         if len(data) == 0:
@@ -36,15 +37,17 @@ class ConnectTo():
         self.connect_id = data['id']
         self.space_id = data['space_id']
         self.operation_type = data['operation_type']
-        self.connect_type = data['source_type']
-        self.connect_name = data['source_name']
-        self.connect_addr = data['source_type']
-        self.connect_account = data['source_account']
-        self.connect_password = data['source_password']
-        self.source_space = data['source_space']
+        self.connect_type = data['connect_type']
+        self.connect_name = data['connect_name']
+        self.connect_addr = data['connect_addr']
+        self.connect_port = data['connect_port']
+        self.connect_account = data['connect_account']
+        self.connect_password = data['connect_password']
+        self.connect_space = data['connect_space']
 
         self.mode = data['mode']
         self.colony_type = data['colony_type']
-        self.connect_conf = data['source_conf']
-        self.connect_route = data['source_route']
-
+        self.source_conf = data['source_conf']
+        self.source_route = data['source_route']
+        self.source_size = data['source_size']
+        self.source_count = data['source_count']

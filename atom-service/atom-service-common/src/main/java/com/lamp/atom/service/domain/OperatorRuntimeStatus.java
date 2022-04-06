@@ -58,12 +58,12 @@ public enum OperatorRuntimeStatus {
     /**
      * runtime 运行自动结束
      */
-    TRAIN_AUTO_FINISH("运行自动结束"),
+    AUTO_FINISH("运行自动结束"),
 
     /**
      * runtime 运行手动终止
      */
-    TRAIN_FINISH("运行手动终止"),
+    MANUAL_FINISH("运行手动终止"),
 
     /**
      * runtime 运行异常结束

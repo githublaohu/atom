@@ -26,8 +26,8 @@ class OperatorRuntime():
     source:Source
     test_source:Source
     sink:Source
-
     def set_source(self , source:Source):
+
         self.source = source
 
     def set_test_source(self , test_source:Source):

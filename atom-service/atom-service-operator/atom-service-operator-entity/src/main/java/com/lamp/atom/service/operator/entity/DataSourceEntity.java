@@ -40,6 +40,11 @@ public class DataSourceEntity extends BaseEntity {
     private String connectionName;
 
     /**
+     * 数据源名
+     */
+    private String sourceName;
+
+    /**
      * 数据源类型
      */
     private SourceType sourceType;

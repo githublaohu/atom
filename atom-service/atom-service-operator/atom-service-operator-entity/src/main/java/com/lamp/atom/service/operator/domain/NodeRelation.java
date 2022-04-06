@@ -7,6 +7,8 @@ public class NodeRelation {
 
     private Long nodeId;
 
+    private Long operatorId;
+
     private Long modelID;
 
     private Long dataSourceId;

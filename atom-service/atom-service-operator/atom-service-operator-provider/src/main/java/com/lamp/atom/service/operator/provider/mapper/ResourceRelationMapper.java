@@ -39,9 +39,16 @@ public interface ResourceRelationMapper {
      * @param resourceRelationEntity
      * @return
      */
-    @Update("update resource_relation set " +
-            "delete_flag = #{deleteFlag} " +
-            "where id = #{id}")
+    @Update({"<script>" +
+            "update resource_relation " +
+            "set " +
+            "<if test = 'beRelatedId != null'>be_related_id = #{beRelatedId},</if>" +
+            "<if test = 'relationType != null'>relation_type = #{relationType},</if>" +
+            "<if test = 'relationStatus != null'>relation_status = #{relationStatus},</if>" +
+            "<if test = 'order != null'>resource_relation.order = #{order} </if>" +
+            "where delete_flag = 0 and " +
+            "relate_id = #{relateId} and relate_type = #{relateType} and be_related_type = #{beRelatedType}" +
+            "</script>"})
     Integer updateResourceRelationEntity(ResourceRelationEntity resourceRelationEntity);
 
     /**

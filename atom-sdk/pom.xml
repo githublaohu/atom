@@ -4,7 +4,7 @@
   <parent>
     <groupId>cn.lampup</groupId>
     <artifactId>atom</artifactId>
-    <version>${reversion}</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>atom-sdk</artifactId>
   <packaging>pom</packaging>

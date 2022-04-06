@@ -39,6 +39,11 @@ public interface RuntimeService {
     Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
+     * 根据节点ID和模型创建类型修改状态
+     */
+    Integer updateRuntimeStatus(RuntimeEntity runtimeEntity);
+
+    /**
      * 批量修改运行实例
      *
      * @param runtimeEntityList

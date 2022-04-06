@@ -37,7 +37,7 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	private OperatorScheduleConfig operatorScheduleConfig;
 
 
-	private Map<String,AtomOperatorShedule> atomOperatorScheduleMap = new HashMap<>();
+	private Map<OperatorRuntimeType,AtomOperatorShedule> atomOperatorScheduleMap = new HashMap<>();
 
 	public AtomScheduleService(OperatorScheduleConfig operatorScheduleConfig) throws Exception {
 		this.operatorScheduleConfig = operatorScheduleConfig;
@@ -46,8 +46,8 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 		}
 		rpcSchedule = new OperatorRpcSchedule(this.operatorScheduleConfig.getOperatorScheduleRpcConfig());
 
-		atomOperatorScheduleMap.put("",kubernetesSchedule);
-		atomOperatorScheduleMap.put("",rpcSchedule);
+		atomOperatorScheduleMap.put(OperatorRuntimeType.TRAIN,kubernetesSchedule);
+		atomOperatorScheduleMap.put(OperatorRuntimeType.REASONING,rpcSchedule);
 
 	}
 	
@@ -65,13 +65,8 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	@Override
 	public void createOperators(Schedule schedule) {
 		OperatorRuntimeType operatorRuntimeType = schedule.getOperatorRuntimeType();
-		if (operatorRuntimeType == OperatorRuntimeType.REASONING) {
-			// 1、推理 =》 RPC调度
-			rpcSchedule.createOperators(schedule);
-		} else {
-			// 2、其他 =》 k8s调度
-			// todo
-		}
+		// 1、训练 =》 k8s调度；2、推理 =》 RPC调度
+		atomOperatorScheduleMap.get(operatorRuntimeType).createOperators(schedule);
 	}
 
 	@Override

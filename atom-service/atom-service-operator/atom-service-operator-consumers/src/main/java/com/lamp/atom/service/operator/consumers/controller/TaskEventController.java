@@ -30,6 +30,7 @@ import com.lamp.atom.service.operator.domain.TaskParam;
 import com.lamp.atom.service.operator.entity.*;
 import com.lamp.atom.service.operator.service.*;
 import com.lamp.decoration.core.result.ResultObject;
+import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,8 +45,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
-@RequestMapping("/operator")
-@RestController("operatorEventController")
+@RequestMapping("/taskEvent")
+@RestController("taskEventController")
 @Api(tags = {"任务事件操作接口"})
 public class TaskEventController {
 
@@ -234,7 +235,7 @@ public class TaskEventController {
         // 4、修改Runtime信息，关闭调度
         for (RuntimeEntity runtimeEntity : runtimeList) {
             runtimeEntity.setEndTime(new Date());
-            runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAIN_FINISH);
+            runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.MANUAL_FINISH);
         }
         runtimeService.batchUpdateRuntimeEntity(runtimeList);
         for (Schedule schedule : scheduleList) {
@@ -251,178 +252,31 @@ public class TaskEventController {
      * @return
      */
     @PostMapping("/startNodeTask")
+    @ApiOperation(value = "开始节点任务")
     public ResultObject<String> startNodeTask(@RequestBody TaskParam taskParam) throws NacosException {
-        // 1、查出节点信息
+        // 0、字段判空
+        if (Objects.isNull(taskParam.getTaskId()) ||
+                Objects.isNull(taskParam.getModelCreateType())) {
+            return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
+        }
+
+        // 1、查出节点信息，判断节点状态是否为“编辑完成”
         NodeEntity node = new NodeEntity();
         node.setId(taskParam.getTaskId());
         node = nodeService.queryNodeEntity(node);
 
-        // 判断节点状态是否为“编辑完成”
         if (node.getNodeStatus() != NodeStatus.EDIT_FINISH) {
             log.info("节点状态校验失败 {}", node);
             return ResultObjectEnums.NODE_STATUS_CHECK_FAIL.getResultObject();
         }
 
-        // 2、根据资源关系查出依赖表
-        ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
-        resourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        resourceRelationEntity.setRelateType(ResourceType.NODE);
-        resourceRelationEntity.setRelateId(node.getId());
-        List<ResourceRelationEntity> resourceRelations = resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
-
-        // 3、封装Schedule数据和Runtime数据
-        Schedule schedule = new Schedule();
-
-        // 设置部署实例和调度的object
-        Deploy deploy = new Deploy();
-        schedule.setDeploy(deploy);
-        List<AtomInstances> instancesList = new ArrayList<>();
-        deploy.setInstancesList(instancesList);
-
-        // 获取runtime部署实例
-        List<String> serviceNames = new ArrayList<>();
-        serviceNames.add("atom-runtime-python-service-standalone");
-        for (String serviceName : serviceNames) {
-            List<Instance> allInstances = namingService.getAllInstances(serviceName);
-            for (Instance instance : allInstances) {
-                AtomInstances atomInstances = new AtomInstances();
-                atomInstances.setIp(instance.getIp());
-                atomInstances.setPort(instance.getPort());
-                instancesList.add(atomInstances);
-            }
-        }
-
-        CreateOperator operatorCreateTo = new CreateOperator();
-        schedule.setObject(operatorCreateTo);
-
-        Map<String, String> hardwareConfig = new HashMap<String, String>();
-        schedule.setHardwareConfig(hardwareConfig);
-        Map<String, String> limits = new HashMap<String, String>();
-        schedule.setLimits(limits);
-        schedule.setRunParameter(taskParam.getRunParameter());
-        schedule.setEnvs(taskParam.getEnvs());
-
-        Strategy strategy = new Strategy();
-        Map<String, String> labelMap = new HashMap<>();
-        schedule.setNodeId(node.getId());
-        schedule.setNodeName(node.getNodeName());
-        schedule.setStrategy(strategy);
-        schedule.setLabels(labelMap);
-        strategy.setScheduleStrategyType(ScheduleStrategyType.DEFAULT_LABEL);
-        strategy.setTiming("0");
-        //todo 策略的标签
-
-        RuntimeEntity runtime = new RuntimeEntity();
-        runtime.setSpaceId(node.getSpaceId());
-        runtime.setCaseSourceType(CaseSourceType.NODE);
-        runtime.setNodeId(node.getId());
-        runtime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
-        runtime.setStartTime(new Date());
-        runtime.setEstimateStartTime(new Date());
-        //todo runtime的启动/关闭人需要用户管理模块的字段
-        runtime.setStartId(1L);
-        runtime.setStartName("");
-        runtime.setEndId(1L);
-        runtime.setEndName("");
-
-        for (ResourceRelationEntity resourceRelation : resourceRelations) {
-            // 模型
-            if (resourceRelation.getBeRelatedType() == ResourceType.MODEL) {
-                ModelEntity model = new ModelEntity();
-                model.setId(resourceRelation.getBeRelatedId());
-                model = modelService.queryModelEntity(model);
-                operatorCreateTo.setModelTo(model);
-            }
-            // 算子
-            if (resourceRelation.getBeRelatedType() == ResourceType.OPERATOR) {
-                OperatorEntity operator = new OperatorEntity();
-                operator.setId(resourceRelation.getBeRelatedId());
-                operator = operatorService.queryOperatorEntity(operator);
-                operatorCreateTo.setOperatorTo(operator);
-
-                // 调度的算子类型
-                schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
-            }
-            // 数据源
-            if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
-                DataSourceEntity dataSource = new DataSourceEntity();
-                dataSource.setId(resourceRelation.getBeRelatedId());
-                dataSource = dataSourceService.queryDataSourceEntity(dataSource);
-                ConnectionEntity connection = new ConnectionEntity();
-                connection.setId(dataSource.getConnectionId());
-                connection = connectionService.queryConnectionEntity(connection);
-                operatorCreateTo.setModelConnect(connection);
-
-                SourceAndConnect sourceAndConnect = new SourceAndConnect();
-                sourceAndConnect.setSourceTo(dataSource);
-                sourceAndConnect.setConnectTo(connection);
-                List<SourceAndConnect> sourceAndConnects = new ArrayList<>();
-                sourceAndConnects.add(sourceAndConnect);
-                operatorCreateTo.setSourceAndConnects(sourceAndConnects);
-
-                runtime.setSourceId(resourceRelation.getBeRelatedId());
-            }
-
-            // todo operatorCreateTo设置的SourceAccountTo需要用户管理模块提供
-
-            // 服务配置信息
-            if (resourceRelation.getBeRelatedType() == ResourceType.SERVICE_INFO) {
-                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
-                hardwareConfig.put("cpu", String.valueOf(serviceInfo.getSiCpu()));
-                hardwareConfig.put("gpu", String.valueOf(serviceInfo.getSiGpu()));
-                hardwareConfig.put("memory", String.valueOf(serviceInfo.getSiDisplayMemory()));
-                hardwareConfig.put("displayMemory", String.valueOf(serviceInfo.getSiDisplayMemory()));
-                labelMap.put(serviceInfo.getSiName(), serviceInfo.getSiLabel());
-
-                runtime.setLabel(serviceInfo.getSiLabel());
-            }
-            // 服务最大配置信息
-            if (resourceRelation.getBeRelatedType() == ResourceType.MAX_SERVICE_INFO) {
-                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
-                limits.put("max_service_config", JSON.toJSONString(serviceInfo));
-            }
-            // 服务最小配置信息
-            if (resourceRelation.getBeRelatedType() == ResourceType.MIN_SERVICE_INFO) {
-                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
-                limits.put("min_service_config", JSON.toJSONString(serviceInfo));
-            }
-        }
+        // 3、获取调度信息和Runtime信息
+        List<RuntimeEntity> runtimeEntityList = new ArrayList<>();
+        Schedule schedule = getSchedule(taskParam, node, runtimeEntityList);
 
         // 4、保存Runtime信息，开启调度
         atomScheduleService.createOperators(schedule);
-        runtimeService.insertRuntimeEntity(runtime);
-
-        return ResultObjectEnums.SUCCESS.getResultObject();
-    }
-
-    /**
-     * console：停止节点任务
-     *
-     * @param taskParam 节点任务参数
-     * @return
-     */
-    @PostMapping("/stopNodeTask")
-    public ResultObject<String> stopNodeTask(@RequestBody TaskParam taskParam) {
-        // 1、根据资源关系查出依赖表
-        ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
-        resourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        resourceRelationEntity.setRelateType(ResourceType.NODE);
-
-        // 3、查询Schedule数据和Runtime数据
-        Schedule schedule = new Schedule();
-        schedule.setNodeId(taskParam.getTaskId());
-
-        RuntimeEntity runtimeEntity = new RuntimeEntity();
-        runtimeEntity.setNodeId(taskParam.getTaskId());
-        List<RuntimeEntity> runtimeList = runtimeService.queryRuntimeEntitys(runtimeEntity);
-
-        // 4、修改Runtime信息，关闭调度
-        for (RuntimeEntity runtime : runtimeList) {
-            runtime.setEndTime(new Date());
-            runtime.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAIN_FINISH);
-        }
-        runtimeService.batchUpdateRuntimeEntity(runtimeList);
-        atomScheduleService.uninstallOperators(schedule);
+        runtimeService.batchInsertRuntimeEntity(runtimeEntityList);
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
@@ -593,51 +447,75 @@ public class TaskEventController {
     /**
      * runtime 算子运行自动完成
      *
-     * @param runtimeEntity
+     * 训练完成后进行推理
+     * 需要：节点ID、模型创建类型
+     *
+     * @param taskParam
      * @return
      */
     @PostMapping("/runningAutoFinish")
-    public ResultObject<String> runningAutoFinish(@RequestBody RuntimeEntity runtimeEntity) {
-        // 1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAIN_AUTO_FINISH);
-        Integer status = runtimeService.updateRuntimeEntity(runtimeEntity);
-        if (status != 1) {
+    public ResultObject<String> runningAutoFinish(@RequestBody TaskParam taskParam) throws NacosException {
+        // 0、字段判空
+        if (Objects.isNull(taskParam.getTaskId()) ||
+                Objects.isNull(taskParam.getModelCreateType())) {
+            return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
+        }
+
+        // 1、修改实例状态（根据节点ID和模型创建类型查出所有runtime)
+        RuntimeEntity runtimeEntity = new RuntimeEntity();
+        runtimeEntity.setNodeId(taskParam.getTaskId());
+        runtimeEntity.setModelCreateType(taskParam.getModelCreateType());
+        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
+        Integer status = runtimeService.updateRuntimeStatus(runtimeEntity);
+        if (status < 1) {
             return ResultObjectEnums.FAIL.getResultObject();
         }
 
         // 2、调度schedule（释放资源、保存数据集）
-
-        // 3、部署
         NodeEntity node = new NodeEntity();
-        node.setId(runtimeEntity.getNodeId());
+        node.setId(taskParam.getTaskId());
         node = nodeService.queryNodeEntity(node);
 
-        ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
-        resourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        resourceRelationEntity.setRelateType(ResourceType.NODE);
-        resourceRelationEntity.setRelateId(node.getId());
-        resourceRelationEntity.setBeRelatedType(ResourceType.OPERATOR);
-        List<ResourceRelationEntity> resourceRelations = resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
+        Schedule schedule = getSchedule(taskParam, node, null);
+        atomScheduleService.uninstallOperators(schedule);
 
-        for (ResourceRelationEntity resourceRelation : resourceRelations) {
-            OperatorEntity operator = new OperatorEntity();
-            operator.setId(resourceRelation.getBeRelatedId());
-            operator = operatorService.queryOperatorEntity(operator);
+        // 3、训练算子完成后启动推理算子
+        if (Objects.equals(taskParam.getModelCreateType() , ModelCreateType.TRAIN)) {
+            // 根据节点查询所有算子，如果算子类型为自动部署，则调用启动节点接口
+            ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
+            resourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
+            resourceRelationEntity.setRelateType(ResourceType.NODE);
+            resourceRelationEntity.setRelateId(node.getId());
+            resourceRelationEntity.setBeRelatedType(ResourceType.OPERATOR);
+            List<ResourceRelationEntity> resourceRelations = resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
 
-            DeployType deployType = operator.getDeployType();
-            switch (deployType) {
-                case AUTO_DEPLOY:
-                    //自动部署
-                    break;
-                case GREY_DEPLOY:
-                    //灰度部署
-                    break;
-                case TOUCH_DEPLOY:
-                    //触发部署
-                    break;
-                case NOT_DEPLOY:
-                    //不部署
-                    break;
+            for (ResourceRelationEntity resourceRelation : resourceRelations) {
+                OperatorEntity operator = new OperatorEntity();
+                operator.setId(resourceRelation.getBeRelatedId());
+                operator = operatorService.queryOperatorEntity(operator);
+
+                //部署推理算子
+                if (Objects.equals(operator.getOperatorRuntimeType(), OperatorRuntimeType.REASONING)) {
+                    DeployType deployType = operator.getDeployType();
+                    switch (deployType) {
+                        case AUTO_DEPLOY:
+                            //自动部署（启动节点任务）
+                            TaskParam reasonTask = new TaskParam();
+                            reasonTask.setTaskId(node.getId());
+                            reasonTask.setModelCreateType(ModelCreateType.REASON);
+                            this.startNodeTask(reasonTask);
+                            break;
+                        case GREY_DEPLOY:
+                            //灰度部署
+                            break;
+                        case TOUCH_DEPLOY:
+                            //触发部署
+                            break;
+                        case NOT_DEPLOY:
+                            //不部署
+                            break;
+                    }
+                }
             }
         }
 
@@ -647,21 +525,36 @@ public class TaskEventController {
     /**
      * console 算子手动完成
      *
-     * @param runtimeEntity
+     * @param taskParam
      * @return
      */
     @PostMapping("/runningFinish")
-    public Integer runningFinish(@RequestBody RuntimeEntity runtimeEntity) {
-        // 1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAIN_FINISH);
-        Integer status = runtimeService.updateRuntimeEntity(runtimeEntity);
-        if (status != 1) {
-            return status;
+    public ResultObject<String> runningFinish(@RequestBody TaskParam taskParam) throws NacosException {
+        //0、字段判空
+        if (Objects.isNull(taskParam.getTaskId()) ||
+                Objects.isNull(taskParam.getModelCreateType())) {
+            return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
+        }
+
+        // 1、对所有实例修改状态（根据节点ID和模型创建类型查出所有runtime)
+        RuntimeEntity runtimeEntity = new RuntimeEntity();
+        runtimeEntity.setNodeId(taskParam.getTaskId());
+        runtimeEntity.setModelCreateType(taskParam.getModelCreateType());
+        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
+        Integer status = runtimeService.updateRuntimeStatus(runtimeEntity);
+        if (status < 1) {
+            return ResultObjectEnums.FAIL.getResultObject();
         }
 
         // 2、调度schedule（释放资源、保存数据集）
+        NodeEntity node = new NodeEntity();
+        node.setId(taskParam.getTaskId());
+        node = nodeService.queryNodeEntity(node);
 
-        return 1;
+        Schedule schedule = getSchedule(taskParam, node, null);
+        atomScheduleService.uninstallOperators(schedule);
+
+        return ResultObjectEnums.SUCCESS.getResultObject();
     }
 
     /**
@@ -702,6 +595,179 @@ public class TaskEventController {
         // 2、调度schedule（释放资源、保存数据集）
 
         return 1;
+    }
+
+    public Schedule getSchedule(TaskParam taskParam, NodeEntity node, List<RuntimeEntity> runtimeEntityList) throws NacosException {
+        // 2、根据资源关系查出依赖表
+        ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
+        resourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        resourceRelationEntity.setRelateType(ResourceType.NODE);
+        resourceRelationEntity.setRelateId(node.getId());
+        List<ResourceRelationEntity> resourceRelations = resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
+
+        // 3、封装Schedule数据和Runtime数据
+        Schedule schedule = new Schedule();
+
+        // 设置部署实例和调度的object
+        Deploy deploy = new Deploy();
+        schedule.setDeploy(deploy);
+        List<AtomInstances> instancesList = new ArrayList<>();
+        deploy.setInstancesList(instancesList);
+
+        // 获取runtime部署实例
+        List<String> serviceNames = new ArrayList<>();
+        serviceNames.add("atom-runtime-python-service-standalone");
+        for (String serviceName : serviceNames) {
+            List<Instance> allInstances = namingService.getAllInstances(serviceName);
+            for (Instance instance : allInstances) {
+                AtomInstances atomInstances = new AtomInstances();
+                atomInstances.setIp(instance.getIp());
+                atomInstances.setPort(instance.getPort());
+                instancesList.add(atomInstances);
+            }
+        }
+
+        CreateOperator operatorCreateTo = new CreateOperator();
+        schedule.setObject(operatorCreateTo);
+
+        Map<String, String> hardwareConfig = new HashMap<String, String>();
+        schedule.setHardwareConfig(hardwareConfig);
+        Map<String, String> limits = new HashMap<String, String>();
+        schedule.setLimits(limits);
+        schedule.setRunParameter(taskParam.getRunParameter());
+        schedule.setEnvs(taskParam.getEnvs());
+
+        Strategy strategy = new Strategy();
+        Map<String, String> labelMap = new HashMap<>();
+        schedule.setNodeId(node.getId());
+        schedule.setNodeName(node.getNodeName());
+        schedule.setStrategy(strategy);
+        schedule.setLabels(labelMap);
+        strategy.setScheduleStrategyType(ScheduleStrategyType.DEFAULT_LABEL);
+        strategy.setTiming("0");
+        //todo 策略的标签
+
+        // 节点、算子和k8s的rumtime
+        RuntimeEntity nodeRuntime = new RuntimeEntity();
+        RuntimeEntity operatorRuntime = new RuntimeEntity();
+        RuntimeEntity kubernetesRuntime = null;
+        if (Objects.nonNull(runtimeEntityList)) {
+            nodeRuntime.setSpaceId(node.getSpaceId());
+            nodeRuntime.setCaseSourceType(CaseSourceType.NODE);
+            nodeRuntime.setNodeId(node.getId());
+            nodeRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+            nodeRuntime.setStartTime(new Date());
+            nodeRuntime.setEstimateStartTime(new Date());
+            //todo runtime的启动/关闭人需要用户管理模块的字段
+            nodeRuntime.setStartId(1L);
+            nodeRuntime.setStartName("");
+            nodeRuntime.setEndId(1L);
+            nodeRuntime.setEndName("");
+
+            operatorRuntime.setSpaceId(node.getSpaceId());
+            operatorRuntime.setCaseSourceType(CaseSourceType.OPERATOR);
+            operatorRuntime.setNodeId(node.getId());
+            operatorRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+            operatorRuntime.setStartTime(new Date());
+            operatorRuntime.setEstimateStartTime(new Date());
+            //todo runtime的启动/关闭人需要用户管理模块的字段
+            operatorRuntime.setStartId(1L);
+            operatorRuntime.setStartName("");
+            operatorRuntime.setEndId(1L);
+            operatorRuntime.setEndName("");
+
+            if (!Objects.equals(taskParam.getModelCreateType(), ModelCreateType.REASON)) {
+                kubernetesRuntime = new RuntimeEntity();
+                kubernetesRuntime.setSpaceId(node.getSpaceId());
+                kubernetesRuntime.setCaseSourceType(CaseSourceType.JOB);
+                kubernetesRuntime.setNodeId(node.getId());
+                kubernetesRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+                kubernetesRuntime.setStartTime(new Date());
+                kubernetesRuntime.setEstimateStartTime(new Date());
+                //todo runtime的启动/关闭人需要用户管理模块的字段
+                kubernetesRuntime.setStartId(1L);
+                kubernetesRuntime.setStartName("");
+                kubernetesRuntime.setEndId(1L);
+                kubernetesRuntime.setEndName("");
+            }
+        }
+
+        for (ResourceRelationEntity resourceRelation : resourceRelations) {
+            // 模型
+            if (resourceRelation.getBeRelatedType() == ResourceType.MODEL) {
+                ModelEntity model = new ModelEntity();
+                model.setId(resourceRelation.getBeRelatedId());
+                model = modelService.queryModelEntity(model);
+                operatorCreateTo.setModelTo(model);
+            }
+            // 算子
+            if (resourceRelation.getBeRelatedType() == ResourceType.OPERATOR) {
+                OperatorEntity operator = new OperatorEntity();
+                operator.setId(resourceRelation.getBeRelatedId());
+                operator = operatorService.queryOperatorEntity(operator);
+                // 模型创建与算子类型一致，则添加到算子创建类和调度中
+                if (Objects.equals(taskParam.getModelCreateType(), operator.getOperatorRuntimeType())) {
+                    operatorCreateTo.setOperatorTo(operator);
+                    schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
+                }
+            }
+            // 数据源
+            if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
+                DataSourceEntity dataSource = new DataSourceEntity();
+                dataSource.setId(resourceRelation.getBeRelatedId());
+                dataSource = dataSourceService.queryDataSourceEntity(dataSource);
+                ConnectionEntity connection = new ConnectionEntity();
+                connection.setId(dataSource.getConnectionId());
+                connection = connectionService.queryConnectionEntity(connection);
+                operatorCreateTo.setModelConnect(connection);
+
+                SourceAndConnect sourceAndConnect = new SourceAndConnect();
+                sourceAndConnect.setSourceTo(dataSource);
+                sourceAndConnect.setConnectTo(connection);
+                List<SourceAndConnect> sourceAndConnects = new ArrayList<>();
+                sourceAndConnects.add(sourceAndConnect);
+                operatorCreateTo.setSourceAndConnects(sourceAndConnects);
+
+                nodeRuntime.setSourceId(resourceRelation.getBeRelatedId());
+                operatorRuntime.setSourceId(resourceRelation.getBeRelatedId());
+            }
+
+            // todo operatorCreateTo设置的SourceAccountTo需要用户管理模块提供
+
+            // 服务配置信息
+            if (resourceRelation.getBeRelatedType() == ResourceType.SERVICE_INFO) {
+                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                hardwareConfig.put("cpu", String.valueOf(serviceInfo.getSiCpu()));
+                hardwareConfig.put("gpu", String.valueOf(serviceInfo.getSiGpu()));
+                hardwareConfig.put("memory", String.valueOf(serviceInfo.getSiDisplayMemory()));
+                hardwareConfig.put("displayMemory", String.valueOf(serviceInfo.getSiDisplayMemory()));
+                labelMap.put(serviceInfo.getSiName(), serviceInfo.getSiLabel());
+
+                nodeRuntime.setLabel(serviceInfo.getSiLabel());
+                operatorRuntime.setLabel(serviceInfo.getSiLabel());
+            }
+            // 服务最大配置信息
+            if (resourceRelation.getBeRelatedType() == ResourceType.MAX_SERVICE_INFO) {
+                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                limits.put("max_service_config", JSON.toJSONString(serviceInfo));
+            }
+            // 服务最小配置信息
+            if (resourceRelation.getBeRelatedType() == ResourceType.MIN_SERVICE_INFO) {
+                ServiceInfoEntity serviceInfo = serviceInfoService.queryServiceInfoEntityById(resourceRelation.getBeRelatedId());
+                limits.put("min_service_config", JSON.toJSONString(serviceInfo));
+            }
+        }
+
+        // 如果是创建调度，则设置runtime信息
+        if (Objects.nonNull(runtimeEntityList)) {
+            runtimeEntityList.add(nodeRuntime);
+            runtimeEntityList.add(operatorRuntime);
+            if (Objects.nonNull(kubernetesRuntime)) {
+                runtimeEntityList.add(kubernetesRuntime);
+            }
+        }
+
+        return schedule;
     }
 
 }

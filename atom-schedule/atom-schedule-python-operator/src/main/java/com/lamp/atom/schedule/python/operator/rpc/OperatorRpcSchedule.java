@@ -102,7 +102,7 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 				instanceList = namingService.getAllInstances(ATOM_RUNTIME_PYTHON_SERVICE_NAME);
 			} else if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.DEFAULT_LABEL)) {
 				instanceList = namingService.getAllInstances(ATOM_RUNTIME_PYTHON_SERVICE_NAME, "");
-			} else if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.ATOM_RPC_RONDOM)) {
+			} else if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.ATOM_RPC_RANDOM)) {
 				instanceList = namingService.getAllInstances(ATOM_RUNTIME_PYTHON_SERVICE_NAME);
 			}
 		}

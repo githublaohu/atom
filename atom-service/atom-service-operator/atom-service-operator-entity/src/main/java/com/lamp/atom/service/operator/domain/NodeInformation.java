@@ -29,6 +29,10 @@ public class NodeInformation {
 
     private ServiceInfoEntity serviceInfoEntity;
 
+    private ServiceInfoEntity maxServiceInfoEntity;
+
+    private ServiceInfoEntity minServiceInfoEntity;
+
     /**
      * Runtime信息
      */

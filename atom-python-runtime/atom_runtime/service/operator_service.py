@@ -60,8 +60,9 @@ class OperatorService():
     def create_operators(self, operator_create_to:OperatorCreateTo):
         create_operator = CreateOperator(self,operator_create_to)
         operator_runtime = create_operator.get_operator_runtime()
-        self.__close_runtime__(operator_create_to.operator_to)
-        self.experiment_id_to_operator[operator_create_to.operator_to.experiment_id] = operator_runtime
+        #todo 场景是否通过节点来传入
+        #self.__close_runtime__(operator_create_to.operator_to)
+        #self.experiment_id_to_operator[operator_create_to.operator_to.experiment_id] = operator_runtime
         self.rpc_operator_service.create_operators(operator_create_to.operator_to)
         self.source_tread_pool.apply_async(operator_runtime.do_run)
 
@@ -138,7 +139,7 @@ class CreateOperator():
             elif source_to.source_type == "test_source":
                 self.operator_runtime.test_source = source
             elif source_to.source_type == "init_data":
-                self.operator_api.init_data = source;
+                self.operator_api.init_data = source
             else:
                 self.operator_runtime.sink = source
         
@@ -159,6 +160,7 @@ class CreateOperator():
         self.operator_runtime.operator_object = self.operator_api
         self.operator_runtime.rpc_operator_service = self.operator_service.rpc_operator_service
         self.operator_runtime.operator_to = self.operator_to
+        
 
     
     def get_operator_runtime(self):

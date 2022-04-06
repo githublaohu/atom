@@ -43,6 +43,11 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
+    public Integer updateRuntimeStatus(RuntimeEntity runtimeEntity) {
+        return runtimeMapper.updateRuntimeStatus(runtimeEntity);
+    }
+
+    @Override
     public Integer batchUpdateRuntimeEntity(List<RuntimeEntity> runtimeEntityList) {
         return runtimeMapper.batchUpdateRuntimeEntity(runtimeEntityList);
     }
