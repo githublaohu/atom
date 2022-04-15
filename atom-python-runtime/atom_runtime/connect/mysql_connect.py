@@ -19,7 +19,6 @@ class MySQLConnect(Connect):
 
     def initialization(self):
         self.connection = pymysql.connect(host=self.connect_to.connect_addr, 
-                        #port=self.connect_to.connect_port, 
                         port=self.connect_to.connect_port, 
                         user=self.connect_to.connect_account, 
                         password=self.connect_to.connect_password, 

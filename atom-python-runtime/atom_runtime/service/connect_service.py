@@ -13,7 +13,7 @@
 from atom_runtime.connect.cloud.aliyun_oss_contect import AliyunOSSConnect
 from atom_runtime.connect.connnect import Connect
 from atom_runtime.connect.file_connect import FileConnect
-from atom_runtime.connect.mysql_contect import MySQLConnect
+from atom_runtime.connect.mysql_connect import MySQLConnect
 from atom_runtime.connect.s3_contect import S3MQConnect
 from atom_runtime.transfer_object.operator.connect_to import ConnectTo
 

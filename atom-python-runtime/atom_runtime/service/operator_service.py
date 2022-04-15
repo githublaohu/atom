@@ -54,8 +54,8 @@ class OperatorService():
 
         self.operator_type_to_operator_runtime["TRAIN"] = TrainOperatorRuntime
         self.operator_type_to_operator_runtime["REASONING"] = ReasoningOperatorRuntime
-        #self.operator_type_to_operator_runtime["features"] = TrainOperatorRuntime
-        #self.operator_type_to_operator_runtime["python-data"] = TrainOperatorRuntime
+        self.operator_type_to_operator_runtime["features"] = TrainOperatorRuntime
+        self.operator_type_to_operator_runtime["python-data"] = TrainOperatorRuntime
 
     def create_operators(self, operator_create_to:OperatorCreateTo):
         create_operator = CreateOperator(self,operator_create_to)

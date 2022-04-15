@@ -118,10 +118,17 @@ class Source(SourceBase):
         self.connect.stream(self.source_to.operate_execute,self.source_to.source_conf,source_stream)
     
     def train_upload(self, train):
-        path = self.source_to.operate_execute
-        if path == None:
-            path = "/" +self.source_to.space_name+ "/" +self.source_to.scene_name +"/" + self.source_to.experiment_name +"/"
-        path = path +self.source_to.space_name+ "-" +self.source_to.scene_name +"-" + self.source_to.experiment_name +"-"
+        connect_type = self.connect.connect_to.connect_type
+        if connect_type == 'MYSQL':
+            path = 'insert into ' + 'train_result(space,scene,experiment,data) ' \
+                + 'values(\''+ \
+                self.source_to.space_name + '\',\'' + \
+                self.source_to.scene_name + '\',\'' + \
+                self.source_to.operate_execute + '\',%s)'
+        if connect_type == 'ALIYUNOSS':
+            path = self.source_to.operate_execute
+            if path == None:
+                path = self.source_to.space_name + "-" +self.source_to.scene_name +"-" + self.source_to.experiment_name +"-"
         
         if isinstance(train,str):
              with open(train, 'rb') as f:
