@@ -16,6 +16,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<kubernetes.client.version>5.12.1</kubernetes.client.version>
+		<nacos.version>2.0.3</nacos.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,7 +38,7 @@
 		<dependency>
 			<groupId>com.alibaba.nacos</groupId>
 			<artifactId>nacos-client</artifactId>
-			<version>2.0.3</version>
+			<version>${nacos.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>cn.lampup</groupId>

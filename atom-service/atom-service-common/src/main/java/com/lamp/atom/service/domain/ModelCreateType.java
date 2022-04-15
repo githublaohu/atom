@@ -17,14 +17,24 @@ package com.lamp.atom.service.domain;
 public enum ModelCreateType {
 
     /**
-     * 推理
+     * 数据
      */
-    REASON,
+    DATA,
 
     /**
      * 训练
      */
     TRAIN,
+
+    /**
+     * 推理
+     */
+    REASON,
+
+    /**
+     * 特征
+     */
+    FEATURE,
 
     /**
      * 上传

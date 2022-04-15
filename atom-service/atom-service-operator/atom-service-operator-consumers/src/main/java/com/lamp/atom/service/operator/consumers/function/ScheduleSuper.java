@@ -3,7 +3,6 @@ package com.lamp.atom.service.operator.consumers.function;
 import static java.util.Collections.emptyMap;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
@@ -38,7 +37,7 @@ import lombok.Setter;
  */
 @Component
 @ConfigurationProperties(prefix="atom.schedule")
-public class SheduleSuper implements BeanFactoryAware {
+public class ScheduleSuper implements BeanFactoryAware {
 
 	private BeanFactory beanFactory;
 
@@ -52,22 +51,21 @@ public class SheduleSuper implements BeanFactoryAware {
 
 	@PostConstruct
 	private void init() throws Exception {
-
 		Properties properties = this.getProperties();
 
 		if (properties.isEmpty()) {
 			// 如果是null，本地文件
 			String config = this.getKubernetesConfigByFile();
-			this.operatorScheduleConfig.getOperatorKubernetesConfig().setConfigYaml(config);
+			this.operatorScheduleConfig.getOperatorScheduleKubernetesConfig().setConfigYaml(config);
 		} else {
 			// 如果不是null，是nacos
 			JSONObject jsonObject = (JSONObject) JSONObject.toJSON(this.operatorScheduleConfig.getOperatorScheduleRpcConfig());
 			Properties nacosConfig = new Properties();
 			nacosConfig.putAll(jsonObject);
 			ConfigService configService = ConfigFactory.createConfigService(properties);
-			String config = configService.getConfig(this.operatorScheduleConfig.getOperatorKubernetesConfig().getConfigName(),
+			String config = configService.getConfig(this.operatorScheduleConfig.getOperatorScheduleKubernetesConfig().getConfigName(),
 					this.operatorScheduleConfig.getOperatorScheduleRpcConfig().getNamespace(), 3000);
-			this.operatorScheduleConfig.getOperatorKubernetesConfig().setConfigYaml(config);
+			this.operatorScheduleConfig.getOperatorScheduleKubernetesConfig().setConfigYaml(config);
 		}
 		atomScheduleService = new AtomScheduleService(this.operatorScheduleConfig);
 	}
@@ -78,7 +76,7 @@ public class SheduleSuper implements BeanFactoryAware {
 	}
 
 	private String getKubernetesConfigByFile() throws IOException {
-		Resource resource = new ClassPathResource(operatorScheduleConfig.getOperatorKubernetesConfig().getConfigName());
+		Resource resource = new ClassPathResource(operatorScheduleConfig.getOperatorScheduleKubernetesConfig().getConfigName());
 		if (resource.exists()) {
 			return FileUtils.readFileToString(resource.getFile(), CharEncoding.UTF_8);
 		}

@@ -12,10 +12,7 @@
 package com.lamp.atom.service.operator.provider.mapper;
 
 import com.lamp.atom.service.operator.entity.ResourceRelationEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -32,6 +29,23 @@ public interface ResourceRelationMapper {
             "values(#{relateId},#{relateType},#{beRelatedId},#{beRelatedType}," +
             "#{relationType},#{relationStatus},#{order})")
     Integer insertResourceRelationEntity(ResourceRelationEntity resourceRelationEntity);
+
+    /**
+     * 批量添加资源关系
+     *
+     * @param resourceRelationEntityList
+     */
+    @Insert("<script>" +
+            "insert into resource_relation" +
+            "(relate_id,relate_type,be_related_id,be_related_type," +
+            "relation_type,relation_status,`order`) " +
+            "values " +
+            "<foreach collection='resourceRelationEntityList' item='item' index='index' separator=','>" +
+            "(#{item.relateId},#{item.relateType},#{item.beRelatedId},#{item.beRelatedType}," +
+            "#{item.relationType},#{item.relationStatus},#{item.order})" +
+            "</foreach>" +
+            "</script>")
+    Integer batchInsertResourceRelationEntity(@Param("resourceRelationEntityList") List<ResourceRelationEntity> resourceRelationEntityList);
 
     /**
      * 修改资源关系

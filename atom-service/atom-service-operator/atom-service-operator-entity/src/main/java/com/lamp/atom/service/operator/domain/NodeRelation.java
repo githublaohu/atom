@@ -19,4 +19,6 @@ public class NodeRelation {
 
     private Long minServiceInfoId;
 
+    private Long nextNodeId;
+
 }

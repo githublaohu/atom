@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -153,13 +154,17 @@ public class NodeController {
             return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
 
-        // 2、修改节点
+        // 2、判断节点状态
         NodeEntity node = new NodeEntity();
         node.setId(nodeRelation.getNodeId());
-        node.setNodeStatus(NodeStatus.EDIT_FINISH);
-        nodeService.updateNodeEntity(node);
+        node = nodeService.queryNodeEntity(node);
+        if (Objects.isNull(node)) {
+            log.info("节点已被删除 {}", nodeRelation);
+            return ResultObjectEnums.FAIL.getResultObject();
+        }
 
-        // 3、创建依赖关系（模型、算子、数据源（包含连接）、服务信息、服务最大配置、服务最小配置）
+        // 3、创建依赖关系（模型、算子、数据源（包含连接）、服务信息、服务最大配置、服务最小配置），下一节点可选
+        List<ResourceRelationEntity> resourceRelationEntityList = new ArrayList<>();
         ResourceRelationEntity modelRelationEntity = new ResourceRelationEntity();
         modelRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
         modelRelationEntity.setRelateId(node.getId());
@@ -178,6 +183,13 @@ public class NodeController {
         operatorRelationEntity.setRelationStatus("relate");
         operatorRelationEntity.setOrder(1);
 
+        //设置节点的算子类型
+        OperatorEntity operator = new OperatorEntity();
+        operator.setId(nodeRelation.getOperatorId());
+        operator = operatorService.queryOperatorEntity(operator);
+        node.setOperatorSourceType(operator.getOperatorSourceType());
+        node.setOperatorRuntimeType(operator.getOperatorRuntimeType());
+
         ResourceRelationEntity dataSourceRelationEntity = new ResourceRelationEntity();
         dataSourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
         dataSourceRelationEntity.setRelateId(node.getId());
@@ -187,39 +199,65 @@ public class NodeController {
         dataSourceRelationEntity.setRelationStatus("relate");
         dataSourceRelationEntity.setOrder(1);
 
-        ResourceRelationEntity serviceInfoEntity = new ResourceRelationEntity();
-        serviceInfoEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        serviceInfoEntity.setRelateId(node.getId());
-        serviceInfoEntity.setRelateType(ResourceType.NODE);
-        serviceInfoEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
-        serviceInfoEntity.setBeRelatedType(ResourceType.SERVICE_INFO);
-        serviceInfoEntity.setRelationStatus("relate");
-        serviceInfoEntity.setOrder(1);
+        ResourceRelationEntity serviceInfoRelationEntity = new ResourceRelationEntity();
+        serviceInfoRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        serviceInfoRelationEntity.setRelateId(node.getId());
+        serviceInfoRelationEntity.setRelateType(ResourceType.NODE);
+        serviceInfoRelationEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
+        serviceInfoRelationEntity.setBeRelatedType(ResourceType.SERVICE_INFO);
+        serviceInfoRelationEntity.setRelationStatus("relate");
+        serviceInfoRelationEntity.setOrder(1);
 
-        ResourceRelationEntity maxServiceInfoEntity = new ResourceRelationEntity();
-        maxServiceInfoEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        maxServiceInfoEntity.setRelateId(node.getId());
-        maxServiceInfoEntity.setRelateType(ResourceType.NODE);
-        maxServiceInfoEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
-        maxServiceInfoEntity.setBeRelatedType(ResourceType.MAX_SERVICE_INFO);
-        maxServiceInfoEntity.setRelationStatus("relate");
-        maxServiceInfoEntity.setOrder(1);
+        ResourceRelationEntity maxServiceInfoRelationEntity = new ResourceRelationEntity();
+        maxServiceInfoRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        maxServiceInfoRelationEntity.setRelateId(node.getId());
+        maxServiceInfoRelationEntity.setRelateType(ResourceType.NODE);
+        maxServiceInfoRelationEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
+        maxServiceInfoRelationEntity.setBeRelatedType(ResourceType.MAX_SERVICE_INFO);
+        maxServiceInfoRelationEntity.setRelationStatus("relate");
+        maxServiceInfoRelationEntity.setOrder(1);
 
-        ResourceRelationEntity minServiceInfoEntity = new ResourceRelationEntity();
-        minServiceInfoEntity.setRelationType(RelationType.RESOURCE_RELATION);
-        minServiceInfoEntity.setRelateId(node.getId());
-        minServiceInfoEntity.setRelateType(ResourceType.NODE);
-        minServiceInfoEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
-        minServiceInfoEntity.setBeRelatedType(ResourceType.MIN_SERVICE_INFO);
-        minServiceInfoEntity.setRelationStatus("relate");
-        minServiceInfoEntity.setOrder(1);
+        ResourceRelationEntity minServiceInfoRelationEntity = new ResourceRelationEntity();
+        minServiceInfoRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
+        minServiceInfoRelationEntity.setRelateId(node.getId());
+        minServiceInfoRelationEntity.setRelateType(ResourceType.NODE);
+        minServiceInfoRelationEntity.setBeRelatedId(nodeRelation.getServiceInfoId());
+        minServiceInfoRelationEntity.setBeRelatedType(ResourceType.MIN_SERVICE_INFO);
+        minServiceInfoRelationEntity.setRelationStatus("relate");
+        minServiceInfoRelationEntity.setOrder(1);
 
-        resourceRelationService.insertResourceRelationEntity(modelRelationEntity);
-        resourceRelationService.insertResourceRelationEntity(operatorRelationEntity);
-        resourceRelationService.insertResourceRelationEntity(dataSourceRelationEntity);
-        resourceRelationService.insertResourceRelationEntity(serviceInfoEntity);
-        resourceRelationService.insertResourceRelationEntity(maxServiceInfoEntity);
-        resourceRelationService.insertResourceRelationEntity(minServiceInfoEntity);
+        // 下一节点
+        if (!Objects.equals(nodeRelation.getNextNodeId(), -1L)) {
+            NodeEntity nextNode = new NodeEntity();
+            nextNode.setId(nodeRelation.getNextNodeId());
+            nextNode = nodeService.queryNodeEntity(nextNode);
+            if (Objects.isNull(nextNode)) {
+                log.info("选择下一个节点不存在 {}", nodeRelation);
+                return ResultObjectEnums.FAIL.getResultObject();
+            }
+
+            ResourceRelationEntity nodeRelationEntity = new ResourceRelationEntity();
+            nodeRelationEntity.setRelationType(RelationType.NODE_RELATION);
+            nodeRelationEntity.setRelateId(node.getId());
+            nodeRelationEntity.setRelateType(ResourceType.NODE);
+            nodeRelationEntity.setBeRelatedId(nextNode.getId());
+            nodeRelationEntity.setBeRelatedType(ResourceType.NODE);
+            nodeRelationEntity.setRelationStatus("relate");
+            nodeRelationEntity.setOrder(1);
+            resourceRelationEntityList.add(nodeRelationEntity);
+        }
+
+        resourceRelationEntityList.add(modelRelationEntity);
+        resourceRelationEntityList.add(operatorRelationEntity);
+        resourceRelationEntityList.add(dataSourceRelationEntity);
+        resourceRelationEntityList.add(serviceInfoRelationEntity);
+        resourceRelationEntityList.add(maxServiceInfoRelationEntity);
+        resourceRelationEntityList.add(minServiceInfoRelationEntity);
+        resourceRelationService.batchInsertResourceRelationEntity(resourceRelationEntityList);
+
+        // 4、修改节点
+        node.setNodeStatus(NodeStatus.EDIT_FINISH);
+        nodeService.updateNodeEntity(node);
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }

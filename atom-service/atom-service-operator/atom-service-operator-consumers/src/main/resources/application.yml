@@ -10,7 +10,7 @@ spring:
 nacos:
   config:
     server-addr: 124.223.198.143:8848
-    namespace: c5881a50-da93-4446-aad9-853da64c92b6
+    namespace: atom-dev
     data-id: operator-consumer-dev
     bootstrap:
       enable: true

@@ -256,7 +256,7 @@ public class TaskEventController {
     public ResultObject<String> startNodeTask(@RequestBody TaskParam taskParam) throws NacosException {
         // 0、字段判空
         if (Objects.isNull(taskParam.getTaskId()) ||
-                Objects.isNull(taskParam.getModelCreateType())) {
+                Objects.isNull(taskParam.getOperatorRuntimeType())) {
             return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
         }
 
@@ -457,14 +457,13 @@ public class TaskEventController {
     public ResultObject<String> runningAutoFinish(@RequestBody TaskParam taskParam) throws NacosException {
         // 0、字段判空
         if (Objects.isNull(taskParam.getTaskId()) ||
-                Objects.isNull(taskParam.getModelCreateType())) {
+                Objects.isNull(taskParam.getOperatorRuntimeType())) {
             return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
         }
 
         // 1、修改实例状态（根据节点ID和模型创建类型查出所有runtime)
         RuntimeEntity runtimeEntity = new RuntimeEntity();
         runtimeEntity.setNodeId(taskParam.getTaskId());
-        runtimeEntity.setModelCreateType(taskParam.getModelCreateType());
         runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
         Integer status = runtimeService.updateRuntimeStatus(runtimeEntity);
         if (status < 1) {
@@ -479,42 +478,47 @@ public class TaskEventController {
         Schedule schedule = getSchedule(taskParam, node, null);
         atomScheduleService.uninstallOperators(schedule);
 
-        // 3、训练算子完成后启动推理算子
-        if (Objects.equals(taskParam.getModelCreateType() , ModelCreateType.TRAIN)) {
-            // 根据节点查询所有算子，如果算子类型为自动部署，则调用启动节点接口
-            ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
-            resourceRelationEntity.setRelationType(RelationType.RESOURCE_RELATION);
-            resourceRelationEntity.setRelateType(ResourceType.NODE);
-            resourceRelationEntity.setRelateId(node.getId());
-            resourceRelationEntity.setBeRelatedType(ResourceType.OPERATOR);
-            List<ResourceRelationEntity> resourceRelations = resourceRelationService.queryResourceRelationEntitys(resourceRelationEntity);
+        // 3、获取下一节点，训练算子完成后启动推理算子
+        if (Objects.equals(taskParam.getOperatorRuntimeType() , ModelCreateType.TRAIN)) {
+            // 根据节点查询下一节点的算子
+            ResourceRelationEntity nodeRelation = new ResourceRelationEntity();
+            nodeRelation.setRelationType(RelationType.RESOURCE_RELATION);
+            nodeRelation.setRelateType(ResourceType.NODE);
+            nodeRelation.setRelateId(node.getId());
+            nodeRelation.setBeRelatedType(ResourceType.NODE);
+            nodeRelation = resourceRelationService.queryResourceRelationEntity(nodeRelation);
 
-            for (ResourceRelationEntity resourceRelation : resourceRelations) {
-                OperatorEntity operator = new OperatorEntity();
-                operator.setId(resourceRelation.getBeRelatedId());
-                operator = operatorService.queryOperatorEntity(operator);
+            ResourceRelationEntity nodeOperatorRelation = new ResourceRelationEntity();
+            nodeOperatorRelation.setRelationType(RelationType.RESOURCE_RELATION);
+            nodeOperatorRelation.setRelateType(ResourceType.NODE);
+            nodeOperatorRelation.setRelateId(nodeRelation.getBeRelatedId());
+            nodeOperatorRelation.setBeRelatedType(ResourceType.OPERATOR);
+            nodeOperatorRelation = resourceRelationService.queryResourceRelationEntity(nodeOperatorRelation);
 
-                //部署推理算子
-                if (Objects.equals(operator.getOperatorRuntimeType(), OperatorRuntimeType.REASONING)) {
-                    DeployType deployType = operator.getDeployType();
-                    switch (deployType) {
-                        case AUTO_DEPLOY:
-                            //自动部署（启动节点任务）
-                            TaskParam reasonTask = new TaskParam();
-                            reasonTask.setTaskId(node.getId());
-                            reasonTask.setModelCreateType(ModelCreateType.REASON);
-                            this.startNodeTask(reasonTask);
-                            break;
-                        case GREY_DEPLOY:
-                            //灰度部署
-                            break;
-                        case TOUCH_DEPLOY:
-                            //触发部署
-                            break;
-                        case NOT_DEPLOY:
-                            //不部署
-                            break;
-                    }
+            OperatorEntity operator = new OperatorEntity();
+            operator.setId(nodeOperatorRelation.getBeRelatedId());
+            operator = operatorService.queryOperatorEntity(operator);
+
+            //推理算子，如果算子类型为自动部署，则调用启动节点接口
+            if (Objects.equals(operator.getOperatorRuntimeType(), OperatorRuntimeType.REASONING)) {
+                DeployType deployType = operator.getDeployType();
+                switch (deployType) {
+                    case AUTO_DEPLOY:
+                        //自动部署（启动节点任务）
+                        TaskParam reasonTask = new TaskParam();
+                        reasonTask.setTaskId(node.getId());
+                        reasonTask.setOperatorRuntimeType(OperatorRuntimeType.REASONING);
+                        this.startNodeTask(reasonTask);
+                        break;
+                    case GREY_DEPLOY:
+                        //灰度部署
+                        break;
+                    case TOUCH_DEPLOY:
+                        //触发部署
+                        break;
+                    case NOT_DEPLOY:
+                        //不部署
+                        break;
                 }
             }
         }
@@ -523,23 +527,23 @@ public class TaskEventController {
     }
 
     /**
-     * console 算子手动完成
+     * console 算子运行手动完成
      *
      * @param taskParam
      * @return
      */
     @PostMapping("/runningFinish")
+    @ApiOperation(value = "算子运行手动完成")
     public ResultObject<String> runningFinish(@RequestBody TaskParam taskParam) throws NacosException {
         //0、字段判空
         if (Objects.isNull(taskParam.getTaskId()) ||
-                Objects.isNull(taskParam.getModelCreateType())) {
+                Objects.isNull(taskParam.getOperatorRuntimeType())) {
             return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
         }
 
         // 1、对所有实例修改状态（根据节点ID和模型创建类型查出所有runtime)
         RuntimeEntity runtimeEntity = new RuntimeEntity();
         runtimeEntity.setNodeId(taskParam.getTaskId());
-        runtimeEntity.setModelCreateType(taskParam.getModelCreateType());
         runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
         Integer status = runtimeService.updateRuntimeStatus(runtimeEntity);
         if (status < 1) {
@@ -676,20 +680,6 @@ public class TaskEventController {
             operatorRuntime.setEndId(1L);
             operatorRuntime.setEndName("");
 
-            if (!Objects.equals(taskParam.getModelCreateType(), ModelCreateType.REASON)) {
-                kubernetesRuntime = new RuntimeEntity();
-                kubernetesRuntime.setSpaceId(node.getSpaceId());
-                kubernetesRuntime.setCaseSourceType(CaseSourceType.JOB);
-                kubernetesRuntime.setNodeId(node.getId());
-                kubernetesRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
-                kubernetesRuntime.setStartTime(new Date());
-                kubernetesRuntime.setEstimateStartTime(new Date());
-                //todo runtime的启动/关闭人需要用户管理模块的字段
-                kubernetesRuntime.setStartId(1L);
-                kubernetesRuntime.setStartName("");
-                kubernetesRuntime.setEndId(1L);
-                kubernetesRuntime.setEndName("");
-            }
         }
 
         for (ResourceRelationEntity resourceRelation : resourceRelations) {
@@ -705,10 +695,23 @@ public class TaskEventController {
                 OperatorEntity operator = new OperatorEntity();
                 operator.setId(resourceRelation.getBeRelatedId());
                 operator = operatorService.queryOperatorEntity(operator);
-                // 模型创建与算子类型一致，则添加到算子创建类和调度中
-                if (Objects.equals(taskParam.getModelCreateType(), operator.getOperatorRuntimeType())) {
-                    operatorCreateTo.setOperatorTo(operator);
-                    schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
+                operatorCreateTo.setOperatorTo(operator);
+                schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
+
+                // 推理算子则需要创建k8s的runtime
+                if (!Objects.equals(operator.getOperatorRuntimeType(), ModelCreateType.REASON)) {
+                    kubernetesRuntime = new RuntimeEntity();
+                    kubernetesRuntime.setSpaceId(node.getSpaceId());
+                    kubernetesRuntime.setCaseSourceType(CaseSourceType.JOB);
+                    kubernetesRuntime.setNodeId(node.getId());
+                    kubernetesRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+                    kubernetesRuntime.setStartTime(new Date());
+                    kubernetesRuntime.setEstimateStartTime(new Date());
+                    //todo runtime的启动/关闭人需要用户管理模块的字段
+                    kubernetesRuntime.setStartId(1L);
+                    kubernetesRuntime.setStartName("");
+                    kubernetesRuntime.setEndId(1L);
+                    kubernetesRuntime.setEndName("");
                 }
             }
             // 数据源

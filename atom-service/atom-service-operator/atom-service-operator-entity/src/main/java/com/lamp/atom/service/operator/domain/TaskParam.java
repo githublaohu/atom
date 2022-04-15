@@ -1,6 +1,6 @@
 package com.lamp.atom.service.operator.domain;
 
-import com.lamp.atom.service.domain.ModelCreateType;
+import com.lamp.atom.service.domain.OperatorRuntimeType;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -15,9 +15,9 @@ public class TaskParam {
     private Long taskId;
 
     /**
-     * 模型创建类型
+     * 算子类型
      */
-    private ModelCreateType modelCreateType;
+    private OperatorRuntimeType operatorRuntimeType;
 
     /**
      * 运行参数

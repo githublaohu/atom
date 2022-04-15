@@ -11,9 +11,7 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import com.lamp.atom.service.domain.NodeModel;
-import com.lamp.atom.service.domain.NodeStatus;
-import com.lamp.atom.service.domain.NodeType;
+import com.lamp.atom.service.domain.*;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -42,9 +40,14 @@ public class NodeEntity extends BaseEntity {
 	private String nodeName;
 
 	/**
-	 * 算子来源类型
+	 * operator：算子来源类型
 	 */
-	private NodeType nodeType;
+	private OperatorSourceType operatorSourceType;
+
+	/**
+	 * operator：算子类型
+	 */
+	private OperatorRuntimeType operatorRuntimeType;
 
 	/**
 	 * 算子运行模式

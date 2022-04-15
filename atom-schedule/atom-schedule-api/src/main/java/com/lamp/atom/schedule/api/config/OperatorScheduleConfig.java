@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class OperatorScheduleConfig {
 
-	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
+	private OperatorScheduleKubernetesConfig operatorScheduleKubernetesConfig;
 
 	private OperatorScheduleRpcConfig operatorScheduleRpcConfig;
 

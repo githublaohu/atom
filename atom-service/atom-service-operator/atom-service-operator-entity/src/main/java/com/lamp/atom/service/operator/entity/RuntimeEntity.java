@@ -14,7 +14,6 @@ package com.lamp.atom.service.operator.entity;
 import java.util.Date;
 
 import com.lamp.atom.service.domain.CaseSourceType;
-import com.lamp.atom.service.domain.ModelCreateType;
 import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -36,11 +35,6 @@ public class RuntimeEntity extends BaseEntity {
      * 节点ID
      */
     private Long nodeId;
-
-    /**
-     * 模型创建类型
-     */
-    private ModelCreateType modelCreateType;
 
     /**
      * 运行实例来源ID
