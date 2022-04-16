@@ -9,8 +9,15 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.operator.common;
+package com.lamp.atom.schedule.api.config;
 
-public class EntityUtils {
+import lombok.Data;
+
+@Data
+public class OperatorScheduleConfig {
+
+	private OperatorScheduleKubernetesConfig operatorScheduleKubernetesConfig;
+
+	private OperatorScheduleRpcConfig operatorScheduleRpcConfig;
 
 }

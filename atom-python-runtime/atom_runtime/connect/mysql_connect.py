@@ -10,6 +10,7 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 from atom_runtime.connect.connnect import Connect
+from atom_runtime.connect.connnect import StreamAPI
 import pymysql
 import pymysql.cursors
 
@@ -25,7 +26,8 @@ class MySQLConnect(Connect):
                         charset='utf8mb4', 
                         cursorclass=pymysql.cursors.DictCursor)
 
-    def stream(self, content, func):
+    #def stream(self, content, func):
+    def stream(self, content, data,stream:StreamAPI):
         pass
 
     def  read_whole(self , content:str ,data ):
@@ -48,7 +50,6 @@ class MySQLConnect(Connect):
         except BaseException as err:
             """
                 异常抛出
-
             """
             self.connection.rollback()
             raise err

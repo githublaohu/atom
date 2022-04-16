@@ -19,7 +19,9 @@ public enum ResultObjectEnums {
 
     FAIL(500,"fail"),
 
-    CHECK_PARAMETERS_FAIL(120001, "check parameters fail");
+    CHECK_PARAMETERS_FAIL(120001, "check parameters fail"),
+
+    NODE_STATUS_CHECK_FAIL(120002, "node status check fail");
 
     private ResultObject<String> resultObject;
 

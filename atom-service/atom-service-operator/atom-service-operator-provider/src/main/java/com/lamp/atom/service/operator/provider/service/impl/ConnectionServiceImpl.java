@@ -43,8 +43,8 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public List<ConnectionEntity> queryConnectionEntitys() {
-        return connectionMapper.queryConnectionEntitys();
+    public List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity) {
+        return connectionMapper.queryConnectionEntitys(connectionEntity);
     }
 
     @Override

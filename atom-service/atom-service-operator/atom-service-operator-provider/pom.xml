@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -34,11 +34,19 @@
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>dubbo-provider</artifactId>
+			<version>0.1.4</version>
 			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.alibaba.nacos</groupId>
+					<artifactId>nacos-client</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.github.githublaohu</groupId>
 			<artifactId>shardingsphere-dependent</artifactId>
+			<version>0.1.4</version>
 			<type>pom</type>
 			<exclusions>
 				<exclusion>
@@ -64,10 +72,6 @@
 					<artifactId>spring-boot-starter</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-context</artifactId>
-				</exclusion>
-				<exclusion>
 					<groupId>com.alibaba.nacos</groupId>
 					<artifactId>nacos-client</artifactId>
 				</exclusion>
@@ -77,12 +81,6 @@
 			<groupId>com.alibaba.boot</groupId>
 			<artifactId>nacos-config-spring-boot-actuator</artifactId>
 			<version>0.2.10</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.alibaba.nacos</groupId>
-					<artifactId>nacos-client</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

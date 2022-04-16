@@ -29,9 +29,9 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SheduleStrategyType {
+public enum ScheduleStrategyType {
 	
-	DEFAULT_RONDOM("default","default","rondom"),
+	DEFAULT_RONDOM("default","default","random"),
 	DEFAULT_TOTAL_QUANTITY("default","default","total quantity"),
 	DEFAULT_LABEL("default","default","label"),
 	DEFAULT_REPLACE("default","default","replace"),
@@ -46,7 +46,7 @@ public enum SheduleStrategyType {
 	KUBERNETES_BACH_QUEUE_WITH_POD_PER_WORK_TIME("kubernetes","bach","queue with pod work item"),
 	KUBERNETES_BACH_QUEUE_WITH_VARIABLE_POD_COUNT("kubernetes","bach","queue with variable pod count"),
 	KUBERNETES_CRON("kubernetes","cron",""),
-	ATOM_RPC_RONDOM("atom","rpc","total quantity"),
+	ATOM_RPC_RANDOM("atom","rpc","total quantity"),
 	ATOM_RPC_TOTAL_QUANTITY("atom","rpc","total quantity"),
 	ATOM_RPC_LABEL("atom","rpc","label"),
 	ATOM_RPC_REPLACE("atom","rpc","replace"),

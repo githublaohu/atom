@@ -16,6 +16,7 @@ class ReasoningOperatorRuntime(OperatorRuntime):
 
     def initialization(self):
             self.operator_object.do_initialization()
+            
 
     def predict(self,data):
         return self.operator_object.predict(data)

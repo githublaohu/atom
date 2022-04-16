@@ -11,10 +11,12 @@
  */
 package com.lamp.atom.schedule.python.operator;
 
+import com.lamp.light.annotation.Body;
 import com.lamp.light.annotation.POST;
 
 public interface AtomOperatorRPCServier {
 
+	@Body
 	@POST("/operator/create_operators")
 	public Result createOperators(CreateOperator createOperator);
 

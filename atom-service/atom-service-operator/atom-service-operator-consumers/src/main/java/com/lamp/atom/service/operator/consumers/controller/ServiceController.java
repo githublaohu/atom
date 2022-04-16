@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lamp.atom.schedule.api.Shedule;
+import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.service.domain.CaseSourceType;
-import com.lamp.atom.service.domain.RuntimeStatus;
+import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
 import com.lamp.atom.service.operator.entity.RuntimeEntity;
 import com.lamp.atom.service.operator.entity.ServiceInfoEntity;
@@ -31,7 +31,6 @@ import com.lamp.atom.service.operator.service.RuntimeService;
 import com.lamp.atom.service.operator.service.ServiceInfoService;
 
 import io.swagger.annotations.Api;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 推理
@@ -47,7 +46,7 @@ public class ServiceController {
     @Autowired
     private PortCreatingFunction portCreatingFunction;
     
-    @Autowired
+    @Autowired(required = false)
     private AtomScheduleService atomScheduleService;
     
     @Reference
@@ -81,12 +80,13 @@ public class ServiceController {
     	runtimeEntity.setEndTime(new Date());
     	runtimeEntity.setEstimateStartTime(new Date());
     	runtimeEntity.setEstimateEndTime(new Date());
-    	runtimeEntity.setRuntimeStatus(RuntimeStatus.QUEUING);
-    	
-    	runtimeEntity.setStartId(1);
-    	runtimeEntity.setStartName("start");
-    	runtimeEntity.setEndId(0);
-    	runtimeEntity.setEndName("end");
+    	runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUING);
+
+		//todo runtime的启动/关闭人需要用户管理模块的字段
+    	runtimeEntity.setStartId(1L);
+    	runtimeEntity.setStartName("");
+    	runtimeEntity.setEndId(1L);
+    	runtimeEntity.setEndName("");
     	
     	
     	runtimeService.insertRuntimeEntity(runtimeEntity);
@@ -96,20 +96,20 @@ public class ServiceController {
     	// 如果是停止，那么从新创建一个
     	
     	// 如果是等待运行，
-    	Shedule shedule = new Shedule();
+    	Schedule schedule = new Schedule();
     	
-    	shedule.setNoteId(runtimeEntity.getId().toString());
-    	shedule.setNoteName(serviceInfoEntity.getSiName());
-    	atomScheduleService.createService(shedule);
+    	schedule.setNodeId(runtimeEntity.getId());
+    	schedule.setNodeName(serviceInfoEntity.getSiName());
+    	atomScheduleService.createService(schedule);
     	// 修改name 与 状态
     	return 0;
     }
     
     @RequestMapping("/dropRuntime")
     public Integer dropRuntime(RuntimeEntity serviceInfo) {
-    	Shedule shedule = new Shedule();
+    	Schedule schedule = new Schedule();
     	// 
-    	atomScheduleService.closeService(shedule);
+    	atomScheduleService.closeService(schedule);
     	return 0;
     }
 

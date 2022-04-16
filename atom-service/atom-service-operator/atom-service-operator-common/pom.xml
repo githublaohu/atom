@@ -43,5 +43,10 @@
 			<artifactId>logback-dependent</artifactId>
 			<type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>cn.lampup</groupId>
+			<artifactId>atom-service-space-entity</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

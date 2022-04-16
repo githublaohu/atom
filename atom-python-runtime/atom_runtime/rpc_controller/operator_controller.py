@@ -10,11 +10,8 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 import json
-from flask import Flask, app,request
-from atom_runtime.utils.environment import name_atom
-
-
-
+from flask import Flask,request
+from atom_runtime.utils.data_handler_utils import DataHandler
 from atom_runtime.service.operator_service import  OperatorService
 from atom_runtime.transfer_object.operator.operator_create_to import OperatorCreateTo
 from atom_runtime.transfer_object.operator.operator_to import OperatorTo
@@ -32,13 +29,16 @@ class OperatorController():
         app.add_url_rule('/operator/uninstall_operators','/operator/uninstall_operators',self.uninstall_operators,methods=["POST"])
 
     def create_operators(self):
-        data = json.loads(request.get_data(as_text=True))
-        create_operator = OperatorCreateTo(**data)
-        self.operator_service.create_operators(create_operator)
+        request_data = request.get_data(as_text=True)
+        data = json.loads(request_data)
+        data_handler:DataHandler = DataHandler()
+        data = data_handler.humpToUnderline(data)
+        operator_create_to = OperatorCreateTo(data)
+        self.operator_service.create_operators(operator_create_to)
         
     def start_operators(self):
         data = json.loads(request.get_data(as_text=True))
-        self.operator_service.start_operators( OperatorTo(**data))
+        self.operator_service.start_operators(OperatorTo(**data))
 
     def suspend_operators(self):
         data = json.loads(request.get_data(as_text=True))

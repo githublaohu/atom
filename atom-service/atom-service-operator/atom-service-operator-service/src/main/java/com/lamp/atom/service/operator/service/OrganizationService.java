@@ -50,9 +50,10 @@ public interface OrganizationService {
     /**
      * 查询多个组织
      *
+     * @param organizationEntity
      * @return
      */
-    List<OrganizationEntity> queryOrganizationEntitys();
+    List<OrganizationEntity> queryOrganizationEntitys(OrganizationEntity organizationEntity);
 
     /**
      * 查询单个组织
@@ -61,4 +62,21 @@ public interface OrganizationService {
      * @return
      */
     OrganizationEntity queryOrganizationEntity(OrganizationEntity organizationEntity);
+
+    /**
+     * 查询单个组织
+     *
+     * @param id
+     * @return
+     */
+    OrganizationEntity queryOrganizationById(Long id);
+
+    /**
+     * 根据实验查询空间
+     *
+     * @param organizationEntity
+     * @return
+     */
+    OrganizationEntity querySpace(OrganizationEntity organizationEntity);
+
 }

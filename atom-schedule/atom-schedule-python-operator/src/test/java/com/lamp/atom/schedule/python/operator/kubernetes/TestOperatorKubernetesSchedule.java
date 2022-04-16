@@ -4,38 +4,46 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.deploy.Deploy;
 import org.junit.Test;
 
-import com.lamp.atom.schedule.api.Shedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 public class TestOperatorKubernetesSchedule {
 
-	Shedule shedule = new Shedule();
+	Schedule schedule = new Schedule();
 
-	OperatorShedeleKubernetesConfig operatorShedeleKubernetesConfig;
+	OperatorScheduleKubernetesConfig operatorScheduleKubernetesConfig;
 
-	private String nacosAddress = "172.19.75.218:8848";
+	private String nacosAddress = "124.223.198.143:8848";
 
 	{
-		shedule.setNoteName("test");
+		schedule.setNodeName("test");
+
+		Deploy deploy = new Deploy();
+		deploy.setCount(1);
+		schedule.setDeploy(deploy);
+
 		Map<String, String> labels = new HashMap<>();
 		labels.put("test", "test");
-		shedule.setLabels(labels);
+		schedule.setLabels(labels);
+
 		Map<String, String> hardwareConfig = new HashMap<>();
 		hardwareConfig.put("cpu", "2");
 		hardwareConfig.put("memory", "1Gi");
-		shedule.setHardwareConfig(hardwareConfig);
+		schedule.setHardwareConfig(hardwareConfig);
+
 		Map<String, String> envs = new HashMap<>();
 		envs.put("nacos_config", "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}");
-		shedule.setEnvs(envs);
+		schedule.setEnvs(envs);
 
-		operatorShedeleKubernetesConfig = new OperatorShedeleKubernetesConfig();
+		operatorScheduleKubernetesConfig = new OperatorScheduleKubernetesConfig();
 		try {
 			InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("kubernetesConfig.yaml");
 			byte[] data = new byte[inputStream.available()];
 			inputStream.read(data);
-			operatorShedeleKubernetesConfig.setConfigYaml(new String(data));
+			operatorScheduleKubernetesConfig.setConfigYaml(new String(data));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -44,15 +52,15 @@ public class TestOperatorKubernetesSchedule {
 
 	@Test
 	public void testCreateService() throws Exception {
-		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
+		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
 
-		kubernetesSchedule.createService(shedule);
+		kubernetesSchedule.createService(schedule);
 	}
 	
 	@Test
 	public void testCreateOperators() throws Exception {
-		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
+		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
 
-		kubernetesSchedule.createOperators(shedule);
+		kubernetesSchedule.createOperators(schedule);
 	}
 }

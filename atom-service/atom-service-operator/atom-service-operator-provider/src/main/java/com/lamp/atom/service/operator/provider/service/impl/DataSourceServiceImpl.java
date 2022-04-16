@@ -43,8 +43,8 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     @Override
-    public List<DataSourceEntity> queryDataSourceEntitys() {
-        return dataSourceMapper.queryDataSourceEntitys();
+    public List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity) {
+        return dataSourceMapper.queryDataSourceEntitys(dataSourceEntity);
     }
 
     @Override

@@ -27,9 +27,9 @@ public interface NodeMapper {
      * @param nodeEntity
      */
     @Insert("insert into node" +
-            "(space_id,node_template_id,node_name,node_type," +
+            "(space_id,node_template_id,node_name," +
             "node_model,node_epoch,node_plan_runtimes,node_status,operator_priority) " +
-            "values(#{spaceId},#{nodeTemplateId},#{nodeName},#{nodeType}," +
+            "values(#{spaceId},#{nodeTemplateId},#{nodeName}," +
             "#{nodeModel},#{nodeEpoch},#{nodePlanRuntimes},#{nodeStatus},#{operatorPriority})")
     Integer insertNodeEntity(NodeEntity nodeEntity);
 
@@ -39,9 +39,16 @@ public interface NodeMapper {
      * @param nodeEntity
      * @return
      */
-    @Update("update node set " +
-            "delete_flag = #{deleteFlag} " +
-            "where id = #{id}")
+    @Update({"<script>" +
+            "update node " +
+            "<set>" +
+            "<if test = 'operatorSourceType != null'>operator_source_type = #{operatorSourceType},</if>" +
+            "<if test = 'operatorRuntimeType != null'>operator_runtime_type = #{operatorRuntimeType},</if>" +
+            "<if test = 'nodeStatus != null'>node_status = #{nodeStatus},</if>" +
+            "<if test = 'deleteFlag != null'>delete_flag = #{deleteFlag}</if>" +
+            "</set>" +
+            "where id = #{id}" +
+            "</script>"})
     Integer updateNodeEntity(NodeEntity nodeEntity);
 
     /**
@@ -52,18 +59,28 @@ public interface NodeMapper {
      */
     @Select("select * from node " +
             "where delete_flag = 0 and " +
-            "(id like #{keyword} or space_id like #{keyword} or node_template_id like #{keyword} or node_name like #{keyword} or node_type like #{keyword} " +
+            "(id like #{keyword} or space_id like #{keyword} or node_template_id like #{keyword} or node_name like #{keyword} " +
+            "or operator_source_type like #{keyword} or operator_runtime_type like #{keyword}" +
             "or node_model like #{keyword} or node_epoch like #{keyword} or node_plan_runtimes like #{keyword} or node_status like #{keyword} or operator_priority like #{keyword})")
     List<NodeEntity> queryNodeEntitysByKeyword(String keyword);
 
     /**
      * 查询多个节点
      *
+     * @param nodeEntity
      * @return
      */
-    @Select("select * from node " +
-            "where delete_flag = 0")
-    List<NodeEntity> queryNodeEntitys();
+    @Select({"<script>" +
+            "select * from node " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'nodeTemplateId != null'>and node_template_id = #{nodeTemplateId} </if>" +
+            "<if test = 'operatorSourceType != null'>and operator_source_type = #{operatorSourceType} </if>" +
+            "<if test = 'operatorRuntimeType != null'>and operator_runtime_type = #{operatorRuntimeType} </if>" +
+            "<if test = 'nodeModel != null'>and node_model = #{nodeModel} </if>" +
+            "<if test = 'nodeStatus != null'>and node_status = #{nodeStatus} </if>" +
+            "</script>"})
+    List<NodeEntity> queryNodeEntitys(NodeEntity nodeEntity);
 
     /**
      * 查询单个节点

@@ -23,11 +23,11 @@ class OperatorRuntime():
     rpc_operator_service:RpcOperatorServcie
     operator_to:OperatorTo
     operator_object:OperatorApi
-    source:Source
-    test_source:Source
-    sink:Source
-
+    source:Source = None
+    test_source:Source = None
+    sink:Source = None
     def set_source(self , source:Source):
+
         self.source = source
 
     def set_test_source(self , test_source:Source):

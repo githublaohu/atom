@@ -53,11 +53,11 @@ lampup小组下的atom项目是一个为AI服务的可编排自动化运行平�
 
 * electron
 
-* decoration light（atom-servcie，java-sdk）
+* decoration light（atom-service，java-sdk）
 
 * MySQL
 
 ## Installation
 ```shell
-pip install atrom-runtime
+pip install atom-runtime
 ```

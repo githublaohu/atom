@@ -50,9 +50,10 @@ public interface NodeService {
     /**
      * 查询多个节点
      *
+     * @param nodeEntity
      * @return
      */
-    List<NodeEntity> queryNodeEntitys();
+    List<NodeEntity> queryNodeEntitys(NodeEntity nodeEntity);
 
     /**
      * 查询单个节点

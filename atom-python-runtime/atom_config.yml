@@ -1,6 +1,6 @@
 is_config: false
 runtime_model: local
-nacos_address: 127.0.0.1:8848
-nacos_namespace: atom-dev
+nacos_address: http://124.223.198.143:8848
+nacos_namespace: c5881a50-da93-4446-aad9-853da64c92b6
 config_name: backend-service
 rpc_controller_port: 9999

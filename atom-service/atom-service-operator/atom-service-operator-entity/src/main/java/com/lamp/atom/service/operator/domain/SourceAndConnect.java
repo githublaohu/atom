@@ -9,26 +9,16 @@
  *MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  *See the Mulan PubL v2 for more details.
  */
-package com.lamp.atom.service.operator.common;
+package com.lamp.atom.service.operator.domain;
 
 import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import com.lamp.atom.service.operator.entity.DataSourceEntity;
-import com.lamp.atom.service.operator.entity.ModelEntity;
-import com.lamp.atom.service.operator.entity.OperatorEntity;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class OperatorCreateTo {
+public class SourceAndConnect {
 
-    private List<SourceAndConnect> sourceAndConnects;
+    private DataSourceEntity sourceTo;
 
-    private ModelEntity modelTo;
-
-    private DataSourceEntity sourceAccountTo;
-
-    private OperatorEntity operatorTo;
-
-    private ConnectionEntity connectionTo;
+    private ConnectionEntity connectTo;
 }

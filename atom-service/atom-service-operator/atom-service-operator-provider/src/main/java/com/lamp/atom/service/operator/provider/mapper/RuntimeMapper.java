@@ -27,13 +27,32 @@ public interface RuntimeMapper {
      * @param runtimeEntity
      */
     @Insert("insert into runtime" +
-            "(space_id,case_source_type,source_id,node_id," +
+            "(space_id,node_id,case_source_id,case_source_type,source_id," +
             "server_ip,server_port,start_time,end_time,estimate_start_time,estimate_end_time," +
-            "runtime_status,label,start_id,start_name,end_id,end_name) " +
-            "values(#{spaceId},#{caseSourceType},#{sourceId},#{nodeId}," +
+            "operator_runtime_status,label,start_id,start_name,end_id,end_name) " +
+            "values(#{spaceId},#{nodeId},#{caseSourceId},#{caseSourceType},#{sourceId}," +
             "#{serverIp},#{serverPort},#{startTime},#{endTime},#{estimateStartTime},#{estimateEndTime}," +
-            "#{runtimeStatus},#{label},#{startId},#{startName},#{endId},#{endName})")
+            "#{operatorRuntimeStatus},#{label},#{startId},#{startName},#{endId},#{endName})")
     Integer insertRuntimeEntity(RuntimeEntity runtimeEntity);
+
+    /**
+     * 批量添加运行实例
+     *
+     * @param runtimeEntityList
+     */
+    @Insert("<script>" +
+            "insert into runtime" +
+            "(space_id,node_id,case_source_id,case_source_type,source_id," +
+            "server_ip,server_port,start_time,end_time,estimate_start_time,estimate_end_time," +
+            "operator_runtime_status,label,start_id,start_name,end_id,end_name) " +
+            "values " +
+            "<foreach collection='runtimeEntityList' item='item' index='index' separator=','>" +
+            "(#{item.spaceId},#{item.nodeId},#{item.caseSourceId},#{item.caseSourceType},#{item.sourceId}," +
+            "#{item.serverIp},#{item.serverPort},#{item.startTime},#{item.endTime},#{item.estimateStartTime},#{item.estimateEndTime}," +
+            "#{item.operatorRuntimeStatus},#{item.label},#{item.startId},#{item.startName},#{item.endId},#{item.endName})" +
+            "</foreach>" +
+            "</script>")
+    Integer batchInsertRuntimeEntity(List<RuntimeEntity> runtimeEntityList);
 
     /**
      * 修改实例
@@ -47,6 +66,32 @@ public interface RuntimeMapper {
     Integer updateRuntimeEntity(RuntimeEntity runtimeEntity);
 
     /**
+     * 根据节点ID和模型创建类型修改状态
+     */
+    @Update("update runtime set " +
+            "operator_runtime_status = #{operatorRuntimeStatus}," +
+            "end_time = now()" +
+            "where node_id = #{nodeId}")
+    Integer updateRuntimeStatus(RuntimeEntity runtimeEntity);
+
+    /**
+     * 批量修改运行实例
+     *
+     * @param runtimeEntityList
+     * @return
+     */
+    @Update({"<script>" +
+            "<foreach collection='runtimeEntityList' item='item' index='index' separator=';'>" +
+            "update runtime " +
+            "<set>" +
+            "<if test = 'item.OperatorRuntimeStatus != null'>operator_runtime_status = #{item.OperatorRuntimeStatus} </if>" +
+            "</set>" +
+            "where id = #{item.id} and delete_flag = 0" +
+            "</foreach>" +
+            "</script>"})
+    Integer batchUpdateRuntimeEntity(List<RuntimeEntity> runtimeEntityList);
+
+    /**
      * 模糊查询多个实例
      *
      * @param keyword
@@ -54,18 +99,31 @@ public interface RuntimeMapper {
      */
     @Select("select * from runtime " +
             "where delete_flag = 0 and " +
-            "(id like #{keyword} or space_id like #{keyword} or case_source_type like #{keyword} or source_id like #{keyword} or node_id like #{keyword} " +
+            "(id like #{keyword} or space_id like #{keyword} or node_id like #{keyword} or case_source_id like #{keyword} or case_source_type like #{keyword} or source_id like #{keyword} " +
             "or server_ip like #{keyword} or server_port like #{keyword} start_time like #{keyword} or end_time like #{keyword} or estimate_start_time like #{keyword} or estimate_end_time like #{keyword} " +
-            "or runtime_status like #{keyword} or label like #{keyword} or start_id like #{keyword} or start_name like #{keyword} or end_id like #{keyword} or end_name like #{keyword})")
+            "or operator_runtime_status like #{keyword} or label like #{keyword} or start_id like #{keyword} or start_name like #{keyword} or end_id like #{keyword} or end_name like #{keyword})")
     List<RuntimeEntity> queryRuntimeEntitysByKeyword(String keyword);
 
     /**
      * 查询多个实例
      *
+     * @param runtimeEntity
      * @return
      */
-    @Select("select * from runtime " +
-            "where space_id = #{spaceId} and delete_flag = 0")
+    @Select({"<script>" +
+            "select * from runtime " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'nodeId != null'>and node_id = #{nodeId} </if>" +
+            "<if test = 'caseSourceId != null'>and case_source_id = #{caseSourceId} </if>" +
+            "<if test = 'caseSourceType != null'>and case_source_type = #{caseSourceType} </if>" +
+            "<if test = 'sourceId != null'>and source_id = #{sourceId} </if>" +
+            "<if test = 'serverIp != null'>and server_ip = #{serverIp} </if>" +
+            "<if test = 'serverPort != null'>and server_port = #{serverPort} </if>" +
+            "<if test = 'operatorRuntimeStatus != null'>and operator_runtime_status = #{operatorRuntimeStatus} </if>" +
+            "<if test = 'startId != null'>and start_id = #{startId} </if>" +
+            "<if test = 'endId != null'>and end_id = #{endId} </if>" +
+            "</script>"})
     List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity);
 
     /**

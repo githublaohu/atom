@@ -33,10 +33,11 @@ class TrainOperatorRuntime(OperatorRuntime):
     def run(self):
         train_operator:TrainOperatorApi = self.operator_object
         self.train(self.source ,train_operator.execute)
+       # 无此属性
         if self.test_source != None:
-                self.train(self.source , train_operator.comparision_execute)         
+            self.train(self.source , train_operator.comparision_execute)         
         # 得到训练结果
-        train_result = train_operator.result()
+        train_result = train_operator().result
         # 保存模型 path= /{root}/{模型名}/{毫秒数}.
         self.sink.train_upload(train_result)
         

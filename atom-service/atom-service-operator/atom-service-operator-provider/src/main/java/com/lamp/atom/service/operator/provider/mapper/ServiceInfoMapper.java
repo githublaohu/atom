@@ -53,13 +53,21 @@ public interface ServiceInfoMapper {
 			+ "or si_cpu like #{keyword} or si_gpu like #{keyword} or si_memory like #{keyword} or si_display_memory like #{keyword} or si_label like #{keyword})")
 	List<ServiceInfoEntity> queryServiceInfoEntitysByKeyword(String keyword);
 
-	/**
-	 * 查询多个服务配置
-	 *
-	 * @return
-	 */
-	@Select("select * from service_info " + "where delete_flag = 0")
-	List<ServiceInfoEntity> queryServiceInfoEntitys();
+    /**
+     * 查询多个服务配置
+     *
+     * @param serviceInfoEntity
+     * @return
+     */
+    @Select({"<script>" +
+            "select * from service_info " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'siRuntimePattern != null'>and si_runtime_pattern = #{siRuntimePattern} </if>" +
+            "<if test = 'siImageName != null'>and si_image_name = #{siImageName} </if>" +
+            "<if test = 'siLabel != null'>and si_label = #{siLabel} </if>" +
+            "</script>"})
+    List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
 
 	/**
 	 * 查询单个服务配置
@@ -69,4 +77,13 @@ public interface ServiceInfoMapper {
 	 */
 	@Select("select * from service_info " + "where id = #{id}")
 	ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+
+	/**
+	 * 查询单个服务配置
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Select("select * from service_info " + "where id = #{id}")
+	ServiceInfoEntity queryServiceInfoEntityById(Long id);
 }

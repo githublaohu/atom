@@ -98,13 +98,14 @@ public class OrganizationController {
     /**
      * 查询多个组织
      *
+     * @param organizationEntity
      * @return
      */
     @PostMapping("/queryOrganizations")
     @ApiOperation(value = "查询多个组织")
-    public List<OrganizationEntity> queryOrganizations() {
+    public List<OrganizationEntity> queryOrganizations(@RequestBody(required = false) OrganizationEntity organizationEntity) {
         try {
-            return organizationService.queryOrganizationEntitys();
+            return organizationService.queryOrganizationEntitys(organizationEntity);
         } catch (Exception e) {
             log.warn("组织查询失败 {}", e);
             return null;

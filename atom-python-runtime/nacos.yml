@@ -1,7 +1,8 @@
 application:
   name: bms-backend
 dev:
-  server_addresses: 192.168.50.71:8848
+  #server_addresses: 192.168.50.71:8848
+  server_addresses: 124.223.198.143:8848
   namespace: c466cade-3f42-4a93-8284-50a947560aa8
   config_name: backend-service
 qa:

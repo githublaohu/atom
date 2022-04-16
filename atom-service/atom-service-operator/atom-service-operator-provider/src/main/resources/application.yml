@@ -2,56 +2,21 @@ server:
   port: 9001
 
 spring:
-  datasource:
-    name: lamp-atom
-    url: jdbc:mysql://120.78.148.188:3306/atom?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true
-    username: lampup
-    password: Lampup@123
-    # using druid data source
-    type: com.alibaba.druid.pool.DruidDataSource
-    maxActive: 20
-    initialSize: 1
-    maxWait: 60000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
-    # encrypt password
-    filters: config,stat,slf4j
-
-dubbo:
-  scan:
-    base-packages: com.lamp.atom.service.operator.provider.service.impl
   application:
-    name: lamp-atom-service-operator
-    owner: dome
-    logger: slf4j
-  protocol:
-    name: dubbo
-    port: 20880
-    accesslog: true
-  provider:
-    timeout: 30000
-    retries: 0
-  registry:
-    address: nacos://127.0.0.1:8848
-    parmeters[namespace]: atom-dev
-    register: true
-    subscribe: false
+    name: atom-service-operator-provider
 
-mybatis:
-  checkConfig-location : false
-  configuration:
-    useGeneratedKeys: true
-    mapUnderscoreToCamelCase: true
-
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
+nacos:
+  config:
+    server-addr: 124.223.198.143:8848
+    namespace: atom-dev
+    data-id: operator-provider-dev
+    bootstrap:
+      enable: true
+      logEnable: true
+    remote-first: true
+    type: yaml
+    auto-refresh: true
+    max-retry: 10
+    config-retry-time: 2333
+    config-long-poll-timeout: 46000
+    enable-remote-sync-config: true

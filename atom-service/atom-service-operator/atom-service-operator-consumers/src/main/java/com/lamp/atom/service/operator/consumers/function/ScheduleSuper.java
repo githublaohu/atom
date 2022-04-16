@@ -13,7 +13,9 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.ConfigFactory;
 import com.alibaba.nacos.api.config.ConfigService;
-import com.lamp.atom.schedule.api.config.OperatorSheduleConfig;
+import com.lamp.atom.schedule.api.config.OperatorScheduleConfig;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 
 import lombok.Setter;
@@ -34,36 +36,38 @@ import lombok.Setter;
  *
  */
 @Component
-@ConfigurationProperties(prefix="atom.shedule")
-public class SheduleSuper implements BeanFactoryAware {
+@ConfigurationProperties(prefix="atom.schedule")
+public class ScheduleSuper implements BeanFactoryAware {
 
 	private BeanFactory beanFactory;
 
 	@Setter
-	private OperatorSheduleConfig operatorSheduleConfig;
-	
+	private OperatorScheduleConfig operatorScheduleConfig;
+
 	private AtomScheduleService atomScheduleService;
+
+	@Autowired
+	private ApplicationContext appContext;
 
 	@PostConstruct
 	private void init() throws Exception {
-
 		Properties properties = this.getProperties();
 
 		if (properties.isEmpty()) {
 			// 如果是null，本地文件
 			String config = this.getKubernetesConfigByFile();
-			operatorSheduleConfig.getOperatorKubernetesConfig().setConfigYaml(config);
+			this.operatorScheduleConfig.getOperatorScheduleKubernetesConfig().setConfigYaml(config);
 		} else {
 			// 如果不是null，是nacos
-			JSONObject jsonObject = (JSONObject) JSONObject.toJSON(operatorSheduleConfig.getOperatorShedeleRpcConfig());
+			JSONObject jsonObject = (JSONObject) JSONObject.toJSON(this.operatorScheduleConfig.getOperatorScheduleRpcConfig());
 			Properties nacosConfig = new Properties();
 			nacosConfig.putAll(jsonObject);
 			ConfigService configService = ConfigFactory.createConfigService(properties);
-			String config = configService.getConfig(operatorSheduleConfig.getOperatorKubernetesConfig().getConfigName(),
-					operatorSheduleConfig.getOperatorShedeleRpcConfig().getNamespace(), 3000);
-			operatorSheduleConfig.getOperatorKubernetesConfig().setConfigYaml(config);
+			String config = configService.getConfig(this.operatorScheduleConfig.getOperatorScheduleKubernetesConfig().getConfigName(),
+					this.operatorScheduleConfig.getOperatorScheduleRpcConfig().getNamespace(), 3000);
+			this.operatorScheduleConfig.getOperatorScheduleKubernetesConfig().setConfigYaml(config);
 		}
-		atomScheduleService = new AtomScheduleService(operatorSheduleConfig);
+		atomScheduleService = new AtomScheduleService(this.operatorScheduleConfig);
 	}
 	
 	@Bean
@@ -72,7 +76,7 @@ public class SheduleSuper implements BeanFactoryAware {
 	}
 
 	private String getKubernetesConfigByFile() throws IOException {
-		Resource resource = new ClassPathResource(operatorSheduleConfig.getOperatorKubernetesConfig().getConfigName());
+		Resource resource = new ClassPathResource(operatorScheduleConfig.getOperatorScheduleKubernetesConfig().getConfigName());
 		if (resource.exists()) {
 			return FileUtils.readFileToString(resource.getFile(), CharEncoding.UTF_8);
 		}

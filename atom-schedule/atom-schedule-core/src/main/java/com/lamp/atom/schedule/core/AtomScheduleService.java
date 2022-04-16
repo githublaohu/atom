@@ -13,10 +13,14 @@ package com.lamp.atom.schedule.core;
 
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
-import com.lamp.atom.schedule.api.Shedule;
-import com.lamp.atom.schedule.api.config.OperatorSheduleConfig;
+import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.config.OperatorScheduleConfig;
 import com.lamp.atom.schedule.python.operator.kubernetes.OperatorKubernetesSchedule;
 import com.lamp.atom.schedule.python.operator.rpc.OperatorRpcSchedule;
+import com.lamp.atom.service.domain.OperatorRuntimeType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 上层决定调用那个
@@ -30,45 +34,54 @@ public class AtomScheduleService  implements AtomOperatorShedule, AtomServiceShe
 	
 	private OperatorRpcSchedule rpcSchedule;
 	
-	private OperatorSheduleConfig operatorSheduleConfig;
-	
-	public AtomScheduleService(OperatorSheduleConfig operatorSheduleConfig) throws Exception {
-		this.operatorSheduleConfig = operatorSheduleConfig;
-		if(operatorSheduleConfig.getOperatorKubernetesConfig().isUser()) {
-			kubernetesSchedule = new OperatorKubernetesSchedule(this.operatorSheduleConfig.getOperatorKubernetesConfig());
+	private OperatorScheduleConfig operatorScheduleConfig;
+
+
+	private Map<OperatorRuntimeType,AtomOperatorShedule> atomOperatorScheduleMap = new HashMap<>();
+
+	public AtomScheduleService(OperatorScheduleConfig operatorScheduleConfig) throws Exception {
+		this.operatorScheduleConfig = operatorScheduleConfig;
+		if(operatorScheduleConfig.getOperatorKubernetesConfig().isUser()) {
+			kubernetesSchedule = new OperatorKubernetesSchedule(this.operatorScheduleConfig.getOperatorKubernetesConfig());
 		}
-		rpcSchedule = new OperatorRpcSchedule(this.operatorSheduleConfig.getOperatorShedeleRpcConfig());
+		rpcSchedule = new OperatorRpcSchedule(this.operatorScheduleConfig.getOperatorScheduleRpcConfig());
+
+		atomOperatorScheduleMap.put(OperatorRuntimeType.TRAIN,kubernetesSchedule);
+		atomOperatorScheduleMap.put(OperatorRuntimeType.REASONING,rpcSchedule);
+
 	}
 	
 	
 	@Override
-	public void createService(Shedule shedule) {
-		kubernetesSchedule.createService(shedule);
+	public void createService(Schedule schedule) {
+		kubernetesSchedule.createService(schedule);
 	}
 
 	@Override
-	public void closeService(Shedule shedule) {
-		kubernetesSchedule.closeService(shedule);
+	public void closeService(Schedule schedule) {
+		kubernetesSchedule.closeService(schedule);
 	}
 
 	@Override
-	public void createOperators(Shedule shedule) {
-		rpcSchedule.createOperators(shedule);
+	public void createOperators(Schedule schedule) {
+		OperatorRuntimeType operatorRuntimeType = schedule.getOperatorRuntimeType();
+		// 1、训练 =》 k8s调度；2、推理 =》 RPC调度
+		atomOperatorScheduleMap.get(operatorRuntimeType).createOperators(schedule);
 	}
 
 	@Override
-	public void startOperators(Shedule shedule) {
-		rpcSchedule.startOperators(shedule);
+	public void startOperators(Schedule schedule) {
+		rpcSchedule.startOperators(schedule);
 	}
 
 	@Override
-	public void suspendOperators(Shedule shedule) {
-		rpcSchedule.suspendOperators(shedule);
+	public void suspendOperators(Schedule schedule) {
+		rpcSchedule.suspendOperators(schedule);
 	}
 
 	@Override
-	public void uninstallPperators(Shedule shedule) {
-		rpcSchedule.uninstallPperators(shedule);
+	public void uninstallOperators(Schedule schedule) {
+		rpcSchedule.uninstallOperators(schedule);
 	}
 
 }

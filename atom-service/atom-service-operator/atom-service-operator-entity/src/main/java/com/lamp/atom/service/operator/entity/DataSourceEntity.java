@@ -11,7 +11,7 @@
  */
 package com.lamp.atom.service.operator.entity;
 
-import com.lamp.atom.service.domain.DataSourceType;
+import com.lamp.atom.service.domain.SourceType;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -25,9 +25,9 @@ public class DataSourceEntity extends BaseEntity {
     private static final long serialVersionUID = -9016196677726614802L;
 
     /**
-     * 算子id
+     * 空间ID
      */
-    private Long operatorId;
+    private Long spaceId;
 
     /**
      * 连接id
@@ -35,9 +35,19 @@ public class DataSourceEntity extends BaseEntity {
     private Long connectionId;
 
     /**
+     * 连接名
+     */
+    private String connectionName;
+
+    /**
+     * 数据源名
+     */
+    private String sourceName;
+
+    /**
      * 数据源类型
      */
-    private DataSourceType dataSourceType;
+    private SourceType sourceType;
 
     /**
      * 源登录空间：关系型数据库的数据库，oss的bucket,redis的index,es的index

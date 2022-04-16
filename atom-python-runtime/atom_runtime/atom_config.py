@@ -22,6 +22,8 @@ class AtomConfig():
     docker_model:bool = False
     runtime_model:str = "standalone"
     node_ip:str = "127.0.0.1"
+
+    # nacos配置
     nacos_address:str
     nacos_namespace:str
     # 
@@ -35,7 +37,7 @@ class AtomConfig():
     # 模型下载地址
     model_directory:str  =None
     # 日志名
-    logging_file_directory_and_name:str = "./atrom-python-runtime.log"
+    logging_file_directory_and_name:str = "./atom-python-runtime.log"
 
     def is_local(self):
         return  self.runtime_model == "local"
@@ -96,11 +98,11 @@ class  AtomConfigServier():
         else:
             self.__atrom_catalogue = "~/atom"
             logging.info("读取默认目录下配置文件成功")
-        atrom_config_json = yaml.load(open(atrom_config_file, "r"), Loader=yaml.SafeLoader)
-        logging.info("配置内容%s", atrom_config_json)
-        self.atom_config.nacos_address = atrom_config_json["nacos_address"]
-        self.atom_config.nacos_namespace = atrom_config_json["nacos_namespace"]
-        self.atom_config.rpc_controller_port = atrom_config_json["rpc_controller_port"]
+        atom_config_json = yaml.load(open(atrom_config_file, "r"), Loader=yaml.SafeLoader)
+        logging.info("配置内容%s", atom_config_json)
+        self.atom_config.nacos_address = atom_config_json["nacos_address"]
+        self.atom_config.nacos_namespace = atom_config_json["nacos_namespace"]
+        self.atom_config.rpc_controller_port = atom_config_json["rpc_controller_port"]
         
     
     def __check_(self):

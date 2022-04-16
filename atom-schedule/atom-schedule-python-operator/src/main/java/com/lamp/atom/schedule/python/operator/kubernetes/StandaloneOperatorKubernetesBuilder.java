@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import com.lamp.atom.schedule.api.Shedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.EnvVarSource;
@@ -40,10 +40,10 @@ import lombok.Setter;
 public class StandaloneOperatorKubernetesBuilder {
 
 	@Setter
-	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
+	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 	
 	@Setter
-	private Shedule shedule;
+	private Schedule schedule;
 
 	private DeploymentBuilder job = new DeploymentBuilder();
 
@@ -63,10 +63,10 @@ public class StandaloneOperatorKubernetesBuilder {
 			    // 空间名
 				// 场景名
 				// TODO 真麻烦，好难。
-				.withName("atom-runtime-standalone" + this.shedule.getNoteName())
+				.withName("atom-runtime-standalone" + this.schedule.getNodeName())
 				// 标签，需要几个
 				//
-				.withLabels(this.shedule.getLabels());
+				.withLabels(this.schedule.getLabels());
 		metadata.endMetadata();
 	}
 
@@ -74,17 +74,17 @@ public class StandaloneOperatorKubernetesBuilder {
 		ResourceRequirements resourceRequirements = new ResourceRequirements();
 		Map<String, Quantity> requests = new HashMap<>();
 		resourceRequirements.setRequests(requests);
-		for (Entry<String, String> e : shedule.getHardwareConfig().entrySet()) {
+		for (Entry<String, String> e : schedule.getHardwareConfig().entrySet()) {
 			requests.put(e.getKey(), new Quantity(e.getKey()));
 		}
 
 		Map<String, Quantity> limits = new HashMap<>();
 		resourceRequirements.setLimits(limits);
-		for (Entry<String, String> e : shedule.getLimits().entrySet()) {
+		for (Entry<String, String> e : schedule.getLimits().entrySet()) {
 			limits.put(e.getKey(), new Quantity(e.getValue()));
 		}
 		List<EnvVar> envList = new ArrayList<EnvVar>();
-		for(Entry<String, String> e : shedule.getEnvs().entrySet()) {
+		for(Entry<String, String> e : schedule.getEnvs().entrySet()) {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
 		envList.add(new EnvVar("docker", "true", null));
@@ -95,14 +95,14 @@ public class StandaloneOperatorKubernetesBuilder {
 		nodeIp.setFieldRef(podId);
 		envList.add(new EnvVar("node_ip", null, nodeIp));
 		
-		String value = shedule.getHardwareConfig().get("nvidia.com/gpu");
+		String value = schedule.getHardwareConfig().get("nvidia.com/gpu");
 		SpecNested<DeploymentBuilder> spec = job.withNewSpec();
-		spec.withReplicas(this.shedule.getDeploy().getCount());
+		spec.withReplicas(this.schedule.getDeploy().getCount());
 		spec.withNewTemplate()
 				.withNewSpec()
 				.withRestartPolicy("OnFailure")
 				.withHostNetwork(true)
-				.addNewContainer().withName(this.shedule.getNoteName())
+				.addNewContainer().withName(this.schedule.getNodeName())
 				.withImage(Objects.isNull(value)
 						? this.operatorKubernetesConfig.getCpuContainerName()
 						: this.operatorKubernetesConfig.getGpcContainerName())

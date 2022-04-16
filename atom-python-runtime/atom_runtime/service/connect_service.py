@@ -13,7 +13,7 @@
 from atom_runtime.connect.cloud.aliyun_oss_contect import AliyunOSSConnect
 from atom_runtime.connect.connnect import Connect
 from atom_runtime.connect.file_connect import FileConnect
-from atom_runtime.connect.mysql_contect import MySQLConnect
+from atom_runtime.connect.mysql_connect import MySQLConnect
 from atom_runtime.connect.s3_contect import S3MQConnect
 from atom_runtime.transfer_object.operator.connect_to import ConnectTo
 
@@ -25,17 +25,18 @@ class ConnectService():
     connect_type_to_connect:map ={}
 
     def __init__(self) :
-        self.connect_type_to_connect["file"] = FileConnect
-        self.connect_type_to_connect["MySQL"] = MySQLConnect
+        self.connect_type_to_connect["FILE"] = FileConnect
+        self.connect_type_to_connect["MYSQL"] = MySQLConnect
         self.connect_type_to_connect["S3"] = S3MQConnect
-        self.connect_type_to_connect["aliyunOSS"] = AliyunOSSConnect
+        self.connect_type_to_connect["ALIYUNOSS"] = AliyunOSSConnect
         pass
     
     def get_connect(self , connect_to:ConnectTo) :
         connect = self.connect_id_to_connect.get(connect_to.connect_id)
         if connect == None:
-            connect_type = self.connect_type_to_connect[connect_to.connect_type]
-            connect:Connect = connect_type()
+            connect_type = self.connect_type_to_connect.get(connect_to.connect_type)
+            connect:Connect = connect_type({})
             connect.connect_to = connect_to
+            connect.initialization()
             self.connect_id_to_connect[connect_to.connect_id] = connect
         return connect

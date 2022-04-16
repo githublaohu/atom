@@ -18,18 +18,18 @@ import java.util.List;
 public interface ResourceRelationService {
 
     /**
-     * 创建资源关系
-     *
-     * @param resourceRelationEntity
-     */
-    Integer createResourceRelationEntity(ResourceRelationEntity resourceRelationEntity);
-
-    /**
      * 添加资源关系
      *
      * @param resourceRelationEntity
      */
     Integer insertResourceRelationEntity(ResourceRelationEntity resourceRelationEntity);
+
+    /**
+     * 批量添加资源关系
+     *
+     * @param resourceRelationEntityList
+     */
+    Integer batchInsertResourceRelationEntity(List<ResourceRelationEntity> resourceRelationEntityList);
 
     /**
      * 模糊查询多个资源关系
@@ -50,9 +50,10 @@ public interface ResourceRelationService {
     /**
      * 查询多个资源关系
      *
+     * @param resourceRelationEntity
      * @return
      */
-    List<ResourceRelationEntity> queryResourceRelationEntitys();
+    List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity);
 
     /**
      * 查询单个资源关系
