@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.lamp.atom.schedule.api.Shedule;
 import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.deploy.Deploy;
 
 public class TestOperatorKubernetesSchedule {
 
@@ -45,7 +46,9 @@ public class TestOperatorKubernetesSchedule {
 	@Test
 	public void testCreateService() throws Exception {
 		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorShedeleKubernetesConfig);
-
+		Deploy deploy = new Deploy();
+		deploy.setCount(4);
+		shedule.setDeploy(deploy);
 		kubernetesSchedule.createService(shedule);
 	}
 	

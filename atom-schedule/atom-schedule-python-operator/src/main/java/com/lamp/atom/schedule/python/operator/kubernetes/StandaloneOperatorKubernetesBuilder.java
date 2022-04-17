@@ -75,7 +75,7 @@ public class StandaloneOperatorKubernetesBuilder {
 		Map<String, Quantity> requests = new HashMap<>();
 		resourceRequirements.setRequests(requests);
 		for (Entry<String, String> e : shedule.getHardwareConfig().entrySet()) {
-			requests.put(e.getKey(), new Quantity(e.getKey()));
+			requests.put(e.getKey(), new Quantity(e.getValue()));
 		}
 
 		Map<String, Quantity> limits = new HashMap<>();
@@ -100,7 +100,7 @@ public class StandaloneOperatorKubernetesBuilder {
 		spec.withReplicas(this.shedule.getDeploy().getCount());
 		spec.withNewTemplate()
 				.withNewSpec()
-				.withRestartPolicy("OnFailure")
+				.withRestartPolicy("Always")
 				.withHostNetwork(true)
 				.addNewContainer().withName(this.shedule.getNoteName())
 				.withImage(Objects.isNull(value)

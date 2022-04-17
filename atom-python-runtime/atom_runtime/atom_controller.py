@@ -119,7 +119,8 @@ class AtomController():
         else:
             operator_create_string = get_env("operator-data")
             if operator_create_string != None:
-                operator_create_to = OperatorCreateTo(json.loads(operator_create_string))
+               
+                operator_create_to = OperatorCreateTo( json.loads(operator_create_string.replace("'","\"")))
                 self.operator_service.create_operators(operator_create_to)
 
     def local_load_remote_operator(self , operator_id):

@@ -64,9 +64,14 @@ class  AtomConfigServier():
             nacos_config = get_env("nacos_config")
             if nacos_config == None:
                 return
-            nacos_config = json.decoder(nacos_config)
+            nacos_config = json.loads(nacos_config.replace("'","\""))
             self.nacso_client = nacos.NacosClient(nacos_config.get("nacos_address"), namespace=nacos_config.get("nacos_namespace"))
-            self.nacso_client.get_config(nacos_config.get("config_name"),None)
+            atom_config = self.nacso_client.get_config(nacos_config.get("config_name"),None)
+            logging.info("配置内容%s", atom_config)
+            atrom_config_json = yaml.load(atom_config, Loader=yaml.SafeLoader)
+            self.atom_config.nacos_address = atrom_config_json["nacos_address"]
+            self.atom_config.nacos_namespace = atrom_config_json["nacos_namespace"]
+            self.atom_config.rpc_controller_port = atrom_config_json["rpc_controller_port"]
 
 
     def __load_atom_config__(self):

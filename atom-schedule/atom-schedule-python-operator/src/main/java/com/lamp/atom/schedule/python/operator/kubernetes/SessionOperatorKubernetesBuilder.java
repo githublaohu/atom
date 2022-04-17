@@ -118,7 +118,6 @@ public class SessionOperatorKubernetesBuilder {
 		this.job();
 		this.metadata();
 		this.spec();
-		System.out.println(this.job.build().toString());
 		return this.job.build();
 	}
 }
