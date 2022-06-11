@@ -75,7 +75,7 @@ public class StandaloneOperatorKubernetesBuilder {
 		Map<String, Quantity> requests = new HashMap<>();
 		resourceRequirements.setRequests(requests);
 		for (Entry<String, String> e : schedule.getHardwareConfig().entrySet()) {
-			requests.put(e.getKey(), new Quantity(e.getKey()));
+			requests.put(e.getKey(), new Quantity(e.getValue()));
 		}
 
 		Map<String, Quantity> limits = new HashMap<>();
