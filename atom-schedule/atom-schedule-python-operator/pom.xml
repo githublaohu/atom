@@ -45,7 +45,11 @@
 			<artifactId>light-core</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>5.1.9.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>cn.lampup</groupId>
 			<artifactId>atom-service-operator-entity</artifactId>

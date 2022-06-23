@@ -17,6 +17,7 @@ import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.ScheduleCallback;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.ScheduleStrategyType;
@@ -152,7 +153,7 @@ public class TaskEventController {
             runtime.setSpaceId(node.getSpaceId());
             runtime.setCaseSourceType(CaseSourceType.NODE);
             runtime.setNodeId(node.getId());
-            runtime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+            runtime.setRuntimeStatus(OperatorRuntimeStatus.EDITING);
             runtime.setStartTime(new Date());
             runtime.setEstimateStartTime(new Date());
             //todo runtime的启动/关闭人需要用户管理模块的字段
@@ -271,12 +272,26 @@ public class TaskEventController {
         }
 
         // 3、获取调度信息和Runtime信息
+        // 包括节点Runtime、算子Runtime、调度Runtime
         List<RuntimeEntity> runtimeEntityList = new ArrayList<>();
         Schedule schedule = getSchedule(taskParam, node, runtimeEntityList);
 
-        // 4、保存Runtime信息，开启调度
-        atomScheduleService.createOperators(schedule);
+        // 4、保存Runtime信息
         runtimeService.batchInsertRuntimeEntity(runtimeEntityList);
+
+        // 5、开启调度
+        try {
+            ScheduleCallback callback = atomScheduleService.createOperators(schedule);
+            if (Objects.equals(ScheduleCallback.OK, callback)) {
+                updateRuntimeStatus(runtimeEntityList, ScheduleCallback.OK);
+            }
+            else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            updateRuntimeStatus(runtimeEntityList, ScheduleCallback.FAIL);
+        }
+        runtimeService.batchUpdateRuntimeEntity(runtimeEntityList);
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
@@ -290,7 +305,7 @@ public class TaskEventController {
     @PostMapping("/editing")
     public Integer editStart(@RequestBody RuntimeEntity runtimeEntity) {
         //1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.EDITING);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -303,7 +318,7 @@ public class TaskEventController {
     @PostMapping("/editCancel")
     public Integer editCancel(@RequestBody RuntimeEntity runtimeEntity) {
         //1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDIT_CANCEL);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.EDIT_CANCEL);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -317,7 +332,7 @@ public class TaskEventController {
         // 2、修改状态
         //runtimeEntity.setOperatorStatus(RuntimeStatus.QUEUING);
         this.atomScheduleService.createOperators(null);
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUING);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -332,7 +347,7 @@ public class TaskEventController {
         // 1、调度schedule
 
         // 2、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUE_CANCELING);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUE_CANCELING);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -345,7 +360,7 @@ public class TaskEventController {
     @PostMapping("/queueCancelFinish")
     public Integer queueCancelFinish(@RequestBody RuntimeEntity runtimeEntity) {
         // 1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUE_CANCEL);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUE_CANCEL);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -360,7 +375,7 @@ public class TaskEventController {
         // 1、调度schedule
 
         // 2、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.QUEUING);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -372,7 +387,7 @@ public class TaskEventController {
 //    @PostMapping("/caseCreating")
 //    public Integer caseCreating(@RequestBody OperatorEntity operatorEntity) {
 //        //1、修改状态
-//        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.CASE_CREATING);
+//        operatorEntity.setRuntimeStatus(OperatorRuntimeStatus.CASE_CREATING);
 //        return operatorService.updateOperatorEntity(operatorEntity);
 //    }
 //
@@ -384,7 +399,7 @@ public class TaskEventController {
 //    @PostMapping("/caseCreateFinish")
 //    public Integer caseCreateFinish(@RequestBody OperatorEntity operatorEntity) {
 //        //1、修改状态
-//        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.CASE_CREATE_FINISH);
+//        operatorEntity.setRuntimeStatus(OperatorRuntimeStatus.CASE_CREATE_FINISH);
 //        return operatorService.updateOperatorEntity(operatorEntity);
 //    }
 //
@@ -396,7 +411,7 @@ public class TaskEventController {
 //    @PostMapping("/dataUploading")
 //    public Integer dataUploading(@RequestBody OperatorEntity operatorEntity) {
 //        //1、修改状态
-//        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.DATA_UPLOADING);
+//        operatorEntity.setRuntimeStatus(OperatorRuntimeStatus.DATA_UPLOADING);
 //        return operatorService.updateOperatorEntity(operatorEntity);
 //    }
 //
@@ -408,7 +423,7 @@ public class TaskEventController {
 //    @PostMapping("/dataUploadFinish")
 //    public Integer dataUploadFinish(@RequestBody OperatorEntity operatorEntity) {
 //        //1、修改状态
-//        operatorEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.DATA_UPLOAD_FINISH);
+//        operatorEntity.setRuntimeStatus(OperatorRuntimeStatus.DATA_UPLOAD_FINISH);
 //        return operatorService.updateOperatorEntity(operatorEntity);
 //    }
 
@@ -421,7 +436,7 @@ public class TaskEventController {
     @PostMapping("/running")
     public Integer running(@RequestBody RuntimeEntity runtimeEntity) {
         //1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAINING);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TRAINING);
         Integer status = runtimeService.updateRuntimeEntity(runtimeEntity);
         if (status != 1) {
             return status;
@@ -440,7 +455,7 @@ public class TaskEventController {
     @PostMapping("/testing")
     public Integer testing(@RequestBody RuntimeEntity runtimeEntity) {
         //1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TESTING);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TESTING);
         return runtimeService.updateRuntimeEntity(runtimeEntity);
     }
 
@@ -464,7 +479,7 @@ public class TaskEventController {
         // 1、修改实例状态（根据节点ID和模型创建类型查出所有runtime)
         RuntimeEntity runtimeEntity = new RuntimeEntity();
         runtimeEntity.setNodeId(taskParam.getTaskId());
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
         Integer status = runtimeService.updateRuntimeStatus(runtimeEntity);
         if (status < 1) {
             return ResultObjectEnums.FAIL.getResultObject();
@@ -544,7 +559,7 @@ public class TaskEventController {
         // 1、对所有实例修改状态（根据节点ID和模型创建类型查出所有runtime)
         RuntimeEntity runtimeEntity = new RuntimeEntity();
         runtimeEntity.setNodeId(taskParam.getTaskId());
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.AUTO_FINISH);
         Integer status = runtimeService.updateRuntimeStatus(runtimeEntity);
         if (status < 1) {
             return ResultObjectEnums.FAIL.getResultObject();
@@ -570,7 +585,7 @@ public class TaskEventController {
     @PostMapping("/runningException")
     public Integer runningException(@RequestBody RuntimeEntity runtimeEntity) {
         // 1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.TRAIN_EXCEPTION);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TRAIN_EXCEPTION);
         Integer status = runtimeService.updateRuntimeEntity(runtimeEntity);
         if (status != 1) {
             return status;
@@ -590,7 +605,7 @@ public class TaskEventController {
     @PostMapping("/serviceException")
     public Integer serviceException(@RequestBody RuntimeEntity runtimeEntity) {
         // 1、修改状态
-        runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.SERVICE_EXCEPTION);
+        runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.SERVICE_EXCEPTION);
         Integer status = runtimeService.updateRuntimeEntity(runtimeEntity);
         if (status != 1) {
             return status;
@@ -601,6 +616,14 @@ public class TaskEventController {
         return 1;
     }
 
+    /**
+     * 获取Schedule和Runtime数据
+     * @param taskParam
+     * @param node
+     * @param runtimeEntityList
+     * @return
+     * @throws NacosException
+     */
     public Schedule getSchedule(TaskParam taskParam, NodeEntity node, List<RuntimeEntity> runtimeEntityList) throws NacosException {
         // 2、根据资源关系查出依赖表
         ResourceRelationEntity resourceRelationEntity = new ResourceRelationEntity();
@@ -616,6 +639,7 @@ public class TaskEventController {
         Deploy deploy = new Deploy();
         schedule.setDeploy(deploy);
         List<AtomInstances> instancesList = new ArrayList<>();
+        //todo 部署实例获取
         deploy.setInstancesList(instancesList);
 
         // 获取runtime部署实例
@@ -659,7 +683,7 @@ public class TaskEventController {
             nodeRuntime.setSpaceId(node.getSpaceId());
             nodeRuntime.setCaseSourceType(CaseSourceType.NODE);
             nodeRuntime.setNodeId(node.getId());
-            nodeRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+            nodeRuntime.setRuntimeStatus(OperatorRuntimeStatus.EDITING);
             nodeRuntime.setStartTime(new Date());
             nodeRuntime.setEstimateStartTime(new Date());
             //todo runtime的启动/关闭人需要用户管理模块的字段
@@ -671,7 +695,7 @@ public class TaskEventController {
             operatorRuntime.setSpaceId(node.getSpaceId());
             operatorRuntime.setCaseSourceType(CaseSourceType.OPERATOR);
             operatorRuntime.setNodeId(node.getId());
-            operatorRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+            operatorRuntime.setRuntimeStatus(OperatorRuntimeStatus.EDITING);
             operatorRuntime.setStartTime(new Date());
             operatorRuntime.setEstimateStartTime(new Date());
             //todo runtime的启动/关闭人需要用户管理模块的字段
@@ -699,12 +723,12 @@ public class TaskEventController {
                 schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
 
                 // 推理算子则需要创建k8s的runtime
-                if (!Objects.equals(operator.getOperatorRuntimeType(), ModelCreateType.REASON)) {
+                if (Objects.equals(operator.getOperatorRuntimeType(), ModelCreateType.REASON)) {
                     kubernetesRuntime = new RuntimeEntity();
                     kubernetesRuntime.setSpaceId(node.getSpaceId());
                     kubernetesRuntime.setCaseSourceType(CaseSourceType.JOB);
                     kubernetesRuntime.setNodeId(node.getId());
-                    kubernetesRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+                    kubernetesRuntime.setRuntimeStatus(OperatorRuntimeStatus.EDITING);
                     kubernetesRuntime.setStartTime(new Date());
                     kubernetesRuntime.setEstimateStartTime(new Date());
                     //todo runtime的启动/关闭人需要用户管理模块的字段
@@ -771,6 +795,42 @@ public class TaskEventController {
         }
 
         return schedule;
+    }
+
+    /**
+     * 修改Runtime信息
+     * @param runtimeEntityList
+     */
+    public void updateRuntimeStatus(List<RuntimeEntity> runtimeEntityList, ScheduleCallback scheduleCallback) {
+        // 调度成功
+        if (Objects.equals(ScheduleCallback.OK, scheduleCallback)) {
+            for (RuntimeEntity runtimeEntity : runtimeEntityList) {
+                if (Objects.equals(CaseSourceType.NODE, runtimeEntity.getCaseSourceType())) {
+                    runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
+                }
+                if (Objects.equals(CaseSourceType.OPERATOR, runtimeEntity.getCaseSourceType())) {
+                    runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
+                }
+                if (Objects.equals(CaseSourceType.JOB, runtimeEntity.getCaseSourceType())) {
+                    runtimeEntity.setRuntimeStatus(ScheduleRuntimeStatus.RUNNING);
+                }
+            }
+        }
+
+        // 调度失败
+        if (Objects.equals(ScheduleCallback.FAIL, scheduleCallback)) {
+            for (RuntimeEntity runtimeEntity : runtimeEntityList) {
+                if (Objects.equals(CaseSourceType.NODE, runtimeEntity.getCaseSourceType())) {
+                    runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TRAIN_EXCEPTION);
+                }
+                if (Objects.equals(CaseSourceType.OPERATOR, runtimeEntity.getCaseSourceType())) {
+                    runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TRAIN_EXCEPTION);
+                }
+                if (Objects.equals(CaseSourceType.JOB, runtimeEntity.getCaseSourceType())) {
+                    runtimeEntity.setRuntimeStatus(ScheduleRuntimeStatus.SCHEDULE_FAIL);
+                }
+            }
+        }
     }
 
 }

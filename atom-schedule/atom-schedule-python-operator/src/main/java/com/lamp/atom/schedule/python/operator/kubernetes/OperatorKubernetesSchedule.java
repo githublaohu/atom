@@ -11,16 +11,23 @@
  */
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
+import java.util.List;
 import java.util.Objects;
 
+import com.alibaba.nacos.api.naming.NamingService;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.ScheduleCallback;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
+import com.lamp.atom.schedule.api.deploy.AtomInstances;
+import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -30,7 +37,15 @@ import io.fabric8.kubernetes.client.KubernetesClient;
  * @author laohu
  *
  */
+@Slf4j
 public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServiceShedule {
+
+	@Value("${nacos.config.server-addr}")
+	private String nacosAddr;
+	@Value("${nacos.config.namespace}")
+	private String namespace;
+
+	NamingService namingService = null;
 
 	private KubernetesClient client;
 
@@ -61,13 +76,26 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 	}
 
 	@Override
-	public void createOperators(Schedule schedule) {
+	public ScheduleCallback createOperators(Schedule schedule) {
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
-				.createOrReplace(operatorKubernetesBuilder.getJob());
 
+		try {
+			client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+					.createOrReplace(operatorKubernetesBuilder.getJob());
+
+			// 注册服务
+			List<AtomInstances> instancesList = schedule.getDeploy().getInstancesList();
+			for (AtomInstances atomInstance: instancesList) {
+				namingService.registerInstance("atom-runtime-kubernetes-service", atomInstance.getIp(), atomInstance.getPort());
+			}
+
+			return ScheduleCallback.OK;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return ScheduleCallback.FAIL;
+		}
 	}
 
 	@Override

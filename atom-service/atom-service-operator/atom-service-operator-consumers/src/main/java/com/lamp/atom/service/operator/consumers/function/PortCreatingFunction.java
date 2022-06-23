@@ -49,21 +49,30 @@ public class PortCreatingFunction {
         }
     }
 
-    volatile Map<String, ServiceAndPort> serviceAndPortMap = new HashMap<>();
+    volatile Map<String, ServiceAndPort> trainServiceAndPortMap = new HashMap<>();
+    volatile Map<String, ServiceAndPort> kubernetesServiceAndPortMap = new HashMap<>();
+
     NamingService namingService = null;
 
-    //获取nacos实例
+    /**
+     * 获取nacos实例
+     * @throws NacosException
+     */
     @PostConstruct
     public void init() throws NacosException {
         Properties properties = new Properties();
         properties.put("serverAddr", this.nacosAddr);
         properties.put("namespace", this.namespace);
         namingService = NamingFactory.createNamingService(properties);
-        this.listen();
+        this.listenTrainStatus();
+        this.listenReasonStatus();
     }
 
-    //监听session服务和standalone服务
-    public void listen() throws NacosException {
+    /**
+     * 监听session服务和standalone服务
+     * @throws NacosException
+     */
+    public void listenTrainStatus() throws NacosException {
         Timer timer = new Timer("serviceListener", true);
         timer.schedule(new TimerTask() {
             @SneakyThrows
@@ -73,7 +82,7 @@ public class PortCreatingFunction {
                 List<String> serviceNames = new ArrayList<>();
                 serviceNames.add("atom-runtime-python-service-session");
                 serviceNames.add("atom-runtime-python-service-standalone");
-                Map<String, ServiceAndPort> newServiceAndPortMap = new HashMap<>();
+                Map<String, ServiceAndPort> refreshTrainServiceAndPortMap = new HashMap<>();
 
                 for (String serviceName : serviceNames) {
                     List<Instance> allInstances = namingService.getAllInstances(serviceName);
@@ -84,21 +93,61 @@ public class PortCreatingFunction {
                         ConcurrentHashMap<Integer, Integer> concurrentHashMap = new ConcurrentHashMap<>();
                         concurrentHashMap.put(instance.getPort(), instance.getPort());
                         serviceAndPort.portMap = concurrentHashMap;
-                        newServiceAndPortMap.put(instance.getIp(), serviceAndPort);
+                        refreshTrainServiceAndPortMap.put(instance.getIp(), serviceAndPort);
                     }
                 }
 
-                serviceAndPortMap = newServiceAndPortMap;
+                trainServiceAndPortMap = refreshTrainServiceAndPortMap;
             }
         }, 100, 5000);
     }
 
-    //获取可用端口
+    /**
+     * 监听k8s的推理服务
+     * @throws NacosException
+     */
+    public void listenReasonStatus() throws NacosException {
+        Timer timer = new Timer("serviceListener", true);
+        timer.schedule(new TimerTask() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                PortCreatingFunction.this.registerService();
+                List<String> serviceNames = new ArrayList<>();
+                serviceNames.add("atom-runtime-kubernetes-service");
+                Map<String, ServiceAndPort> refreshKubernetesServiceAndPortMap = new HashMap<>();
+
+                for (String serviceName : serviceNames) {
+                    List<Instance> allInstances = namingService.getAllInstances(serviceName);
+                    for (Instance instance : allInstances) {
+                        ServiceAndPort serviceAndPort = new ServiceAndPort();
+                        serviceAndPort.ip = instance.getIp();
+                        serviceAndPort.port = new AtomicInteger(instance.getPort());
+                        ConcurrentHashMap<Integer, Integer> concurrentHashMap = new ConcurrentHashMap<>();
+                        concurrentHashMap.put(instance.getPort(), instance.getPort());
+                        serviceAndPort.portMap = concurrentHashMap;
+                        refreshKubernetesServiceAndPortMap.put(instance.getIp(), serviceAndPort);
+                    }
+                }
+
+                kubernetesServiceAndPortMap = refreshKubernetesServiceAndPortMap;
+
+                //todo 监听到有服务异常时，作出响应
+            }
+        }, 100, 5000);
+    }
+
+    /**
+     * 获取可用端口
+     * 每次调用后自增一
+     * @param ip
+     * @return
+     */
     public Integer getPort(String ip) {
-        ServiceAndPort serviceAndPort = this.serviceAndPortMap.get(ip);
+        PortCreatingFunction.ServiceAndPort serviceAndPort = this.trainServiceAndPortMap.get(ip);
         for (; ; ) {
             if (Objects.isNull(serviceAndPort)) {
-                serviceAndPort = new ServiceAndPort();
+                serviceAndPort = new PortCreatingFunction.ServiceAndPort();
                 serviceAndPort.ip = ip;
                 serviceAndPort.port = new AtomicInteger(20000);
                 serviceAndPort.portMap = new ConcurrentHashMap<>();
@@ -111,7 +160,10 @@ public class PortCreatingFunction {
         }
     }
 
-    //注册实例到服务中
+    /**
+     * 注册实例到服务中
+     * @throws NacosException
+     */
     public void registerService() throws NacosException {
         namingService.registerInstance("atom-service-operator", ip, Integer.parseInt(port));
     }

@@ -14,7 +14,6 @@ package com.lamp.atom.service.operator.entity;
 import java.util.Date;
 
 import com.lamp.atom.service.domain.CaseSourceType;
-import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value="RuntimeEntity",description="运行实例类")
-public class RuntimeEntity extends BaseEntity {
+public class RuntimeEntity<T> extends BaseEntity {
 
     private static final long serialVersionUID = -2237946472510786359L;
 
@@ -82,9 +81,11 @@ public class RuntimeEntity extends BaseEntity {
     private Date estimateEndTime;
 
     /**
-     * 状态
+     * 运行状态
+     * 1、算子运行状态 OperatorRuntimeStatus
+     * 2、调度状态 ScheduleRuntimeStatus
      */
-    private OperatorRuntimeStatus operatorRuntimeStatus;
+    private T runtimeStatus;
 
     /**
      * 服务标签
