@@ -11,6 +11,24 @@
  */
 package com.lamp.atom.service.operator.consumers.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
@@ -22,28 +40,42 @@ import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.ScheduleStrategyType;
 import com.lamp.atom.schedule.api.strategy.Strategy;
+import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.schedule.python.operator.CreateOperator;
-import com.lamp.atom.service.domain.*;
-import com.lamp.atom.service.operator.consumers.function.PortCreatingFunction;
+import com.lamp.atom.service.domain.CaseSourceType;
+import com.lamp.atom.service.domain.DeployType;
+import com.lamp.atom.service.domain.ModelCreateType;
+import com.lamp.atom.service.domain.NodeStatus;
+import com.lamp.atom.service.domain.OperatorRuntimeStatus;
+import com.lamp.atom.service.domain.OperatorRuntimeType;
+import com.lamp.atom.service.domain.RelationType;
+import com.lamp.atom.service.domain.ResourceType;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.atom.service.operator.domain.SourceAndConnect;
 import com.lamp.atom.service.operator.domain.TaskParam;
-import com.lamp.atom.service.operator.entity.*;
-import com.lamp.atom.service.operator.service.*;
+import com.lamp.atom.service.operator.entity.ConnectionEntity;
+import com.lamp.atom.service.operator.entity.DataSourceEntity;
+import com.lamp.atom.service.operator.entity.ModelEntity;
+import com.lamp.atom.service.operator.entity.NodeEntity;
+import com.lamp.atom.service.operator.entity.OperatorEntity;
+import com.lamp.atom.service.operator.entity.OrganizationEntity;
+import com.lamp.atom.service.operator.entity.ResourceRelationEntity;
+import com.lamp.atom.service.operator.entity.RuntimeEntity;
+import com.lamp.atom.service.operator.entity.ServiceInfoEntity;
+import com.lamp.atom.service.operator.service.ConnectionService;
+import com.lamp.atom.service.operator.service.DataSourceService;
+import com.lamp.atom.service.operator.service.ModelService;
+import com.lamp.atom.service.operator.service.NodeService;
+import com.lamp.atom.service.operator.service.OperatorService;
+import com.lamp.atom.service.operator.service.OrganizationService;
+import com.lamp.atom.service.operator.service.ResourceRelationService;
+import com.lamp.atom.service.operator.service.RuntimeService;
+import com.lamp.atom.service.operator.service.ServiceInfoService;
 import com.lamp.decoration.core.result.ResultObject;
-import io.swagger.annotations.ApiOperation;
-import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
-
-import com.lamp.atom.schedule.core.AtomScheduleService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.PostConstruct;
-import java.util.*;
 
 @Slf4j
 @RequestMapping("/taskEvent")
@@ -69,8 +101,7 @@ public class TaskEventController {
     private RuntimeService runtimeService;
     @Reference
     private ResourceRelationService resourceRelationService;
-    @Autowired
-    private PortCreatingFunction portCreatingFunction;
+
     @Autowired
     private AtomScheduleService atomScheduleService;
 
@@ -258,7 +289,7 @@ public class TaskEventController {
         // 0、字段判空
         if (Objects.isNull(taskParam.getTaskId()) ||
                 Objects.isNull(taskParam.getOperatorRuntimeType())) {
-            return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
+            return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
 
         // 1、查出节点信息，判断节点状态是否为“编辑完成”
@@ -441,8 +472,6 @@ public class TaskEventController {
         if (status != 1) {
             return status;
         }
-
-
         return 1;
     }
 
@@ -473,7 +502,7 @@ public class TaskEventController {
         // 0、字段判空
         if (Objects.isNull(taskParam.getTaskId()) ||
                 Objects.isNull(taskParam.getOperatorRuntimeType())) {
-            return ResultObjectEnums.FAIL.CHECK_PARAMETERS_FAIL.getResultObject();
+            return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
 
         // 1、修改实例状态（根据节点ID和模型创建类型查出所有runtime)
@@ -494,7 +523,7 @@ public class TaskEventController {
         atomScheduleService.uninstallOperators(schedule);
 
         // 3、获取下一节点，训练算子完成后启动推理算子
-        if (Objects.equals(taskParam.getOperatorRuntimeType() , ModelCreateType.TRAIN)) {
+        if (OperatorRuntimeType.TRAIN == taskParam.getOperatorRuntimeType()) {
             // 根据节点查询下一节点的算子
             ResourceRelationEntity nodeRelation = new ResourceRelationEntity();
             nodeRelation.setRelationType(RelationType.RESOURCE_RELATION);

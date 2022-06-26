@@ -15,7 +15,6 @@ import subprocess
 import platform
 from pathlib import Path
 from git import Repo
-import logging
 from atom_runtime.implement_code.code_load import CodeLoad
 
 def __init__git__():

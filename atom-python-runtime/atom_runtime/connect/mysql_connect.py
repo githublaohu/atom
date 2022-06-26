@@ -45,6 +45,11 @@ class MySQLConnect(Connect):
     def write(self , conntent:str , data):
         cursor = self.connection.cursor()
         try:
+            path = 'insert into ' + 'train_result(space,scene,experiment,data) ' \
+                + 'values(\''+ \
+                self.source_to.space_name + '\',\'' + \
+                self.source_to.scene_name + '\',\'' + \
+                self.source_to.operate_execute + '\',%s)'
             cursor.execute(conntent,data)
             self.connection.commit()
         except BaseException as err:

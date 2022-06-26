@@ -1,5 +1,3 @@
-#############################################################################
-#Copyright (c) [Year] [name of copyright holder]
 #[Software Name] is licensed under Mulan PubL v2.
 #You can use this software according to the terms and conditions of the Mulan PubL v2.
 #You may obtain a copy of Mulan PubL v2 at:
@@ -9,25 +7,13 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
-from atom_runtime.atom_runtime_api.operator.operators_api import OperatorApi
 
-class TrainOperatorApi(OperatorApi):
-    
-    labels:object
 
-    def __init__(self) :
-        super().__init__()
+from atom_runtime.dao.base_dao import BaseDao
 
-    def initialization(self):
-        super().initialization()
 
-    def execute(self, data):
+class RuntimeDao(BaseDao):
+
+    def getPort(self):
+        #
         pass
-
-    def result(self):
-       pass
-    
-    def comparision_execute(self, data):
-        pass
-
-    

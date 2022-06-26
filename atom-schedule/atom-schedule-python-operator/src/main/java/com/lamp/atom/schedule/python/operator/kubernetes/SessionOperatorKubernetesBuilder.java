@@ -90,11 +90,22 @@ public class SessionOperatorKubernetesBuilder {
 		envList.add(new EnvVar("docker", "true", null));
 		envList.add(new EnvVar("runtime_model", "session", null));
 		envList.add(new EnvVar("operator-data", JSON.toJSONString(schedule.getObject()), null));
+		ObjectFieldSelector podIP = new ObjectFieldSelector();
+		podIP.setFieldPath("status.podIP");
+		podIP.setApiVersion("v1");
+		EnvVarSource nodeIp = new EnvVarSource();
+		nodeIp.setFieldRef(podIP);
+		envList.add(new EnvVar("node_ip", null, nodeIp));
+		
 		ObjectFieldSelector podId = new ObjectFieldSelector();
 		podId.setFieldPath("status.podIP");
-		EnvVarSource nodeIp = new EnvVarSource();
-		nodeIp.setFieldRef(podId);
-		envList.add(new EnvVar("node_ip", null, nodeIp));
+		podId.setApiVersion("v1");
+		EnvVarSource nodeId = new EnvVarSource();
+		nodeId.setFieldRef(podId);
+		envList.add(new EnvVar("node_id", null, nodeId));
+		
+		
+		
 		String value = schedule.getHardwareConfig().get("nvidia.com/gpu");
 		SpecNested<JobBuilder> spec = job.withNewSpec();
 		spec.withNewTemplate()

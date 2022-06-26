@@ -3,17 +3,14 @@
 from atom_runtime.atom_runtime_api.operator.train_api import TrainOperatorApi
 import pickle
 
-
-
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
-
 # import tensorflow as tf
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
 class TrainExample(TrainOperatorApi):
 
-    def __init__(self) -> None:
+    def __init__(self) :
         super().__init__()
     
     def _init_session(self):
@@ -42,7 +39,7 @@ class TrainExample(TrainOperatorApi):
         self.optimizer = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
 
     def initialization(self):
-        super().initialization(self)
+        super().initialization()
         self.avg_cost = 0
         self.total_batch = 0
         self.learning_rate = 0.01
@@ -50,9 +47,9 @@ class TrainExample(TrainOperatorApi):
         self.batch_size = 1024
         self.display_step = 1
         self.training_epochs = 100
-        self.build_model(self)
+        self.build_model()
         self.display_step = 10
-        self._init_session(self)
+        self._init_session()
 
     def execute(self , data):
         self.total_batch += + len(data)

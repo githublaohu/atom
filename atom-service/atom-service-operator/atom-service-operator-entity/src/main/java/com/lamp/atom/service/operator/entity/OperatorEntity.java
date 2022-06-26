@@ -20,7 +20,6 @@ import com.lamp.atom.service.domain.OperatorSourceType;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

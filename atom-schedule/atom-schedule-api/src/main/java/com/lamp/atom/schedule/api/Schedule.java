@@ -45,6 +45,8 @@ public class Schedule {
     private Long nodeId;
 
     private String nodeName;
+    
+    private String nodeK8sType;
 
     /**
      * 算子类型

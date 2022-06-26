@@ -9,25 +9,3 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
-from atom_runtime.atom_runtime_api.operator.operators_api import OperatorApi
-
-class TrainOperatorApi(OperatorApi):
-    
-    labels:object
-
-    def __init__(self) :
-        super().__init__()
-
-    def initialization(self):
-        super().initialization()
-
-    def execute(self, data):
-        pass
-
-    def result(self):
-       pass
-    
-    def comparision_execute(self, data):
-        pass
-
-    

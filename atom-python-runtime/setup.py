@@ -64,7 +64,7 @@ setup(
     packages=packages,
     include_package_data=True,
     zip_safe=False,
-    version= "0.0.3",
+    version= "0.0.8",
     entry_points={"console_scripts": ["atom=atom_runtime.atom_controller:main"]},
 
     url="https://github.com/githublaohu/atom",

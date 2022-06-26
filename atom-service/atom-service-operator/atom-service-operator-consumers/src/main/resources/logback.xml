@@ -21,7 +21,7 @@
 
 	<!-- project default level -->
 	<logger name="org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod" level="trace" />
-	<root level="info">
+	<root level="DEBUG">
 		<appender-ref ref="console" />
 		<appender-ref ref="rollingFile" />
 	</root>

@@ -101,8 +101,8 @@ class CreateOperator():
     
     def __create_object__(self):
         self.operator_api : OperatorApi= self.operator_service.code_service.get_object(self.operator_create_to.operator_to,
-        self.operator_create_to.source_account)
-        self.operator_api.do_initialization(self.operator_api)
+        self.operator_create_to.source_account)()
+        self.operator_api.do_initialization()
 
     def __operator_config__(self):
         self.__config_handler__( self.operator_to.model_conf,self.operator_api.set_mode_config )
@@ -121,7 +121,7 @@ class CreateOperator():
         if  hasattr(func , "__annotations__") and len(func.__annotations__) == 1:
                 #config_data = reflection_object(  func,config_data)
                 pass
-        func( config_data)
+        func(config_data)
 
     def __create_connect_and_source__(self):
         if self.operator_create_to.model_connect != None:

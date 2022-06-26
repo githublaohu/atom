@@ -23,7 +23,7 @@ class SourceAndConnect():
     source_to:SourceTo
     connect_to:ConnectTo
 
-    def __init__(self, data):
+    def __init__(self, data = {}):
         if len(data) == 0:
             return
         self.source_to = SourceTo(data['source_to'])

@@ -100,7 +100,7 @@ public class StandaloneOperatorKubernetesBuilder {
 		spec.withReplicas(this.schedule.getDeploy().getCount());
 		spec.withNewTemplate()
 				.withNewSpec()
-				.withRestartPolicy("OnFailure")
+				.withRestartPolicy("Always")
 				.withHostNetwork(true)
 				.addNewContainer().withName(this.schedule.getNodeName())
 				.withImage(Objects.isNull(value)

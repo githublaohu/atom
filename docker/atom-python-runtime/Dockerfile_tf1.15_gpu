@@ -2,7 +2,7 @@ FROM tensorflow/tensorflow:1.15.5-gpu-py3-jupyter
 
 ENV docker yes
 # Install git
-RUN apt update && \
+RUN apt update && update && apt upgrade \
          apt install -y git python3.7 python3.7-dev build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev&& \
           /usr/bin/python3.7 -m pip install --upgrade pip && \
           pip install pynvml && \

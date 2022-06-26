@@ -10,12 +10,16 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 
+from cmath import log
 import os
 import json
 import yaml
 import nacos
 import logging
 from atom_runtime.utils.environment import atrom_catalogue,get_env
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 class AtomConfig():
     # 是否是docker模式
@@ -40,7 +44,10 @@ class AtomConfig():
     logging_file_directory_and_name:str = "./atom-python-runtime.log"
 
     def is_local(self):
-        return  self.runtime_model == "local"
+        return self.runtime_model == None or self.runtime_model == "local"
+    
+    def is_session(self):
+        return self.runtime_model == "session"
 
 
 class  AtomConfigServier():
@@ -48,6 +55,7 @@ class  AtomConfigServier():
     def __init__(self) :
         self.__atrom_catalogue = atrom_catalogue
         docker = get_env("docker")
+        logging.info("it is docker model  {} " .format( docker))
         if docker == None:
             self.__load_atom_config__()
             self.__check_()
@@ -57,18 +65,28 @@ class  AtomConfigServier():
     
     def __docker_model(self):
             node_ip = get_env("node_ip")
+            logging.info("it is node IP  {} " .format( node_ip))
             self.__atrom_catalogue = "~/atom"
             if node_ip  != None:
                 self.atom_config.node_ip = node_ip
             runtime_model = get_env("runtime_model")
+            logging.info("it is runtime_model  {} " .format( runtime_model))
             if runtime_model != None:
                 self.atom_config.runtime_model = runtime_model
             nacos_config = get_env("nacos_config")
+            logging.info("it is nacos_config %s", nacos_config)
             if nacos_config == None:
                 return
-            nacos_config = json.decoder(nacos_config)
+            self.atom_config.nacos_address = nacos_config.get("nacos_address")
+            self.atom_config.nacos_namespace = nacos_config.get("nacos_namespace")
+            nacos_config = json.loads(nacos_config.replace("'","\""))
             self.nacso_client = nacos.NacosClient(nacos_config.get("nacos_address"), namespace=nacos_config.get("nacos_namespace"))
-            self.nacso_client.get_config(nacos_config.get("config_name"),None)
+            atom_config = self.nacso_client.get_config(nacos_config.get("config_name"),None)
+            logging.info("配置内容 \n %s", atom_config)
+            if atom_config == None:     
+                return
+            atrom_config_json = yaml.load(atom_config, Loader=yaml.SafeLoader)
+            self.atom_config.rpc_controller_port = atrom_config_json["rpc_controller_port"]
 
 
     def __load_atom_config__(self):

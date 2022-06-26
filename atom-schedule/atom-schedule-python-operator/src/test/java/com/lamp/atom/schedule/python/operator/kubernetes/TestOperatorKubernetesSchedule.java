@@ -4,11 +4,11 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.deploy.Deploy;
 import org.junit.Test;
 
+import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
+import com.lamp.atom.schedule.api.deploy.Deploy;
 
 public class TestOperatorKubernetesSchedule {
 
@@ -53,7 +53,9 @@ public class TestOperatorKubernetesSchedule {
 	@Test
 	public void testCreateService() throws Exception {
 		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
-
+		Deploy deploy = new Deploy();
+		deploy.setCount(4);
+		schedule.setDeploy(deploy);
 		kubernetesSchedule.createService(schedule);
 	}
 	

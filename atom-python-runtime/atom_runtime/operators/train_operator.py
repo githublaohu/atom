@@ -37,14 +37,14 @@ class TrainOperatorRuntime(OperatorRuntime):
         if self.test_source != None:
             self.train(self.source , train_operator.comparision_execute)         
         # 得到训练结果
-        train_result = train_operator().result
+        train_result = train_operator.result()
         # 保存模型 path= /{root}/{模型名}/{毫秒数}.
         self.sink.train_upload(train_result)
         
 
 
     def train(self ,source:Source , func ):
-        source.run(func,self.set_operator_object)
+        source.run(self.operator_object,func,self.set_operator_object)
 
     def  set_operator_object(self , labels):
         self.operator_object.labels = labels

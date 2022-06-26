@@ -9,29 +9,13 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
-from atom_runtime.atom_runtime_api.operator.model_info import ModelInfo
 
-class OperatorApi():
-    operators_config:object
-    model_config:object
-    init_data: object
-    model: ModelInfo
+import mysql.connector
+
+import mysql.connector
+import mysql.connector.connection
 
 
-    def set_mode_config(self,mode_config):
-        self.mode_config = mode_config
-    
-    def set_operators_config(self,operators_config):
-        self.operators_config = operators_config
+class BaseDao():
+    connector: mysql.connector.connection.MySQLConnection
 
-    def set_init_data(self, init_data):
-        self.init_data = init_data
-    
-    def set_model(self, model):
-        self.model = model
-    
-    def initialization(self):
-        pass
-    
-    def do_initialization(self):
-        self.initialization()

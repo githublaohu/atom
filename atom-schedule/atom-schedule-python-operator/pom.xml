@@ -60,5 +60,10 @@
 			<artifactId>atom-service-space-entity</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>io.fabric8</groupId>
+			<artifactId>openshift-client</artifactId>
+			<version>5.12.2</version>
+		</dependency>
 	</dependencies>
 </project>

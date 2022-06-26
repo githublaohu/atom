@@ -1,4 +1,5 @@
 /*
+
  *Copyright (c) [Year] [name of copyright holder]
  *[Software Name] is licensed under Mulan PubL v2.
  *You can use this software according to the terms and conditions of the Mulan PubL v2.
@@ -22,10 +23,17 @@ import com.lamp.atom.schedule.api.ScheduleCallback;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
-import io.fabric8.kubernetes.api.model.NamespaceList;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.Deletable;
+import io.fabric8.kubernetes.client.dsl.Gettable;
+import io.fabric8.kubernetes.client.dsl.PodResource;
+import io.fabric8.kubernetes.client.dsl.RollableScalableResource;
+import io.fabric8.kubernetes.client.dsl.ScalableResource;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,13 +74,18 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		StandaloneOperatorKubernetesBuilder operatorKubernetesBuilder = new StandaloneOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace())
+		Deployment deployment = client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getDeployment());
+		log.info("deployment info : {}", deployment);
 	}
 
 	@Override
 	public void closeService(Schedule schedule) {
-		client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace()).withName(schedule.getNodeName()).delete();
+		if(schedule.getNodeK8sType() == "") {
+			this.deleteDeployment(schedule);
+		}else {
+			this.deleteJob(schedule);
+		}
 	}
 
 	@Override
@@ -80,7 +93,9 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-
+		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+				.createOrReplace(operatorKubernetesBuilder.getJob());
+		log.info("job info : {}", job);
 		try {
 			client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
 					.createOrReplace(operatorKubernetesBuilder.getJob());
@@ -100,6 +115,40 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 
 	@Override
 	public void uninstallOperators(Schedule schedule) {
-		client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace()).withName(schedule.getNodeName()).delete();
+		this.deletePods(schedule);
+	}
+
+
+
+	private void deleteDeployment(Schedule schedule) {
+		RollableScalableResource<Deployment> deploymentResource = client.apps().deployments()
+				.inNamespace(operatorKubernetesConfig.getNamespace()).withName(schedule.getNodeName());
+		this.deleteBehavior(deploymentResource, deploymentResource);
+	}
+
+	private void deleteJob(Schedule schedule) {
+		ScalableResource<Job> jobResource = client.batch().v1().jobs()
+				.inNamespace(operatorKubernetesConfig.getNamespace()).withName(schedule.getNodeName());
+		this.deleteBehavior(jobResource, jobResource);
+	}
+
+	private void deletePods(Schedule schedule) {
+		PodResource<Pod> podsResource = client.pods().inNamespace(operatorKubernetesConfig.getNamespace())
+				.withName(schedule.getNodeName());
+		this.deleteBehavior(podsResource, podsResource);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void deleteBehavior(Gettable gettable, Deletable deletable) {
+		Object object = gettable.get();
+		if (Objects.isNull(object)) {
+			log.info("节点删除失败，没有查询到节点");
+			return;
+		}
+		if (deletable.delete()) {
+			log.info("");
+		} else {
+			log.error("节点删除失败");
+		}
 	}
 }

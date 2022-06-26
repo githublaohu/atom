@@ -12,7 +12,7 @@
 from pydantic import BaseModel
 
 
-class OperatorTo(BaseModel):
+class OperatorTo():
     operator_id:int= -1
     space_id:int= -1
     space_name:str = 'space1'
@@ -43,11 +43,11 @@ class OperatorTo(BaseModel):
     operator_priority:str = None
     deploy_type:str = None
 
-    def __setattr__(self, key, value):
-        super.__setattr__(self, key, value)
+    # def __setattr__(self, key, value):
+    #     super.__setattr__(self, key, value)
 
-    def __getattribute__(self, __name: str):
-        return super().__getattribute__(__name)
+    # def __getattribute__(self, __name: str):
+    #     return super().__getattribute__(__name)
 
     def __init__(self, data:dict):
         if len(data) == 0:

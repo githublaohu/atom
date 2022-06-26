@@ -46,8 +46,10 @@ class OperatorRuntime():
             self.rpc_operator_service.complete_operators(self.operator_to)
         except Exception as e:
             traceback.print_exc()
-            self.rpc_operator_service.abnormal_operators(self.operator_to)
-            
+            try:
+                self.rpc_operator_service.abnormal_operators(self.operator_to)
+            except Exception as ee:
+                 traceback.print_exc()
 
     def run(self):
         pass
