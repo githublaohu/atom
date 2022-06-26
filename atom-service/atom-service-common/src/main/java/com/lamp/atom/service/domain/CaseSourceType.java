@@ -17,12 +17,27 @@ package com.lamp.atom.service.domain;
 public enum CaseSourceType {
 
     /**
+     * 节点
+     */
+    NODE,
+
+    /**
+     * 任务
+     */
+    JOB,
+
+    /**
      * 服务
      */
     SERVICE,
 
     /**
-     * 节点
+     * 进程
      */
-    NODE
+    PROCESS,
+
+    /**
+     * 算子
+     */
+    OPERATOR
 }

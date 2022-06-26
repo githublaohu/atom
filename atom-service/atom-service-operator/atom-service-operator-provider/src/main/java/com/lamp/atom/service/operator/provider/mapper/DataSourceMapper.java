@@ -27,10 +27,10 @@ public interface DataSourceMapper {
      * @param dataSourceEntity
      */
     @Insert("insert into datasource" +
-            "(operator_id,connection_id,data_source_type,source_space,source_conf," +
+            "(space_id,connection_id,connection_name,source_name,source_type,source_space,source_conf," +
             "task_init_execute,operate_execute_before,data_execute_before,operate_execute,data_execute_after,operate_execute_after," +
             "data_format,operator_read_num,connect_read_num,disposable,paginate_read_num,async_load,`order`) " +
-            "values(#{operatorId},#{connectionId},#{dataSourceType},#{sourceSpace},#{sourceConf}," +
+            "values(#{spaceId},#{connectionId},#{connectionName},#{sourceName},#{sourceType},#{sourceSpace},#{sourceConf}," +
             "#{taskInitExecute},#{operateExecuteBefore},#{dataExecuteBefore},#{operateExecute},#{dataExecuteAfter},#{operateExecuteAfter}," +
             "#{dataFormat},#{operatorReadNum},#{connectReadNum},#{disposable},#{paginateReadNum},#{asyncLoad},#{order})")
     Integer insertDataSourceEntity(DataSourceEntity dataSourceEntity);
@@ -54,7 +54,8 @@ public interface DataSourceMapper {
      */
     @Select("select * from datasource " +
             "where delete_flag = 0 and " +
-            "(id like #{keyword} or operator_id like #{keyword} or connection_id like #{keyword} or data_source_type like #{keyword} " +
+            "(id like #{keyword} or space_id like #{keyword} or connection_id like #{keyword} or connection_name like #{keyword} " +
+            "or source_name like #{keyword} or source_type like #{keyword} " +
             "or source_space like #{keyword} or source_conf like #{keyword} or task_init_execute like #{keyword} " +
             "or operate_execute_before like #{keyword} or data_execute_before like #{keyword} or operate_execute like #{keyword} " +
             "or data_execute_after like #{keyword} or operate_execute_after like #{keyword} or data_format like #{keyword} " +
@@ -65,11 +66,22 @@ public interface DataSourceMapper {
     /**
      * 查询多个数据源
      *
+     * @param dataSourceEntity
      * @return
      */
-    @Select("select * from datasource " +
-            "where delete_flag = 0")
-    List<DataSourceEntity> queryDataSourceEntitys();
+    @Select({"<script>" +
+            "select * from datasource " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'connectionId != null'>and connection_id = #{connectionId} </if>" +
+            "<if test = 'connectionName != null'>and connection_name = #{connectionName} </if>" +
+            "<if test = 'sourceType != null'>and source_type = #{sourceType} </if>" +
+            "<if test = 'sourceSpace != null'>and source_space = #{sourceSpace} </if>" +
+            "<if test = 'disposable != null'>and disposable = #{disposable} </if>" +
+            "<if test = 'asyncLoad != null'>and async_load = #{asyncLoad} </if>" +
+            "<if test = 'order != null'>and 'order' = #{order} </if>" +
+            "</script>"})
+    List<DataSourceEntity> queryDataSourceEntitys(DataSourceEntity dataSourceEntity);
 
     /**
      * 查询单个数据源

@@ -5,7 +5,7 @@
   <parent>
     <groupId>cn.lampup</groupId>
     <artifactId>atom-service-reasoning</artifactId>
-    <version>${reversion}</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>atom-service-reasoning-entity</artifactId>
   <name>atom-service-reasoning-entity</name>

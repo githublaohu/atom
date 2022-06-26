@@ -15,10 +15,13 @@ class TrainOperatorApi(OperatorApi):
     
     labels:object
 
-    def initialization(self):  
+    def __init__(self) :
+        super().__init__()
+
+    def initialization(self):
         super().initialization()
 
-    def execute(self , data):
+    def execute(self, data):
         pass
 
     def result(self):

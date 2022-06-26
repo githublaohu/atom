@@ -50,9 +50,10 @@ public interface ModelService {
     /**
      * 查询多个模型
      *
+     * @param modelEntity
      * @return
      */
-    List<ModelEntity> queryModelEntitys();
+    List<ModelEntity> queryModelEntitys(ModelEntity modelEntity);
 
     /**
      * 查询单个模型

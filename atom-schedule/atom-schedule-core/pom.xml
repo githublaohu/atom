@@ -7,14 +7,18 @@
 	<parent>
 		<groupId>cn.lampup</groupId>
 		<artifactId>atom-schedule</artifactId>
-		<version>${reversion}</version>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
+
 	<artifactId>atom-schedule-core</artifactId>
 	<name>atom-schedule-core</name>
 	<url>http://maven.apache.org</url>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

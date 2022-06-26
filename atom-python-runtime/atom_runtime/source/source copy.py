@@ -108,15 +108,15 @@ class Source(SourceBase):
         self.__write_data_()
     
     def download(self,url,path):
-        self.connect.download(url,path)
+        self.connect.download(url,path,None)
 
     def __write_data_(self):
         if self.source_to.connect_read_num == -1 :
-            self.data = self.connect.read_whole(self.source_to.operate_exectute,self.source_to.source_conf )
+            self.data = self.connect.read_whole(self.source_to.operate_execute,self.source_to.source_conf )
             self.data = CSVConvert().convert(self.data)
             self.connect_finish_reading = True
         else:
-            self.data = self.connect.read(self.source_to.operate_exectute,self.source_to.source_conf , self.connect_read_num,self.source_to.connect_read_num)
+            self.data = self.connect.read(self.source_to.operate_execute,self.source_to.source_conf , self.connect_read_num,self.source_to.connect_read_num)
             self.connect_read_num = self.connect_read_num + self.source_to.connect_read_num
             if len(self.data) < self.source_to.connect_read_num:
                 self.connect_finish_reading = True
@@ -143,7 +143,7 @@ class Source(SourceBase):
         source_stream.convert = convert
         source_stream.func = operator
         source_stream.labels = labels
-        self.connect.stream(self.source_to.operate_exectute,self.source_to.source_conf,source_stream)
+        self.connect.stream(self.source_to.operate_execute,self.source_to.source_conf,source_stream)
 
 
     def _not_next(self):

@@ -104,13 +104,14 @@ public class ServiceInfoController {
     /**
      * 查询多个服务配置
      *
+     * @param serviceInfoEntity
      * @return
      */
     @PostMapping("/queryServiceInfos")
     @ApiOperation(value = "查询多个服务配置")
-    public List<ServiceInfoEntity> queryServiceInfos() {
+    public List<ServiceInfoEntity> queryServiceInfos(@RequestBody(required = false) ServiceInfoEntity serviceInfoEntity) {
         try {
-            return serviceInfoService.queryServiceInfoEntitys();
+            return serviceInfoService.queryServiceInfoEntitys(serviceInfoEntity);
         } catch (Exception e) {
             log.warn("服务配置查询失败 {}", e);
             return null;

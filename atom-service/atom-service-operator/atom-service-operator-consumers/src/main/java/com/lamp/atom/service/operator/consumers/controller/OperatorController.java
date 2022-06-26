@@ -16,12 +16,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.lamp.atom.service.operator.common.OperatorCreateTo;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.atom.service.operator.entity.OperatorEntity;
 import com.lamp.atom.service.operator.service.AvaliablePortService;
@@ -110,13 +106,14 @@ public class OperatorController {
     /**
      * 查询多个算子
      *
+     * @param operatorEntity
      * @return
      */
     @PostMapping("/queryOperators")
     @ApiOperation(value = "查询多个算子")
-    public List<OperatorEntity> queryOperators() {
+    public List<OperatorEntity> queryOperators(@RequestBody(required = false) OperatorEntity operatorEntity) {
         try {
-            return operatorService.queryOperatorEntitys();
+            return operatorService.queryOperatorEntitys(operatorEntity);
         } catch (Exception e) {
             log.warn("算子查询失败 {}", e);
             return null;
@@ -134,17 +131,9 @@ public class OperatorController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", paramType = "body", dataType = "Long", dataTypeClass = java.lang.Long.class, defaultValue = "1")
     })
-    public OperatorCreateTo queryOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity) {
+    public OperatorEntity queryOperator(@ApiIgnore @RequestBody OperatorEntity operatorEntity) {
         try {
-            OperatorEntity operatorEntity1 = operatorService.queryOperatorEntity(operatorEntity);
-            //查出算子的数据
-            OperatorCreateTo operatorCreateTo = new OperatorCreateTo();
-
-
-            operatorCreateTo.setOperatorTo(operatorEntity1);
-
-
-            return operatorCreateTo;
+            return operatorService.queryOperatorEntity(operatorEntity);
         } catch (Exception e) {
             log.warn("算子查询失败 {}", e);
             return null;

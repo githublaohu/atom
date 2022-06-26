@@ -25,6 +25,7 @@ class SourceStreamAPI(StreamAPI):
     convert:Convert
     labels: object
     func:object
+    objects:object
 
     def batch(self,data):
         cvs_data = self.convert.converts(data)
@@ -108,20 +109,18 @@ class Source(SourceBase):
     def download(self,url,path):
         self.connect.download(url,path,self.source_to.source_conf)
 
-    def run(self, operator,labels):
+    def run(self, operator_object , operator,labels):
         convert_class = type_get_convert(self.source_to.data_format)
         convert = convert_class()
         source_stream = SourceStreamAPI()
         source_stream.convert = convert
         source_stream.func = operator
         source_stream.labels = labels
-        self.connect.stream(self.source_to.operate_exectute,self.source_to.source_conf,source_stream)
+        source_stream.objects = operator_object
+        self.connect.stream(self.source_to.operate_execute,self.source_to.source_conf,source_stream)
     
     def train_upload(self, train):
-        path = self.source_to.operate_exectute
-        if path == None:
-            path = "/" +self.source_to.space_name+ "/" +self.source_to.scene_name +"/" + self.source_to.experiment_name +"/"
-        path = path +self.source_to.space_name+ "-" +self.source_to.scene_name +"-" + self.source_to.experiment_name +"-"
+        path = self.source_to.operate_execute + self.source_to.space_name + "-" +self.source_to.scene_name +"-" + self.source_to.experiment_name +"-"
         
         if isinstance(train,str):
              with open(train, 'rb') as f:

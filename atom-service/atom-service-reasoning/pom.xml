@@ -4,7 +4,7 @@
   <parent>
     <groupId>cn.lampup</groupId>
     <artifactId>atom-service</artifactId>
-    <version>${reversion}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>atom-service-reasoning</artifactId>

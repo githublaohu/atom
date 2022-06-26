@@ -16,12 +16,10 @@ import com.lamp.atom.service.domain.DeployType;
 import com.lamp.atom.service.domain.OperatorModel;
 import com.lamp.atom.service.domain.OperatorRuntimeType;
 import com.lamp.atom.service.domain.OperatorSourceType;
-import com.lamp.atom.service.domain.RuntimeStatus;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -33,13 +31,11 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 空间id
      */
-    @NonNull
     private Long spaceId;
 
     /**
      * 算子模板
      */
-    @NonNull
     private Long operatorTemplateId;
 
     /**
@@ -50,48 +46,41 @@ public class OperatorEntity extends BaseEntity {
     /**
      * 算子源id
      */
-    @NonNull
     private Long operatorSourceId;
 
     /**
      * 算子来源类型
      */
-    @NonNull
     private OperatorSourceType operatorSourceType;
 
     /**
      * 算子类型
      */
-    @NonNull
     private OperatorRuntimeType operatorRuntimeType;
 
     /**
      * 算子运行模式
      */
-    @NonNull
     private OperatorModel operatorModel;
 
     /**
      * 细化级别
      */
-    private Integer level = 3;
+    private Integer level;
 
     /**
      * 资源账户id
      */
-    @NonNull
     private Long resourcesAccountId;
 
     /**
      * 加载模式
      */
-    @NonNull
     private CodeMode codeMode;
 
     /**
      * 加载地址
      */
-    @NonNull
     private String codeAddress;
 
     /**
@@ -125,26 +114,6 @@ public class OperatorEntity extends BaseEntity {
     private String modelConf;
 
     /**
-     * cpu使用率
-     */
-    private String cpu;
-
-    /**
-     * gpu使用率
-     */
-    private String gpu;
-
-    /**
-     * 内存使用率
-     */
-    private String men;
-
-    /**
-     * 显卡使用率
-     */
-    private String displayCard;
-
-    /**
      * 训练轮数
      */
     private Integer operatorEpoch;
@@ -154,21 +123,10 @@ public class OperatorEntity extends BaseEntity {
      */
     private String operatorPlanRuntimes;
 
-    /**
-     * 训练状态
-     */
-    @NonNull
-    private RuntimeStatus runtimeStatus;
-
-    /**
+     /**
      * 训练优先级
      */
     private Integer operatorPriority;
-
-    /**
-     * 部署实例
-     */
-    private Long caseId;
 
     /**
      * 部署类型

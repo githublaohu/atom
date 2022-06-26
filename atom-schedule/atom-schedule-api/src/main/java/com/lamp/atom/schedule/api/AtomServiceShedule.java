@@ -11,6 +11,9 @@
  */
 package com.lamp.atom.schedule.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 1.
  * 
@@ -19,10 +22,12 @@ package com.lamp.atom.schedule.api;
  */
 public interface AtomServiceShedule {
 
-	public default void createService(Shedule shedule) {
+	public default void createService(Schedule schedule) {
 	}
 
-	public default void closeService(Shedule shedule) {
+	public default void closeService(Schedule schedule) {
 	}
+	
+	public default List<Object> queryAllService() {return new ArrayList<>(1);}
 
 }

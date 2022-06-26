@@ -26,11 +26,11 @@ import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
-import com.lamp.atom.schedule.api.Shedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleRpcConfig;
+import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.config.OperatorScheduleRpcConfig;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
-import com.lamp.atom.schedule.api.strategy.SheduleStrategyType;
+import com.lamp.atom.schedule.api.strategy.ScheduleStrategyType;
 import com.lamp.atom.schedule.python.operator.AtomOperatorRPCServier;
 import com.lamp.atom.schedule.python.operator.CreateOperator;
 import com.lamp.light.Light;
@@ -48,11 +48,11 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 
 	private static String ATOM_RUNTIME_PYTHON_SERVICE_NAME = "atom-runtime-python-service-standalone";
 
-	private static String ATOM_RUNTIME_OPERATOR_NAME = "atom-runtime-operator-";
+	private static String ATOM_RUNTIME_OPERATOR_NAME = "atom-runtime-operator";
 
 	private NamingService namingService;
 
-	private OperatorShedeleRpcConfig operatorShedeleRpcConfig;
+	private OperatorScheduleRpcConfig operatorScheduleRpcConfig;
 
 	/**
 	 * 重试是否需要
@@ -62,10 +62,10 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 
 	private Map<Instance, AtomOperatorRPCServier> runtimeClient = new ConcurrentHashMap<>();
 	
-	public OperatorRpcSchedule(OperatorShedeleRpcConfig operatorShedeleRpcConfig) throws NacosException {
-		this.operatorShedeleRpcConfig = operatorShedeleRpcConfig;
+	public OperatorRpcSchedule(OperatorScheduleRpcConfig operatorScheduleRpcConfig) throws NacosException {
+		this.operatorScheduleRpcConfig = operatorScheduleRpcConfig;
 		Properties properties = new Properties();
-		JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(this.operatorShedeleRpcConfig));
+		JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(this.operatorScheduleRpcConfig));
 		properties.putAll(jsonObject);
 		namingService = NamingFactory.createNamingService(properties);
 	}
@@ -81,9 +81,9 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 
 	}
 
-	private List<Instance> getInstance(Shedule shedule) throws NacosException {
+	private List<Instance> getInstance(Schedule schedule) throws NacosException {
 		List<Instance> instanceList = null;
-		Deploy deploy = shedule.getDeploy();
+		Deploy deploy = schedule.getDeploy();
 		// 指定部署实例
 		if (Objects.nonNull(deploy) && Objects.nonNull(deploy.getInstancesList())) {
 			instanceList = new ArrayList<Instance>(deploy.getInstancesList().size());
@@ -95,14 +95,14 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 				instanceList.add(instance);
 			}
 		} else {
-			SheduleStrategyType sheduleStrategyType = shedule.getStrategy().getSheduleStrategyType();
-			if (Objects.equals(sheduleStrategyType, SheduleStrategyType.DEFAULT_REPLACE)) {
-				instanceList = namingService.getAllInstances(ATOM_RUNTIME_OPERATOR_NAME + shedule.getNoteName());
-			} else if (Objects.equals(sheduleStrategyType, SheduleStrategyType.DEFAULT_TOTAL_QUANTITY)) {
+			ScheduleStrategyType scheduleStrategyType = schedule.getStrategy().getScheduleStrategyType();
+			if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.DEFAULT_REPLACE)) {
+				instanceList = namingService.getAllInstances(ATOM_RUNTIME_OPERATOR_NAME + schedule.getNodeName());
+			} else if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.DEFAULT_TOTAL_QUANTITY)) {
 				instanceList = namingService.getAllInstances(ATOM_RUNTIME_PYTHON_SERVICE_NAME);
-			} else if (Objects.equals(sheduleStrategyType, SheduleStrategyType.DEFAULT_LABEL)) {
+			} else if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.DEFAULT_LABEL)) {
 				instanceList = namingService.getAllInstances(ATOM_RUNTIME_PYTHON_SERVICE_NAME, "");
-			} else if (Objects.equals(sheduleStrategyType, SheduleStrategyType.ATOM_RPC_RONDOM)) {
+			} else if (Objects.equals(scheduleStrategyType, ScheduleStrategyType.ATOM_RPC_RANDOM)) {
 				instanceList = namingService.getAllInstances(ATOM_RUNTIME_PYTHON_SERVICE_NAME);
 			}
 		}
@@ -113,16 +113,18 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 	 * 全量 标签 覆盖
 	 */
 	@Override
-	public void createOperators(Shedule shedule) {
+	public void createOperators(Schedule schedule) {
 		try {
+			// 获取部署实例信息
+			List<Instance> instanceList = this.getInstance(schedule);
 
-			List<Instance> instanceList = this.getInstance(shedule);
 			// 创建对象
-			CreateOperator object = (CreateOperator) shedule.getObject();
+			CreateOperator object = (CreateOperator) schedule.getObject();
 			for (Instance instance : instanceList) {
 				this.createClient(instance)
 					.createOperators(object);
 			}
+
 			// 发送请求
 
 		} catch (Exception e) {
@@ -132,19 +134,19 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 	}
 
 	@Override
-	public void startOperators(Shedule shedule) {
+	public void startOperators(Schedule schedule) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void suspendOperators(Shedule shedule) {
+	public void suspendOperators(Schedule schedule) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void uninstallPperators(Shedule shedule) {
+	public void uninstallOperators(Schedule schedule) {
 		// TODO Auto-generated method stub
 
 	}

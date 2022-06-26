@@ -101,11 +101,12 @@ public class RuntimeController {
     /**
      * 查询多个实例
      *
+     * @param runtimeEntity
      * @return
      */
     @PostMapping("/queryRuntimes")
     @ApiOperation(value = "查询多个实例")
-    public List<RuntimeEntity> queryRuntimes(RuntimeEntity runtimeEntity) {
+    public List<RuntimeEntity> queryRuntimes(@RequestBody(required = false) RuntimeEntity runtimeEntity) {
         try {
             return runtimeService.queryRuntimeEntitys(runtimeEntity);
         } catch (Exception e) {

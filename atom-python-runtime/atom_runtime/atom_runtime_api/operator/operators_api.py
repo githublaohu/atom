@@ -27,11 +27,11 @@ class OperatorApi():
     def set_init_data(self, init_data):
         self.init_data = init_data
     
-    def set_model(self , model):
+    def set_model(self, model):
         self.model = model
-
-    def initialization(self):  
+    
+    def initialization(self):
         pass
-
+    
     def do_initialization(self):
         self.initialization()

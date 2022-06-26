@@ -11,13 +11,15 @@
  */
 package com.lamp.atom.service.operator.entity;
 
+import com.lamp.atom.service.domain.RelationType;
+import com.lamp.atom.service.domain.ResourceType;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="ResourceRelationEntity",description="资源关系类")
+@ApiModel(value="ResourceRelationEntity",description="关联关系类")
 public class ResourceRelationEntity extends BaseEntity {
 
     private static final long serialVersionUID = -3149595542813993064L;
@@ -25,22 +27,27 @@ public class ResourceRelationEntity extends BaseEntity {
     /**
      * 关联ID
      */
-    private Long relationId;
+    private Long relateId;
 
     /**
      * 关联类型
      */
-    private String relationType;
+    private ResourceType relateType;
 
     /**
      * 被关联ID
      */
-    private Long beRelationId;
+    private Long beRelatedId;
 
     /**
      * 被关联类型
      */
-    private String beRelationType;
+    private ResourceType beRelatedType;
+
+    /**
+     * 关系类型
+     */
+    private RelationType relationType;
 
     /**
      * 关联状态

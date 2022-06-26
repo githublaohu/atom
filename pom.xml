@@ -5,13 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cn.lampup</groupId>
 	<artifactId>atom</artifactId>
-	<version>${reversion}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>atom-service</module>
 		<module>atom-sdk</module>
 		<module>atom-schedule</module>
-		<module>atom-space</module>
     </modules>
 	<properties>
 		<reversion>0.0.1-SNAPSHOT</reversion>
@@ -21,14 +20,15 @@
 			-Djava.net.preferIPv4Stack=true -XX:MetaspaceSize=64m
 			-XX:MaxMetaspaceSize=128m
 		</argline>
-		<lombok.version>1.18.0</lombok.version>
+		<lombok.version>1.18.22</lombok.version>
+		<spring-boot.version>2.1.7.RELEASE</spring-boot.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
-			<scope>provided</scope>
+<!--			<scope>provided</scope>-->
 		</dependency>
 	</dependencies>
 
@@ -52,7 +52,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>${maven_source_version}</version>
+						<version>3.2.1</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -124,7 +124,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.2.2</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -166,7 +166,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.21.0</version>
+					<version>2.22.2</version>
 					<configuration>
 						<argLine>-Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m</argLine>
 						<testFailureIgnore>true</testFailureIgnore>

@@ -47,12 +47,13 @@ public interface ServiceInfoService {
 	 */
 	Integer updateServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
 
-	/**
-	 * 查询多个服务配置
-	 *
-	 * @return
-	 */
-	List<ServiceInfoEntity> queryServiceInfoEntitys();
+    /**
+     * 查询多个服务配置
+     *
+     * @param serviceInfoEntity
+     * @return
+     */
+    List<ServiceInfoEntity> queryServiceInfoEntitys(ServiceInfoEntity serviceInfoEntity);
 
 	/**
 	 * 查询单个服务配置
@@ -61,4 +62,12 @@ public interface ServiceInfoService {
 	 * @return
 	 */
 	ServiceInfoEntity queryServiceInfoEntity(ServiceInfoEntity serviceInfoEntity);
+
+	/**
+	 * 查询单个服务配置
+	 *
+	 * @param id
+	 * @return
+	 */
+	ServiceInfoEntity queryServiceInfoEntityById(Long id);
 }

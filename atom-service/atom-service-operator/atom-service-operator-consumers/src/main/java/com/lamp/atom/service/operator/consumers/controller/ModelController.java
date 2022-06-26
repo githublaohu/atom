@@ -48,8 +48,7 @@ public class ModelController {
 	@ApiOperation(value = "添加模型")
 	public ResultObject<String> insertModel(@RequestBody ModelEntity modelEntity) {
 		// 字段判空
-		if (Objects.isNull(modelEntity.getSpaceId()) || Objects.isNull(modelEntity.getNodeId())
-				|| Objects.isNull(modelEntity.getRuntimeId()) || Objects.isNull(modelEntity.getOperatorId())) {
+		if (Objects.isNull(modelEntity.getSpaceId())) {
 			log.info("参数校验失败 {}", modelEntity);
 			return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
 		}
@@ -103,14 +102,15 @@ public class ModelController {
 
 	/**
 	 * 查询多个模型
-	 * 
+	 *
+	 * @param modelEntity
 	 * @return
 	 */
 	@PostMapping("/queryModels")
 	@ApiOperation(value = "查询多个模型")
-	public List<ModelEntity> queryModels() {
+	public List<ModelEntity> queryModels(@RequestBody(required = false) ModelEntity modelEntity) {
 		try {
-			return modelService.queryModelEntitys();
+			return modelService.queryModelEntitys(modelEntity);
 		} catch (Exception e) {
 			log.warn("模型查询失败 {}", e);
 			return null;

@@ -28,10 +28,10 @@ public interface ConnectionMapper {
      * @param connectionEntity
      */
     @Insert("insert into connection" +
-            "(space_id,operation_type,source_type,source_name,source_addr,source_account,source_password,source_space," +
+            "(space_id,operation_type,connect_type,connect_name,connect_addr,connect_account,connect_password,connect_space," +
             "mode,colony_type,source_conf,source_route,source_size,source_count) " +
-            "values(#{spaceId},#{operationType},#{sourceType},#{sourceName},#{sourceAddr},#{sourceAccount},#{sourcePassword},#{sourceSpace}," +
-            "#{mode},#{colonyType},#{sourceConf},#{sourceRoute},#{sourceSize},#{sourceCount})")
+            "values(#{spaceId},#{operationType},#{connectType},#{connectName},#{connectAddr},#{connectAccount},#{connectPassword},#{connectSpace}," +
+            "#{mode},#{colonyType},#{sourceConf,typeHandler=com.lamp.atom.service.operator.provider.utils.JsonTypeHandler},#{sourceRoute},#{sourceSize},#{sourceCount})")
     Integer insertConnectionEntity(ConnectionEntity connectionEntity);
 
     /**
@@ -54,8 +54,8 @@ public interface ConnectionMapper {
     @Select("select * from connection " +
             "where delete_flag = 0 and " +
             "(id like #{keyword} or space_id like #{keyword} or operation_type like #{keyword} " +
-            "or source_type like #{keyword} or source_name like #{keyword} or source_addr like #{keyword} " +
-            "or source_account like #{keyword} or source_password like #{keyword} or source_space like #{keyword} " +
+            "or connect_type like #{keyword} or connect_name like #{keyword} or connect_addr like #{keyword} " +
+            "or connect_account like #{keyword} or connect_password like #{keyword} or connect_space like #{keyword} " +
             "or mode like #{keyword} or colony_type like #{keyword} " +
             "or source_conf like #{keyword} or source_route like #{keyword} or source_size like #{keyword} or source_count like #{keyword})")
     List<ConnectionEntity> queryConnectionEntitysByKeyword(String keyword);
@@ -66,9 +66,18 @@ public interface ConnectionMapper {
      *
      * @return
      */
-    @Select("select * from connection " +
-            "where delete_flag = 0")
-    List<ConnectionEntity> queryConnectionEntitys();
+    @Select({"<script>" +
+            "select * from connection " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'connectType != null'>and source_type = #{connectType} </if>" +
+            "<if test = 'connectAddr != null'>and connect_addr = #{connectAddr} </if>" +
+            "<if test = 'connectAccount != null'>and connect_account = #{connectAccount} </if>" +
+            "<if test = 'connectSpace != null'>and connect_space = #{connectSpace} </if>" +
+            "<if test = 'mode != null'>and mode = #{mode} </if>" +
+            "<if test = 'colonyType != null'>and colony_type = #{colonyType} </if>" +
+            "</script>"})
+    List<ConnectionEntity> queryConnectionEntitys(ConnectionEntity connectionEntity);
 
     /**
      * 查询单个连接

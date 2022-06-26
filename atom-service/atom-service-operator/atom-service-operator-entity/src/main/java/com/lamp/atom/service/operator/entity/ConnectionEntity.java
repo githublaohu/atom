@@ -12,16 +12,14 @@
 package com.lamp.atom.service.operator.entity;
 
 import com.lamp.atom.service.domain.ColonyType;
-import com.lamp.atom.service.domain.SourceType;
+import com.lamp.atom.service.domain.ConnectType;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @ApiModel(value="ConnectionEntity",description="连接实体")
 public class ConnectionEntity extends BaseEntity {
 
@@ -38,34 +36,34 @@ public class ConnectionEntity extends BaseEntity {
     private String operationType;
 
     /**
-     * 数据源类型
-     */
-    private SourceType sourceType;
-
-    /**
      * 数据源名
      */
-    private String sourceName;
+    private String connectName;
+
+    /**
+     * 数据源类型
+     */
+    private ConnectType connectType;
 
     /**
      * 源数据地址
      */
-    private String sourceAddr;
+    private String connectAddr;
 
     /**
      * 源登录账户
      */
-    private String sourceAccount;
+    private String connectAccount;
 
     /**
      * 源登录密码
      */
-    private String sourcePassword;
+    private String connectPassword;
 
     /**
      * 源登录空间：关系型数据库的数据库，oss的bucket,redis的index,es的index
      */
-    private String sourceSpace;
+    private String connectSpace;
 
     /**
      * 模式
@@ -80,7 +78,7 @@ public class ConnectionEntity extends BaseEntity {
     /**
      * 源数据配置
      */
-    private String sourceConf;
+    private Object sourceConf;
 
     /**
      * 源数据路径

@@ -28,13 +28,13 @@ public class ResourceRelationServiceImpl implements ResourceRelationService {
     private ResourceRelationMapper resourceRelationMapper;
 
     @Override
-    public Integer createResourceRelationEntity(ResourceRelationEntity resourceRelationEntity) {
-        return null;
+    public Integer insertResourceRelationEntity(ResourceRelationEntity resourceRelationEntity) {
+        return resourceRelationMapper.insertResourceRelationEntity(resourceRelationEntity);
     }
 
     @Override
-    public Integer insertResourceRelationEntity(ResourceRelationEntity resourceRelationEntity) {
-        return resourceRelationMapper.insertResourceRelationEntity(resourceRelationEntity);
+    public Integer batchInsertResourceRelationEntity(List<ResourceRelationEntity> resourceRelationEntityList) {
+        return resourceRelationMapper.batchInsertResourceRelationEntity(resourceRelationEntityList);
     }
 
     @Override
@@ -48,8 +48,8 @@ public class ResourceRelationServiceImpl implements ResourceRelationService {
     }
 
     @Override
-    public List<ResourceRelationEntity> queryResourceRelationEntitys() {
-        return resourceRelationMapper.queryResourceRelationEntitys();
+    public List<ResourceRelationEntity> queryResourceRelationEntitys(ResourceRelationEntity resourceRelationEntity) {
+        return resourceRelationMapper.queryResourceRelationEntitys(resourceRelationEntity);
     }
 
     @Override

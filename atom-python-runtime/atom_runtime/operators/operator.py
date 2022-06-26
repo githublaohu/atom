@@ -23,11 +23,11 @@ class OperatorRuntime():
     rpc_operator_service:RpcOperatorServcie
     operator_to:OperatorTo
     operator_object:OperatorApi
-    source:Source
-    test_source:Source
-    sink:Source
-
+    source:Source = None
+    test_source:Source = None
+    sink:Source = None
     def set_source(self , source:Source):
+
         self.source = source
 
     def set_test_source(self , test_source:Source):
@@ -46,8 +46,10 @@ class OperatorRuntime():
             self.rpc_operator_service.complete_operators(self.operator_to)
         except Exception as e:
             traceback.print_exc()
-            self.rpc_operator_service.abnormal_operators(self.operator_to)
-            
+            try:
+                self.rpc_operator_service.abnormal_operators(self.operator_to)
+            except Exception as ee:
+                 traceback.print_exc()
 
     def run(self):
         pass

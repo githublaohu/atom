@@ -3,15 +3,16 @@
 from atom_runtime.atom_runtime_api.operator.train_api import TrainOperatorApi
 import pickle
 
-
-
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
-
-import tensorflow as tf
-
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 class TrainExample(TrainOperatorApi):
 
+    def __init__(self) :
+        super().__init__()
+    
     def _init_session(self):
         self.saver = tf.train.Saver(max_to_keep=1)
         config = tf.ConfigProto()
@@ -37,7 +38,7 @@ class TrainExample(TrainOperatorApi):
         # Gradient Descent
         self.optimizer = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
 
-    def initialization(self):  
+    def initialization(self):
         super().initialization()
         self.avg_cost = 0
         self.total_batch = 0
@@ -59,7 +60,7 @@ class TrainExample(TrainOperatorApi):
         pass
 
     def result(self):
-          return  convert_variables_to_constants(self.sess, self.sess.graph_def, output_node_names=['output']).SerializeToString()
+        return  convert_variables_to_constants(self.sess, self.sess.graph_def, output_node_names=['output']).SerializeToString()
     
     def comparision_execute(self,data):
         self.total_batch += + len(data)

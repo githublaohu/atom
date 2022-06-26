@@ -14,15 +14,15 @@ package com.lamp.atom.schedule.api;
 public interface AtomOperatorShedule {
 
 	
-	public void createOperators(Shedule shedule);
+	public void createOperators(Schedule schedule);
 	
-	public default void startOperators(Shedule shedule) {
+	public default void startOperators(Schedule schedule) {
 		
 	}
 	
-	public default void suspendOperators(Shedule shedule) {
+	public default void suspendOperators(Schedule schedule) {
 		
 	}
 	
-	public void uninstallPperators(Shedule shedule);
+	public void uninstallOperators(Schedule schedule);
 }

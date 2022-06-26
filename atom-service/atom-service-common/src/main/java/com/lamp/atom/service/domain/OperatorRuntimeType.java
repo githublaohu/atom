@@ -18,40 +18,51 @@ public enum OperatorRuntimeType {
     /**
      * TRAIN
      */
-    TRAIN,
+    TRAIN("训练算子"),
 
     /**
      * REASONING
      */
-    REASONING,
+    REASONING("推理算子"),
 
     /**
      * FEATURES
      */
-    FEATURES,
+    FEATURES("特征算子"),
 
     /**
      * PYTHON
      */
-    PYTHON,
+    PYTHON("python算子"),
 
     /**
      * FLINK
      */
-    FLINK,
+    FLINK("flink算子"),
 
     /**
      * PY_FLINK
      */
-    PY_FLINK,
+    PY_FLINK("py_flink算子"),
 
     /**
      * ALINK
      */
-    ALINK,
+    ALINK("alink算子"),
 
     /**
      * PYTHON_DATA
      */
-    PYTHON_DATA
+    PYTHON_DATA("python数据算子");
+
+    String name;
+
+    OperatorRuntimeType(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

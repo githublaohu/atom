@@ -12,7 +12,9 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
 
+import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import com.lamp.atom.service.operator.entity.DataSourceEntity;
+import com.lamp.atom.service.operator.service.ConnectionService;
 import com.lamp.atom.service.operator.service.DataSourceService;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
@@ -42,6 +44,8 @@ public class DataSourceController {
 
     @Reference
     private DataSourceService dataSourceService;
+    @Reference
+    private ConnectionService connectionService;
 
     /**
      * 添加数据源
@@ -52,10 +56,14 @@ public class DataSourceController {
     @ApiOperation(value = "添加数据源")
     public ResultObject<String> insertDataSource(@RequestBody DataSourceEntity dataSourceEntity) {
         //字段判空
-        if (Objects.isNull(dataSourceEntity.getOperatorId()) || Objects.isNull(dataSourceEntity.getConnectionId())) {
+        if (Objects.isNull(dataSourceEntity.getConnectionId())) {
             log.info("参数校验失败 {}", dataSourceEntity);
             return ResultObjectEnums.CHECK_PARAMETERS_FAIL.getResultObject();
         }
+        ConnectionEntity connection = new ConnectionEntity();
+        connection.setId(dataSourceEntity.getConnectionId());
+        connection = connectionService.queryConnectionEntity(connection);
+        dataSourceEntity.setConnectionName(connection.getConnectName());
         try {
             dataSourceService.insertDataSourceEntity(dataSourceEntity);
         } catch (Exception e) {
@@ -107,13 +115,14 @@ public class DataSourceController {
     /**
      * 查询多个数据源
      *
+     * @param dataSourceEntity
      * @return
      */
     @PostMapping("/queryDataSources")
     @ApiOperation(value = "查询多个数据源")
-    public List<DataSourceEntity> queryDataSources() {
+    public List<DataSourceEntity> queryDataSources(@RequestBody(required = false) DataSourceEntity dataSourceEntity) {
         try {
-            return dataSourceService.queryDataSourceEntitys();
+            return dataSourceService.queryDataSourceEntitys(dataSourceEntity);
         } catch (Exception e) {
             log.warn("数据源查询失败 {}", e);
             return null;

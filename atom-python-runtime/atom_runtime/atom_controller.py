@@ -9,9 +9,11 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
+import os
 import json
 import signal
 import logging
+import logging.config
 from flask import Flask
 
 from atom_runtime.utils.environment import get_env
@@ -30,23 +32,37 @@ from atom_runtime.service.operator_service import OperatorService
 from atom_runtime.service.rpc_controller_service import RpcControllerServcie
 from atom_runtime.service.rpc_servcie_servcie import HttpClient, RpcServcieServcie
 from atom_runtime.service.source_service import SourceService
+from atom_runtime.service.atom_service import AtomService
 
 app = Flask(__name__)
 
 class AtomController():
+
     atom_config:AtomConfig
+
+    atom_service:AtomService
+
     code_service:CodeService
+
     register_service: RegisterService = None
+
     source_service:SourceService
+
     connect_service:ConnectService
+
     service_service:RpcServcieServcie
     
-
     operator_service: OperatorService
 
     rpc_controller_servcie:RpcControllerServcie
 
     def __init__(self) :
+        path = r'./logging.conf'
+        if os.path.exists(path) == False:
+            path = r'./atom_runtime/logging.conf'
+
+        with open(path,"r",encoding = 'utf-8') as f:
+            logging.config.fileConfig(path)
         self.__init_config__()
         self.__init_logging__()
         self.__init_code__()
@@ -62,6 +78,7 @@ class AtomController():
     def __init_config__(self):
         atom_config_service:AtomConfigServier = AtomConfigServier()
         self.atom_config = atom_config_service.get_atrom_config()
+        self.atom_service = AtomService(self.atom_config)
     
     def __init_logging__(self):
         self.logging_servcie = LoggingServcie()
@@ -91,12 +108,15 @@ class AtomController():
 
         self.rpc_operator_servcie:RpcOperatorServcie = RpcOperatorServcie()
         self.rpc_operator_servcie.client = http_client
+        self.rpc_operator_servcie.atom_service = self.atom_service
         self.rpcRuntimeService:RpcRuntimeService = RpcRuntimeService()
         self.rpcRuntimeService.client = http_client;
         if self.atom_config.docker_model :
            self.atom_config.rpc_controller_port = self.rpcRuntimeService.get_internet_protocol_address()
 
     def __init_operator_service__(self):
+        if  self.atom_config.is_local():
+                return
         self.operator_service = OperatorService()
         self.operator_service.atom_config = self.atom_config
         self.operator_service.code_service = self.code_service

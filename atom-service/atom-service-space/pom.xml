@@ -7,7 +7,7 @@
         <artifactId>atom-service</artifactId>
         <groupId>cn.lampup</groupId>
         <version>0.0.1-SNAPSHOT</version>
-<!--        <relativePath>../pom.xml</relativePath>-->
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>atom-service-space</artifactId>
@@ -33,25 +33,25 @@
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>dubbo-springmvc</artifactId>
-                <version>0.0.6</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>dubbo-provider</artifactId>
-                <version>0.0.6</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>shardingsphere-dependent</artifactId>
-                <version>0.0.6</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>io.github.githublaohu</groupId>
                 <artifactId>logback-dependent</artifactId>
-                <version>0.0.10</version>
+                <version>0.1.4</version>
                 <type>pom</type>
             </dependency>
         </dependencies>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
+            <version>1.18.22</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

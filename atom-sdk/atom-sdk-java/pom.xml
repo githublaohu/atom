@@ -5,7 +5,7 @@
   <parent>
     <groupId>cn.lampup</groupId>
     <artifactId>atom-sdk</artifactId>
-    <version>${reversion}</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>atom-sdk-java</artifactId>
   <name>atom-sdk-java</name>

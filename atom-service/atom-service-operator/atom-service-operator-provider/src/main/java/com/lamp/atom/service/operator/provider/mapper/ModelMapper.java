@@ -55,24 +55,38 @@ public interface ModelMapper {
      */
     @Select("select * from model " +
             "where delete_flag = 0 and " +
-            "(id like #{keyword} or space_id like #{keyword} or space_name like #{keyword} or space_alias like #{keyword} " +
+            "(id like #{keyword} or space_id like #{keyword} or node_id like #{keyword} or runtime_id like #{keyword} or operator_id like #{keyword} " +
             "or scene_id like #{keyword} or scene_name like #{keyword} or scene_alias like #{keyword} " +
-            "or experiment_id like #{keyword} or experiment_name like #{keyword} or experiment_alias like #{keyword} " +
             "or model_create_type like #{keyword} or model_name like #{keyword} or model_version like #{keyword} " +
             "or model_score like #{keyword} or model_type like #{keyword} or model_technology_type like #{keyword} " +
             "or model_address like #{keyword} or model_status like #{keyword} or connect_id like #{keyword} " +
-            "or connect_status like #{keyword} or operator_id like #{keyword} or operator_result like #{keyword} " +
+            "or connect_status like #{keyword} or operator_result like #{keyword} " +
             "or resource_type like #{keyword} or resource_value like #{keyword} or resource_size like #{keyword} or produce_way like #{keyword})")
     List<ModelEntity> queryModelEntitysByKeyword(String keyword);
 
     /**
      * 查询多个模型
      *
+     * @param modelEntity
      * @return
      */
-    @Select("select * from model " +
-            "where delete_flag = 0")
-    List<ModelEntity> queryModelEntitys();
+    @Select({"<script>" +
+            "select * from model " +
+            "where delete_flag = 0 " +
+            "<if test = 'spaceId != null'>and space_id = #{spaceId} </if>" +
+            "<if test = 'nodeId != null'>and node_id = #{nodeId} </if>" +
+            "<if test = 'runtimeId != null'>and runtime_id = #{runtimeId} </if>" +
+            "<if test = 'operatorId != null'>and operator_id = #{operatorId} </if>" +
+            "<if test = 'modelCreateType != null'>and model_create_type = #{modelCreateType} </if>" +
+            "<if test = 'modelType != null'>and model_type = #{modelType} </if>" +
+            "<if test = 'modelTechnologyType != null'>and model_technology_type = #{modelTechnologyType} </if>" +
+            "<if test = 'modelAddress != null'>and model_address = #{modelAddress} </if>" +
+            "<if test = 'modelStatus != null'>and model_status = #{modelStatus} </if>" +
+            "<if test = 'connectId != null'>and connect_id = #{connectId} </if>" +
+            "<if test = 'connectStatus != null'>and connect_status = #{connectStatus} </if>" +
+            "<if test = 'operatorResult != null'>and operator_result = #{operatorResult} </if>" +
+            "</script>"})
+    List<ModelEntity> queryModelEntitys(ModelEntity modelEntity);
 
     /**
      * 查询单个模型

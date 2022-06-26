@@ -15,6 +15,7 @@ import fcntl
 import struct
 from threading import Timer
 
+from atom_runtime.utils.environment  import get_env
 from atom_runtime.atom_config import AtomConfig
            
 class RegisterService():
@@ -26,18 +27,23 @@ class RegisterService():
 
     net_address: str
     atom_config:AtomConfig
-    nacso_client : nacos.NacosClient
+    nacos_client:nacos.NacosClient
     service_instances:list
+    metadata:dict = {}
 
     def __init__(self, atom_config:AtomConfig) :
         self.atom_config = atom_config
         if  atom_config.is_local():
             return
-        self.nacso_client = nacos.NacosClient(atom_config.nacos_address, namespace=atom_config.nacos_namespace)
+        self.metadata["podId"]= get_env("pod_id");
+        self.metadata["nodeInfo"]= get_env("nodeInfo");
+
         self.__get_net_address__()
+
+        self.nacos_client = nacos.NacosClient(server_addresses=atom_config.nacos_address, namespace=atom_config.nacos_namespace)
+        self.nacos_client.add_naming_instance("atom-runtime-python-service-"+self.atom_config.runtime_model,self.net_address, self.atom_config.rpc_controller_port)
+        
         self.__register_and_get_instance__()
-
-
         
 
     def __get_net_address__(self):
@@ -70,8 +76,14 @@ class RegisterService():
             那么服务名是否可变
             如果不可变是否加入groupid 用于区别
         """
-        self.nacso_client.add_naming_instance("atom-runtime-python-service-"+self.atom_config.runtime_model, self.net_address,  self.atom_config.rpc_controller_port)
-        result = self.nacso_client.list_naming_instance("atom-operator-service" , healthy_only = True)
+
+        # 注册服务
+        self.nacos_client.send_heartbeat("atom-runtime-python-service-"+self.atom_config.runtime_model,
+        self.net_address, self.atom_config.rpc_controller_port);
+        
+        # 获取算子服务实例
+        result = self.nacos_client.list_naming_instance("atom-service-operator", healthy_only=True)
+        
         self.service_instances = result["hosts"]
         self.__heartbeat__()
 

@@ -11,6 +11,25 @@
  */
 package com.lamp.atom.schedule.python.operator;
 
+import com.lamp.atom.service.operator.domain.SourceAndConnect;
+import com.lamp.atom.service.operator.entity.ConnectionEntity;
+import com.lamp.atom.service.operator.entity.ModelEntity;
+import com.lamp.atom.service.operator.entity.OperatorEntity;
+import com.lamp.atom.service.space.entity.ResourceAccountEntity;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
 public class CreateOperator {
 
+    private List<SourceAndConnect> sourceAndConnects;
+
+    private ModelEntity modelTo;
+
+    private ResourceAccountEntity resourceAccountTo;
+
+    private OperatorEntity operatorTo;
+
+    private ConnectionEntity modelConnect;
 }

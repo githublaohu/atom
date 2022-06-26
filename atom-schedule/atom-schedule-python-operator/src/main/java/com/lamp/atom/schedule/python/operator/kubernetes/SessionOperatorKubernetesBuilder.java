@@ -19,8 +19,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.alibaba.fastjson.JSON;
-import com.lamp.atom.schedule.api.Shedule;
-import com.lamp.atom.schedule.api.config.OperatorShedeleKubernetesConfig;
+import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.EnvVarSource;
@@ -41,10 +41,10 @@ import lombok.Setter;
 public class SessionOperatorKubernetesBuilder {
 
 	@Setter
-	private OperatorShedeleKubernetesConfig operatorKubernetesConfig;
+	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 	
 	@Setter
-	private Shedule shedule;
+	private Schedule schedule;
 
 	private JobBuilder job = new JobBuilder();
 
@@ -62,11 +62,11 @@ public class SessionOperatorKubernetesBuilder {
 		// nvidia.com/gpu
 		metadata
 				// GPU 还是cpu镜像
-				.withName("atom-runtime-session-"+this.shedule.getNoteName())
+				.withName("atom-runtime-session-"+this.schedule.getNodeName())
 				// 标签，需要几个
 				// 第一个 算子的名字+序列
 				// 的哥
-				.withLabels(shedule.getLabels());
+				.withLabels(schedule.getLabels());
 		metadata.endMetadata();
 	}
 
@@ -74,35 +74,46 @@ public class SessionOperatorKubernetesBuilder {
 		ResourceRequirements resourceRequirements = new ResourceRequirements();
 		Map<String, Quantity> requests = new HashMap<>();
 		resourceRequirements.setRequests(requests);
-		for (Entry<String, String> e : shedule.getHardwareConfig().entrySet()) {
+		for (Entry<String, String> e : schedule.getHardwareConfig().entrySet()) {
 			requests.put(e.getKey(), new Quantity(e.getValue()));
 		}
 
 		Map<String, Quantity> limits = new HashMap<>();
 		resourceRequirements.setLimits(limits);
-		for (Entry<String, String> e : shedule.getLimits().entrySet()) {
+		for (Entry<String, String> e : schedule.getLimits().entrySet()) {
 			limits.put(e.getKey(), new Quantity(e.getKey()));
 		}
 		List<EnvVar> envList = new ArrayList<EnvVar>();
-		for(Entry<String, String> e : shedule.getEnvs().entrySet()) {
+		for(Entry<String, String> e : schedule.getEnvs().entrySet()) {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
 		envList.add(new EnvVar("docker", "true", null));
 		envList.add(new EnvVar("runtime_model", "session", null));
-		envList.add(new EnvVar("operator-data", JSON.toJSONString(shedule.getObject()), null));
+		envList.add(new EnvVar("operator-data", JSON.toJSONString(schedule.getObject()), null));
+		ObjectFieldSelector podIP = new ObjectFieldSelector();
+		podIP.setFieldPath("status.podIP");
+		podIP.setApiVersion("v1");
+		EnvVarSource nodeIp = new EnvVarSource();
+		nodeIp.setFieldRef(podIP);
+		envList.add(new EnvVar("node_ip", null, nodeIp));
+		
 		ObjectFieldSelector podId = new ObjectFieldSelector();
 		podId.setFieldPath("status.podIP");
-		EnvVarSource nodeIp = new EnvVarSource();
-		nodeIp.setFieldRef(podId);
-		envList.add(new EnvVar("node_ip", null, nodeIp));
-		String value = shedule.getHardwareConfig().get("nvidia.com/gpu");
+		podId.setApiVersion("v1");
+		EnvVarSource nodeId = new EnvVarSource();
+		nodeId.setFieldRef(podId);
+		envList.add(new EnvVar("node_id", null, nodeId));
+		
+		
+		
+		String value = schedule.getHardwareConfig().get("nvidia.com/gpu");
 		SpecNested<JobBuilder> spec = job.withNewSpec();
 		spec.withNewTemplate()
 				.withNewSpec()
 				.withRestartPolicy("Never")
 				.withHostNetwork(true)
 				.addNewContainer()
-				.withName(this.shedule.getNoteName())
+				.withName(this.schedule.getNodeName())
 				.withImage(Objects.isNull(value)
 						? this.operatorKubernetesConfig.getCpuContainerName()
 						: this.operatorKubernetesConfig.getGpcContainerName())

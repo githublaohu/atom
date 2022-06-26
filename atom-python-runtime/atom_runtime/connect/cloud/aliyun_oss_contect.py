@@ -18,7 +18,7 @@ class AliyunOSSConnect(Connect):
         2. 要支持断点续传下载
     """
 
-    bucket_dict:map=[]
+    bucket_dict:map={}
 
     def initialization(self):
         super().initialization()

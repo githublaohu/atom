@@ -33,8 +33,23 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
+    public Integer batchInsertRuntimeEntity(List<RuntimeEntity> runtimeEntityList) {
+        return runtimeMapper.batchInsertRuntimeEntity(runtimeEntityList);
+    }
+
+    @Override
     public Integer updateRuntimeEntity(RuntimeEntity runtimeEntity) {
         return runtimeMapper.updateRuntimeEntity(runtimeEntity);
+    }
+
+    @Override
+    public Integer updateRuntimeStatus(RuntimeEntity runtimeEntity) {
+        return runtimeMapper.updateRuntimeStatus(runtimeEntity);
+    }
+
+    @Override
+    public Integer batchUpdateRuntimeEntity(List<RuntimeEntity> runtimeEntityList) {
+        return runtimeMapper.batchUpdateRuntimeEntity(runtimeEntityList);
     }
 
     @Override
@@ -42,15 +57,13 @@ public class RuntimeServiceImpl implements RuntimeService {
         return runtimeMapper.queryRuntimeEntitysByKeyword(keyword);
     }
 
+    @Override
+    public List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity) {
+        return runtimeMapper.queryRuntimeEntitys(runtimeEntity);
+    }
 
     @Override
     public RuntimeEntity queryRuntimeEntity(RuntimeEntity runtimeEntity) {
         return runtimeMapper.queryRuntimeEntity(runtimeEntity);
     }
-
-	@Override
-	public List<RuntimeEntity> queryRuntimeEntitys(RuntimeEntity runtimeEntity) {
-		// TODO Auto-generated method stub
-		return runtimeMapper.queryRuntimeEntitys(runtimeEntity);
-	}
 }
