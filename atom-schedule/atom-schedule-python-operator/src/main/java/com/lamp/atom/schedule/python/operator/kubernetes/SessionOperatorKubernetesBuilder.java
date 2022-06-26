@@ -81,7 +81,7 @@ public class SessionOperatorKubernetesBuilder {
 		Map<String, Quantity> limits = new HashMap<>();
 		resourceRequirements.setLimits(limits);
 		for (Entry<String, String> e : schedule.getLimits().entrySet()) {
-			limits.put(e.getKey(), new Quantity(e.getKey()));
+			limits.put(e.getKey(), new Quantity(e.getValue()));
 		}
 		List<EnvVar> envList = new ArrayList<EnvVar>();
 		for(Entry<String, String> e : schedule.getEnvs().entrySet()) {
