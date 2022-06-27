@@ -26,134 +26,49 @@ Atom是一个为AI服务的可编排自动化运行平台，能够在该平台�
 
 **docker：**docker模块，包括dockerfile和kubernetes的yaml配置文件模板
 
-## 三、快速启动
-
-#### 1、在Nacos中添加如下两个配置文件
-
-###### operator-provider-dev
-
-```yaml
-spring:
-  datasource:
-    name: lamp-atom
-    url: jdbc:mysql://{mysql_ip}:{port}/atom?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true
-    username: {username}
-    password: {password}
-    # using druid data source
-    type: com.alibaba.druid.pool.DruidDataSource
-    maxActive: 20
-    initialSize: 1
-    maxWait: 60000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
-    # encrypt password
-    filters: config,stat,slf4j
-
-dubbo:
-  scan:
-    base-packages: com.lamp.atom.service.operator.provider.service.impl
-  application:
-    name: lamp-atom-service-operator
-    owner: dome
-    logger: slf4j
-  protocol:
-    name: dubbo
-    port: 20880
-    accesslog: true
-  provider:
-    timeout: 30000
-    retries: 0
-  registry:
-    address: nacos://{nacos_ip}:{port}
-    parmeters:
-      namespace: atom-dev
-    register: true
-    subscribe: false
-
-mybatis:
-  checkConfig-location : false
-  configuration:
-    useGeneratedKeys: true
-    mapUnderscoreToCamelCase: true
-    name: atom-service-operator-provider
-
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
-```
-
-######  operator-consumer-dev
-
-```yaml
-spring:
-  application:
-    name: lamp-atom-service-operator
-    owner: dome
-    logger: slf4j
-    name: atom-service-operator-consumer
-
-dubbo:
-  protocol:
-    name: dubbo
-    port: 20880
-    accesslog: true
-  consume:
-    timeout: 30000
-    retries: 0
-  registry:
-    address: nacos://{nacos_ip}:{port}
-    parmeters:
-      namespace: atom-dev
-    register: true
-    subscribe: true
-  scan:
-    base-packages: com.lamp.atom.service.operator.consumer.controller
-
-atom:
-    schedule:
-      operatorScheduleConfig:
-        operatorScheduleKubernetesConfig:
-          isUser: true
-          masterUrl: https://{kubernetes_ip}:{port}/
-          configName: kubernetesConfig.yaml
-        operatorScheduleRpcConfig:
-          namespace: atom-dev
-          serverAddr: {nacos_ip}:{port}
-
-decoration:
-   defaultExceptionResult: com.lamp.atom.service.operator.consumers.utils.AtomConsumerExceptionResult
-```
-
-#### 2、启动算子模块的生产者
-
-```java
-com.lamp.atom.service.operator.provider.AtomServiceOperatorProviderApplication.java
-```
-
-#### 3、启动算子模块的消费者
-
-```java
-com.lamp.atom.service.operator.consumer.AtomServiceOperatorConsumerApplication.java
-```
-
-#### 4、启动python的runtime服务
-
-启动atom-runtime-python模块的main.py
-
-## 四、算子模块各部分的依赖关系
+## 三、算子模块各部分的依赖关系
 
 #### 1、各部分的关联关系
 
-![atom_relationship](../../images/atom_relationship.png)
+![atom_relationship](images/atom_relationship.png)
+
+
+
+节点关联关系
+
+节点（算子、模型、数据源、基本配置、最大配置、最小配置）
+
+runtime：
+
+- node的runtime
+- operator的runtime
+- kubernetes的调度任务
+
+训练算子完成
+
+=》数据入库（MySQL或OSS）
+
+=》回调推理服务算子
+
+
+
+空间space=》场景expirement=》实验exam
+
+开始节点和开始实验不同，实验包含多个节点，一个实验有点大
+
+开始节点：
+
+1、节点为“编辑完成”
+
+2、查看节点的依赖信息
+
+3、创建runtime
+
+4、创建schedule
+
+
+
+
 
 #### 2、模块创建
 
@@ -339,7 +254,7 @@ POST:/lamp/atom/service/operator/node/createNodeRelation
 | maxServiceInfoId | Long | 是       | 最大服务配置ID |
 | minServiceInfoId | Long | 是       | 最小服务配置ID |
 
-## 五、启动任务
+## 四、启动任务流程
 
 接口：
 
@@ -356,9 +271,9 @@ POST:/lamp/atom/service/operator/taskEvent/startNodeTask
 
 启动训练算子流程：
 
-![start_task](../../images/start_task.png)
+![start_task](images/start_task.png)
 
-## 六、启动算子
+## 五、启动算子流程
 
 #### 1、训练算子
 
