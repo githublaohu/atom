@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
+import com.lamp.atom.service.domain.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,21 +36,13 @@ import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.ScheduleCallback;
+import com.lamp.atom.schedule.api.ScheduleReturn;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
 import com.lamp.atom.schedule.api.strategy.ScheduleStrategyType;
 import com.lamp.atom.schedule.api.strategy.Strategy;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.schedule.python.operator.CreateOperator;
-import com.lamp.atom.service.domain.CaseSourceType;
-import com.lamp.atom.service.domain.DeployType;
-import com.lamp.atom.service.domain.ModelCreateType;
-import com.lamp.atom.service.domain.NodeStatus;
-import com.lamp.atom.service.domain.OperatorRuntimeStatus;
-import com.lamp.atom.service.domain.OperatorRuntimeType;
-import com.lamp.atom.service.domain.RelationType;
-import com.lamp.atom.service.domain.ResourceType;
 import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.atom.service.operator.domain.SourceAndConnect;
 import com.lamp.atom.service.operator.domain.TaskParam;
@@ -220,11 +213,24 @@ public class TaskEventController {
             runtimeList.add(runtime);
         }
 
-        // 4、保存Runtime信息，开启调度
+        // 4、保存Runtime信息
         runtimeService.batchInsertRuntimeEntity(runtimeList);
+        // 5、开启调度
+        ScheduleReturn scheduleReturn = new ScheduleReturn();
         for (Schedule schedule : scheduleList) {
-            atomScheduleService.createOperators(schedule);
+            try {
+                scheduleReturn = atomScheduleService.createOperators(schedule);
+                if (scheduleReturn.getScheduleStatus() != 200) {
+                    throw new Exception("createOperators exception!(调度异常)");
+                }
+                log.error("createOperators success!(调度成功)");
+            } catch (Exception e) {
+                // 调度失败
+                runtimeService.batchUpdateRuntimeEntity(runtimeList);
+                log.error("createOperators exception!(调度异常)");
+            }
         }
+        updateRuntimeStatus(runtimeList, scheduleReturn.getScheduleStatus());
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
@@ -264,12 +270,14 @@ public class TaskEventController {
             runtimeList.addAll(runtimeEntityList);
         }
 
-        // 4、修改Runtime信息，关闭调度
+        // 4、修改Runtime信息
         for (RuntimeEntity runtimeEntity : runtimeList) {
             runtimeEntity.setEndTime(new Date());
-            runtimeEntity.setOperatorRuntimeStatus(OperatorRuntimeStatus.MANUAL_FINISH);
+            runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.MANUAL_FINISH);
         }
         runtimeService.batchUpdateRuntimeEntity(runtimeList);
+
+        // 5、关闭调度
         for (Schedule schedule : scheduleList) {
             atomScheduleService.uninstallOperators(schedule);
         }
@@ -311,17 +319,17 @@ public class TaskEventController {
         runtimeService.batchInsertRuntimeEntity(runtimeEntityList);
 
         // 5、开启调度
+        ScheduleReturn scheduleReturn = new ScheduleReturn();
         try {
-            ScheduleCallback callback = atomScheduleService.createOperators(schedule);
-            if (Objects.equals(ScheduleCallback.OK, callback)) {
-                updateRuntimeStatus(runtimeEntityList, ScheduleCallback.OK);
+            scheduleReturn = atomScheduleService.createOperators(schedule);
+            if (200 != scheduleReturn.getScheduleStatus()) {
+                throw new Exception("createOperators exception!(调度异常)");
             }
-            else {
-                throw new Exception();
-            }
+            log.error("createOperators success!(调度成功)");
         } catch (Exception e) {
-            updateRuntimeStatus(runtimeEntityList, ScheduleCallback.FAIL);
+            log.error("createOperators exception!(调度异常)");
         }
+        updateRuntimeStatus(runtimeEntityList, scheduleReturn.getScheduleStatus());
         runtimeService.batchUpdateRuntimeEntity(runtimeEntityList);
 
         return ResultObjectEnums.SUCCESS.getResultObject();
@@ -668,7 +676,7 @@ public class TaskEventController {
         Deploy deploy = new Deploy();
         schedule.setDeploy(deploy);
         List<AtomInstances> instancesList = new ArrayList<>();
-        //todo 部署实例获取
+        //todo 部署实例获取 使用随机端口
         deploy.setInstancesList(instancesList);
 
         // 获取runtime部署实例
@@ -830,9 +838,9 @@ public class TaskEventController {
      * 修改Runtime信息
      * @param runtimeEntityList
      */
-    public void updateRuntimeStatus(List<RuntimeEntity> runtimeEntityList, ScheduleCallback scheduleCallback) {
+    public void updateRuntimeStatus(List<RuntimeEntity> runtimeEntityList, Integer scheduleStatus) {
         // 调度成功
-        if (Objects.equals(ScheduleCallback.OK, scheduleCallback)) {
+        if (200 == scheduleStatus) {
             for (RuntimeEntity runtimeEntity : runtimeEntityList) {
                 if (Objects.equals(CaseSourceType.NODE, runtimeEntity.getCaseSourceType())) {
                     runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
@@ -841,13 +849,10 @@ public class TaskEventController {
                     runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
                 }
                 if (Objects.equals(CaseSourceType.JOB, runtimeEntity.getCaseSourceType())) {
-                    runtimeEntity.setRuntimeStatus(ScheduleRuntimeStatus.RUNNING);
+                    runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUING);
                 }
             }
-        }
-
-        // 调度失败
-        if (Objects.equals(ScheduleCallback.FAIL, scheduleCallback)) {
+        } else {// 调度失败
             for (RuntimeEntity runtimeEntity : runtimeEntityList) {
                 if (Objects.equals(CaseSourceType.NODE, runtimeEntity.getCaseSourceType())) {
                     runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TRAIN_EXCEPTION);
@@ -856,7 +861,7 @@ public class TaskEventController {
                     runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.TRAIN_EXCEPTION);
                 }
                 if (Objects.equals(CaseSourceType.JOB, runtimeEntity.getCaseSourceType())) {
-                    runtimeEntity.setRuntimeStatus(ScheduleRuntimeStatus.SCHEDULE_FAIL);
+                    runtimeEntity.setRuntimeStatus(OperatorRuntimeStatus.QUEUE_CANCELING);
                 }
             }
         }

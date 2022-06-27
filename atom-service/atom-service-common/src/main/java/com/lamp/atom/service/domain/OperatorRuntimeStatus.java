@@ -12,7 +12,7 @@
 package com.lamp.atom.service.domain;
 
 /**
- * 训练状态
+ * 调度状态
  */
 public enum OperatorRuntimeStatus {
     /**
@@ -31,9 +31,9 @@ public enum OperatorRuntimeStatus {
     QUEUE_CANCELING("排队取消中"),
 
     /**
-     * console 训练中
+     * console 调度中
      */
-    TRAINING("训练中"),
+    TRAINING("调度中"),
 
     /**
      * runtime 测试中

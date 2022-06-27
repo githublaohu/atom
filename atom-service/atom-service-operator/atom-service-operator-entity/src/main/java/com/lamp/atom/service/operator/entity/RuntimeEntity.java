@@ -14,6 +14,7 @@ package com.lamp.atom.service.operator.entity;
 import java.util.Date;
 
 import com.lamp.atom.service.domain.CaseSourceType;
+import com.lamp.atom.service.domain.OperatorRuntimeStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -82,10 +83,8 @@ public class RuntimeEntity<T> extends BaseEntity {
 
     /**
      * 运行状态
-     * 1、算子运行状态 OperatorRuntimeStatus
-     * 2、调度状态 ScheduleRuntimeStatus
      */
-    private T runtimeStatus;
+    private OperatorRuntimeStatus runtimeStatus;
 
     /**
      * 服务标签

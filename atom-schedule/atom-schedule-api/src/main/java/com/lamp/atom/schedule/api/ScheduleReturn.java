@@ -11,18 +11,25 @@
  */
 package com.lamp.atom.schedule.api;
 
-public interface AtomOperatorShedule {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	
-	public ScheduleReturn createOperators(Schedule schedule);
-	
-	public default void startOperators(Schedule schedule) {
-		
-	}
-	
-	public default void suspendOperators(Schedule schedule) {
-		
-	}
-	
-	public void uninstallOperators(Schedule schedule);
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ScheduleReturn {
+
+    /**
+     * SUCCESS:200
+     * FAIL:500
+     */
+    private Integer scheduleStatus;
+
+    /**
+     * SUCCESS
+     * FAIL
+     */
+    private String scheduleMessage;
+
 }

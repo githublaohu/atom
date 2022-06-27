@@ -12,17 +12,16 @@
  */
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
-import java.util.List;
 import java.util.Objects;
 
 import com.alibaba.nacos.api.naming.NamingService;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Schedule;
-import com.lamp.atom.schedule.api.ScheduleCallback;
+import com.lamp.atom.schedule.api.ScheduleReturn;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
-import com.lamp.atom.schedule.api.deploy.AtomInstances;
+import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
@@ -89,27 +88,28 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 	}
 
 	@Override
-	public ScheduleCallback createOperators(Schedule schedule) {
+	public ScheduleReturn createOperators(Schedule schedule) {
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
 		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getJob());
 		log.info("job info : {}", job);
+
 		try {
 			client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
 					.createOrReplace(operatorKubernetesBuilder.getJob());
 
 			// 注册服务
-			List<AtomInstances> instancesList = schedule.getDeploy().getInstancesList();
-			for (AtomInstances atomInstance: instancesList) {
-				namingService.registerInstance("atom-runtime-kubernetes-service", atomInstance.getIp(), atomInstance.getPort());
-			}
+//			List<AtomInstances> instancesList = schedule.getDeploy().getInstancesList();
+//			for (AtomInstances atomInstance: instancesList) {
+//				namingService.registerInstance("atom-runtime-kubernetes-service", atomInstance.getIp(), atomInstance.getPort());
+//			}
 
-			return ScheduleCallback.OK;
+			return new ScheduleReturn(200, "SUCCESS");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			return ScheduleCallback.FAIL;
+			return new ScheduleReturn(500, "FAIL");
 		}
 	}
 
