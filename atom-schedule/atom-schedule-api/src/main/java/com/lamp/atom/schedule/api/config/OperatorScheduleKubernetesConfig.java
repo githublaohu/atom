@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class OperatorScheduleKubernetesConfig {
 
-	private boolean isUser = false;
+	private boolean isUser = true;
 	
 	private String masterUrl;
 	

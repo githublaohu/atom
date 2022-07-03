@@ -20,4 +20,8 @@ public class OperatorScheduleConfig {
 
 	private OperatorScheduleRpcConfig operatorScheduleRpcConfig;
 
+	public OperatorScheduleConfig() {
+		this.operatorScheduleKubernetesConfig = new OperatorScheduleKubernetesConfig();
+		this.operatorScheduleRpcConfig = new OperatorScheduleRpcConfig();
+	}
 }

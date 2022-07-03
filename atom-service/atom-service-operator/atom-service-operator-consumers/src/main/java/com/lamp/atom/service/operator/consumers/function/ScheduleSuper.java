@@ -41,7 +41,7 @@ public class ScheduleSuper implements BeanFactoryAware {
 
 	private BeanFactory beanFactory;
 
-	@Setter
+//	@Setter
 	private OperatorScheduleConfig operatorScheduleConfig;
 
 	private AtomScheduleService atomScheduleService;
@@ -76,6 +76,7 @@ public class ScheduleSuper implements BeanFactoryAware {
 	}
 
 	private String getKubernetesConfigByFile() throws IOException {
+		operatorScheduleConfig = new OperatorScheduleConfig();
 		Resource resource = new ClassPathResource(operatorScheduleConfig.getOperatorScheduleKubernetesConfig().getConfigName());
 		if (resource.exists()) {
 			return FileUtils.readFileToString(resource.getFile(), CharEncoding.UTF_8);

@@ -10,6 +10,7 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 import json
+import requests
 from flask import Flask,request
 from atom_runtime.utils.data_handler_utils import DataHandler
 from atom_runtime.service.operator_service import  OperatorService
@@ -35,6 +36,9 @@ class OperatorController():
         data = data_handler.humpToUnderline(data)
         operator_create_to = OperatorCreateTo(data)
         self.operator_service.create_operators(operator_create_to)
+        # 回调自动完成接口
+        request_param = {"taskId": "", "operatorRuntimeType": operator_create_to.operator_to.operator_runtime_type, "runParameter":{}, "envs":{}}
+        requests.post("/lamp/atom/service/operator/taskEvent/startNodeTask", request_param)
         
     def start_operators(self):
         data = json.loads(request.get_data(as_text=True))

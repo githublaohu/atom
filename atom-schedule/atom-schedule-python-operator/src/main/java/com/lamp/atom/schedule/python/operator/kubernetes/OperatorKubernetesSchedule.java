@@ -59,13 +59,13 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 
 	public OperatorKubernetesSchedule(OperatorScheduleKubernetesConfig operatorKubernetesConfig) throws Exception {
-		this.operatorKubernetesConfig = operatorKubernetesConfig;
-		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
-			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());
-		} else if (Objects.nonNull(operatorKubernetesConfig.getConfigYaml())) {
-			Config config = Config.fromKubeconfig(operatorKubernetesConfig.getConfigYaml());
-			client = new DefaultKubernetesClient(config);
-		}
+//		this.operatorKubernetesConfig = operatorKubernetesConfig;
+//		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
+//			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());
+//		} else if (Objects.nonNull(operatorKubernetesConfig.getConfigYaml())) {
+//			Config config = Config.fromKubeconfig(operatorKubernetesConfig.getConfigYaml());
+//			client = new DefaultKubernetesClient(config);
+//		}
 	}
 
 	@Override
@@ -73,6 +73,13 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		StandaloneOperatorKubernetesBuilder operatorKubernetesBuilder = new StandaloneOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
+
+		// for test
+		NamespaceList namespaceList = client.namespaces().list();
+		namespaceList.getItems()
+				.forEach(namespace ->
+						System.out.println(namespace.getMetadata().getName() + ":" + namespace.getStatus().getPhase()));
+
 		Deployment deployment = client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getDeployment());
 		log.info("deployment info : {}", deployment);

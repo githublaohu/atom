@@ -82,7 +82,7 @@ public class PortCreatingFunction {
      *
      * @throws NacosException
      */
-    @PostConstruct
+//    @PostConstruct
     public void init() throws NacosException {
         Properties properties = new Properties();
         properties.put("serverAddr", this.nacosAddr);

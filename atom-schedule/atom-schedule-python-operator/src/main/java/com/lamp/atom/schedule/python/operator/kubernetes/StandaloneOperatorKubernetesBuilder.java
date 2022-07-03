@@ -11,6 +11,8 @@
  */
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import com.alibaba.fastjson.JSON;
 import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
@@ -31,6 +34,7 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
 import io.fabric8.kubernetes.api.model.apps.DeploymentFluent.MetadataNested;
 import io.fabric8.kubernetes.api.model.apps.DeploymentFluent.SpecNested;
 import lombok.Setter;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * 主要用于推理,晚上
@@ -63,7 +67,7 @@ public class StandaloneOperatorKubernetesBuilder {
 			    // 空间名
 				// 场景名
 				// TODO 真麻烦，好难。
-				.withName("atom-runtime-standalone" + this.schedule.getNodeName())
+				.withName("atom-runtime-standalone-" + this.schedule.getNodeName())
 				// 标签，需要几个
 				//
 				.withLabels(this.schedule.getLabels());
@@ -118,6 +122,13 @@ public class StandaloneOperatorKubernetesBuilder {
 		this.job();
 		this.metadata();
 		this.spec();
+		System.out.println(JSON.toJSON(job.build()));
+		Yaml yaml = new Yaml();
+		try {
+			yaml.dump(job.build(), new FileWriter("standalone.yaml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return job.build();
 	}
 }
