@@ -84,7 +84,7 @@ public class RuntimeEntity<T> extends BaseEntity {
     /**
      * 运行状态
      */
-    private OperatorRuntimeStatus runtimeStatus;
+    private OperatorRuntimeStatus operatorRuntimeStatus;
 
     /**
      * 服务标签

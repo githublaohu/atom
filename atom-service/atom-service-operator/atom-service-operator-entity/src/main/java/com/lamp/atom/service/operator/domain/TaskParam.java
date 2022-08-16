@@ -15,7 +15,7 @@ public class TaskParam {
     private Long taskId;
 
     /**
-     * 算子类型
+     * 算子类型，如TRAIN、REASONING
      */
     private OperatorRuntimeType operatorRuntimeType;
 

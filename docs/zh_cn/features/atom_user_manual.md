@@ -139,7 +139,7 @@ POST:/lamp/atom/service/operator/model/insertModel
 | 参数                | 类型                                             | 是否必须 | 备注         |
 | ------------------- | ------------------------------------------------ | -------- | ------------ |
 | spaceId             | Long                                             | 是       | 空间ID       |
-| nodeId              | Long                                             |          | 节点ID       |
+| nodeId              | Long                                             | 是       | 节点ID       |
 | runtimeId           | Long                                             | 是       | 运行实例ID   |
 | operatorId          | Long                                             | 是       | 训练ID       |
 | modelCreateType     | Enum("DATA","TRAIN","REASON","FEATURE","UPLOAD") | 是       | 模型创建类型 |
@@ -339,7 +339,13 @@ POST:/lamp/atom/service/operator/taskEvent/runningAutoFinish
 
 
 
+## 六、迭代
 
+- 日志监控、监控等级
+- 数据算子开发
+- 代码全接入gitlab
+- 代码开发流程规范（review）
+- 
 
 
 
