@@ -9,6 +9,8 @@
 | MySQL  | 8.0   | 是       |
 | Nacos  | 2.0.3 | 是       |
 
+pip install flask nacos-sdk-python pyyaml pydantic requests gitpython oss2 pymysql boto3
+
 ## 二、启动算子服务
 
 Nacos作为算子服务的**注册中心和配置中心**

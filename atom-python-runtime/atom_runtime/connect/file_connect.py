@@ -28,6 +28,6 @@ class FileConnect(Connect):
          with open(content, 'rb') as f:
              return f.read()
 
-    def write(self , conntent:str , data):
+    def write(self, conntent:str , data):
         file = open( conntent, 'wb')
         file.write(data)

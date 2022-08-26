@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value="RuntimeEntity",description="运行实例类")
-public class RuntimeEntity<T> extends BaseEntity {
+public class RuntimeEntity extends BaseEntity {
 
     private static final long serialVersionUID = -2237946472510786359L;
 
@@ -49,7 +49,7 @@ public class RuntimeEntity<T> extends BaseEntity {
     /**
      * 服务配置ID
      */
-    private Long sourceId;
+    private Long serviceInfoId;
 
     /**
      * 服务器IP
@@ -59,7 +59,7 @@ public class RuntimeEntity<T> extends BaseEntity {
     /**
      * 服务器端口
      */
-    private String serverPort;
+    private Integer serverPort;
 
     /**
      * 开始时间

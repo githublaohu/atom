@@ -10,6 +10,7 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 from atom_runtime.transfer_object.operator.connect_to import ConnectTo
+from atom_runtime.transfer_object.operator.source_to import SourceTo
 
 
 class StreamAPI():
@@ -33,6 +34,7 @@ class StreamAPI():
 class Connect():
 
     connect_to:ConnectTo
+    source_to:SourceTo
 
     def __init__(self, data):
         if len(data) == 0:
@@ -57,7 +59,7 @@ class Connect():
     def download(self,connect:str,path:str,data):
         pass
 
-    def write(self , conntent:str , data):
+    def write(self, conntent:str , data):
         pass
 
 

@@ -205,7 +205,7 @@ public class TaskEventController {
                     limits.put("min_service_config", JSON.toJSONString(serviceInfo));
                 }
                 if (resourceRelation.getBeRelatedType() == ResourceType.DATASOURCE) {
-                    runtime.setSourceId(resourceRelation.getBeRelatedId());
+                    runtime.setServiceInfoId(resourceRelation.getBeRelatedId());
                 }
             }
 
@@ -324,6 +324,7 @@ public class TaskEventController {
         Schedule schedule = getSchedule(taskParam, node, runtimeEntityList);
 
         // 4、保存Runtime信息
+        //todo 返回自增主键ID
         runtimeService.batchInsertRuntimeEntity(runtimeEntityList);
 
         // 5、开启调度
@@ -339,6 +340,8 @@ public class TaskEventController {
         }
         updateRuntimeStatus(runtimeEntityList, scheduleReturn.getScheduleStatus());
         runtimeService.batchUpdateRuntimeEntity(runtimeEntityList);
+
+        //todo 更新节点信息（修改时间）
 
         return ResultObjectEnums.SUCCESS.getResultObject();
     }
@@ -687,7 +690,7 @@ public class TaskEventController {
         //todo 部署实例获取 使用随机端口
         deploy.setInstancesList(instancesList);
 
-        // 获取runtime部署实例
+        // 获取部署实例
         List<String> serviceNames = new ArrayList<>();
         serviceNames.add("atom-runtime-python-service-standalone");
         for (String serviceName : serviceNames) {
@@ -699,6 +702,8 @@ public class TaskEventController {
                 instancesList.add(atomInstances);
             }
         }
+
+        //todo 当没实例时，抛出异常
 
         CreateOperator operatorCreateTo = new CreateOperator();
         schedule.setObject(operatorCreateTo);
@@ -720,35 +725,48 @@ public class TaskEventController {
         strategy.setTiming("0");
         //todo 策略的标签
 
-        // 节点、算子和k8s的rumtime
-        RuntimeEntity nodeRuntime = new RuntimeEntity();
-        RuntimeEntity operatorRuntime = new RuntimeEntity();
+        /**
+         * 节点、算子和k8s的rumtime
+         * 有多个部署实例时，创建多个runtime
+         */
+        List<RuntimeEntity> nodeRuntimeList = new ArrayList<>();
+        List<RuntimeEntity> operatorRuntimeList = new ArrayList();
         RuntimeEntity kubernetesRuntime = null;
         if (Objects.nonNull(runtimeEntityList)) {
-            nodeRuntime.setSpaceId(node.getSpaceId());
-            nodeRuntime.setCaseSourceType(CaseSourceType.NODE);
-            nodeRuntime.setNodeId(node.getId());
-            nodeRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
-            nodeRuntime.setStartTime(new Date());
-            nodeRuntime.setEstimateStartTime(new Date());
-            //todo runtime的启动/关闭人需要用户管理模块的字段
-            nodeRuntime.setStartId(1L);
-            nodeRuntime.setStartName("");
-            nodeRuntime.setEndId(1L);
-            nodeRuntime.setEndName("");
+            for (AtomInstances instance: instancesList) {
+                RuntimeEntity nodeRuntime = new RuntimeEntity();
+                nodeRuntime.setSpaceId(node.getSpaceId());
+                nodeRuntime.setNodeId(node.getId());
+                nodeRuntime.setCaseSourceId(node.getId());
+                nodeRuntime.setCaseSourceType(CaseSourceType.NODE);
+                nodeRuntime.setServerIp(instance.getIp());
+                nodeRuntime.setServerPort(instance.getPort());
+                nodeRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+                nodeRuntime.setStartTime(new Date());
+                nodeRuntime.setEstimateStartTime(new Date());
+                //todo runtime的启动/关闭人需要用户管理模块的字段
+                nodeRuntime.setStartId(1L);
+                nodeRuntime.setStartName("");
+                nodeRuntime.setEndId(1L);
+                nodeRuntime.setEndName("");
+                nodeRuntimeList.add(nodeRuntime);
 
-            operatorRuntime.setSpaceId(node.getSpaceId());
-            operatorRuntime.setCaseSourceType(CaseSourceType.OPERATOR);
-            operatorRuntime.setNodeId(node.getId());
-            operatorRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
-            operatorRuntime.setStartTime(new Date());
-            operatorRuntime.setEstimateStartTime(new Date());
-            //todo runtime的启动/关闭人需要用户管理模块的字段
-            operatorRuntime.setStartId(1L);
-            operatorRuntime.setStartName("");
-            operatorRuntime.setEndId(1L);
-            operatorRuntime.setEndName("");
-
+                RuntimeEntity operatorRuntime = new RuntimeEntity();
+                operatorRuntime.setSpaceId(node.getSpaceId());
+                operatorRuntime.setNodeId(node.getId());
+                operatorRuntime.setCaseSourceType(CaseSourceType.OPERATOR);
+                operatorRuntime.setServerIp(instance.getIp());
+                operatorRuntime.setServerPort(instance.getPort());
+                operatorRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
+                operatorRuntime.setStartTime(new Date());
+                operatorRuntime.setEstimateStartTime(new Date());
+                //todo runtime的启动/关闭人需要用户管理模块的字段
+                operatorRuntime.setStartId(1L);
+                operatorRuntime.setStartName("");
+                operatorRuntime.setEndId(1L);
+                operatorRuntime.setEndName("");
+                operatorRuntimeList.add(operatorRuntime);
+            }
         }
 
         for (ResourceRelationEntity resourceRelation : resourceRelations) {
@@ -764,6 +782,9 @@ public class TaskEventController {
                 OperatorEntity operator = new OperatorEntity();
                 operator.setId(resourceRelation.getBeRelatedId());
                 operator = operatorService.queryOperatorEntity(operator);
+                for (RuntimeEntity operatorRuntime: operatorRuntimeList) {
+                    operatorRuntime.setCaseSourceId(operator.getId());
+                }
                 operatorCreateTo.setOperatorTo(operator);
                 schedule.setOperatorRuntimeType(operator.getOperatorRuntimeType());
 
@@ -772,6 +793,11 @@ public class TaskEventController {
                     kubernetesRuntime = new RuntimeEntity();
                     kubernetesRuntime.setSpaceId(node.getSpaceId());
                     kubernetesRuntime.setCaseSourceType(CaseSourceType.JOB);
+
+                    //todo 获取k8s部署实例的IP+PORT
+                    kubernetesRuntime.setServerIp("-1");
+                    kubernetesRuntime.setServerPort(-1);
+
                     kubernetesRuntime.setNodeId(node.getId());
                     kubernetesRuntime.setOperatorRuntimeStatus(OperatorRuntimeStatus.EDITING);
                     kubernetesRuntime.setStartTime(new Date());
@@ -800,8 +826,12 @@ public class TaskEventController {
                 sourceAndConnects.add(sourceAndConnect);
                 operatorCreateTo.setSourceAndConnects(sourceAndConnects);
 
-                nodeRuntime.setSourceId(resourceRelation.getBeRelatedId());
-                operatorRuntime.setSourceId(resourceRelation.getBeRelatedId());
+                for (RuntimeEntity nodeRuntime: nodeRuntimeList) {
+                    nodeRuntime.setServiceInfoId(resourceRelation.getBeRelatedId());
+                }
+                for (RuntimeEntity operatorRuntime: operatorRuntimeList) {
+                    operatorRuntime.setServiceInfoId(resourceRelation.getBeRelatedId());
+                }
             }
 
             // todo operatorCreateTo设置的SourceAccountTo需要用户管理模块提供
@@ -815,8 +845,12 @@ public class TaskEventController {
                 hardwareConfig.put("displayMemory", String.valueOf(serviceInfo.getSiDisplayMemory()));
                 labelMap.put(serviceInfo.getSiName(), serviceInfo.getSiLabel());
 
-                nodeRuntime.setLabel(serviceInfo.getSiLabel());
-                operatorRuntime.setLabel(serviceInfo.getSiLabel());
+                for (RuntimeEntity nodeRuntime: nodeRuntimeList) {
+                    nodeRuntime.setLabel(serviceInfo.getSiLabel());
+                }
+                for (RuntimeEntity operatorRuntime: operatorRuntimeList) {
+                    operatorRuntime.setLabel(serviceInfo.getSiLabel());
+                }
             }
             // 服务最大配置信息
             if (resourceRelation.getBeRelatedType() == ResourceType.MAX_SERVICE_INFO) {
@@ -829,11 +863,12 @@ public class TaskEventController {
                 limits.put("min_service_config", JSON.toJSONString(serviceInfo));
             }
         }
+        operatorCreateTo.getModelTo().setOperatorId(operatorCreateTo.getOperatorTo().getId());
 
-        // 如果是创建调度，则设置runtime信息
+        // 如果是创建训练任务，则设置runtime信息
         if (Objects.nonNull(runtimeEntityList)) {
-            runtimeEntityList.add(nodeRuntime);
-            runtimeEntityList.add(operatorRuntime);
+            runtimeEntityList.addAll(nodeRuntimeList);
+            runtimeEntityList.addAll(operatorRuntimeList);
             if (Objects.nonNull(kubernetesRuntime)) {
                 runtimeEntityList.add(kubernetesRuntime);
             }

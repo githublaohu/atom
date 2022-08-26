@@ -48,9 +48,9 @@ public class AtomScheduleService implements AtomOperatorShedule, AtomServiceShed
 		rpcSchedule = new OperatorRpcSchedule(this.operatorScheduleConfig.getOperatorScheduleRpcConfig());
 
 		//训练算子
-		atomOperatorScheduleMap.put(OperatorRuntimeType.TRAIN,kubernetesSchedule);
+		atomOperatorScheduleMap.put(OperatorRuntimeType.TRAIN, rpcSchedule);
 		//推理算子
-		atomOperatorScheduleMap.put(OperatorRuntimeType.REASONING,rpcSchedule);
+		atomOperatorScheduleMap.put(OperatorRuntimeType.REASONING, kubernetesSchedule);
 
 	}
 	

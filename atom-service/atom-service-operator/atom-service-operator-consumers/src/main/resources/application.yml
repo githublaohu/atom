@@ -6,8 +6,6 @@ server:
 spring:
   application:
     name: atom-service-operator-consumer
-  resources:
-    static-locations: classpath:/static/
 nacos:
   config:
     server-addr: 124.223.198.143:8848
