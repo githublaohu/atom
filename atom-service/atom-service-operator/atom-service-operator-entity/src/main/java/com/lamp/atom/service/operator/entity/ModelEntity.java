@@ -38,14 +38,24 @@ public class ModelEntity extends BaseEntity {
     private Long nodeId;
 
     /**
-     * 运行实例id
+     * 连接id
      */
-    private Long runtimeId;
+    private Long connectId;
+
+    /**
+     * 连接状态
+     */
+    private String connectStatus;
 
     /**
      * 训练id
      */
     private Long operatorId;
+
+    /**
+     * 运行实例id
+     */
+    private Long runtimeId;
 
     /**
      * 模型创建类型
@@ -58,16 +68,6 @@ public class ModelEntity extends BaseEntity {
     private String modelName;
 
     /**
-     * 模型版本名
-     */
-    private String modelVersion;
-
-    /**
-     * 模型打分
-     */
-    private Long modelScore;
-
-    /**
      * 模型类型
      */
     private ModelType modelType;
@@ -76,6 +76,11 @@ public class ModelEntity extends BaseEntity {
      * 模型工程类型
      */
     private ModelTechnologyType modelTechnologyType;
+
+    /**
+     * 模型版本名
+     */
+    private String modelVersion;
 
     /**
      * 模型地址
@@ -88,14 +93,9 @@ public class ModelEntity extends BaseEntity {
     private String modelStatus;
 
     /**
-     * 连接id
+     * 模型打分
      */
-    private Long connectId;
-
-    /**
-     * 连接状态
-     */
-    private String connectStatus;
+    private Long modelScore;
 
     /**
      * 训练结果
@@ -113,13 +113,13 @@ public class ModelEntity extends BaseEntity {
     private String resourceValue;
 
     /**
-     * 资源大小
-     */
-    private String resourceSize;
-
-    /**
      * 产生方式
      */
     private String produceWay;
+
+    /**
+     * 资源大小
+     */
+    private String resourceSize;
 
 }

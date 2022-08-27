@@ -706,6 +706,7 @@ public class TaskEventController {
         //todo 当没实例时，抛出异常
 
         CreateOperator operatorCreateTo = new CreateOperator();
+        operatorCreateTo.setTaskId(taskParam.getTaskId());
         schedule.setObject(operatorCreateTo);
 
         Map<String, String> hardwareConfig = new HashMap<String, String>();
