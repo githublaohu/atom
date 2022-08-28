@@ -79,7 +79,7 @@ class RegisterService():
 
         # 注册服务
         self.nacos_client.send_heartbeat("atom-runtime-python-service-"+self.atom_config.runtime_model,
-        self.net_address, self.atom_config.rpc_controller_port);
+        self.net_address, self.atom_config.rpc_controller_port)
         
         # 获取算子服务实例
         result = self.nacos_client.list_naming_instance("atom-service-operator", healthy_only=True)

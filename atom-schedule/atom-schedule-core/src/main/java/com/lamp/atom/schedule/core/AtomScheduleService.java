@@ -50,7 +50,7 @@ public class AtomScheduleService implements AtomOperatorShedule, AtomServiceShed
 		//训练算子
 		atomOperatorScheduleMap.put(OperatorRuntimeType.TRAIN, rpcSchedule);
 		//推理算子
-		atomOperatorScheduleMap.put(OperatorRuntimeType.REASONING, kubernetesSchedule);
+		atomOperatorScheduleMap.put(OperatorRuntimeType.REASON, kubernetesSchedule);
 
 	}
 	

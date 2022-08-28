@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduleConfiguration {
 
-//    @Bean
-//    @ConfigurationProperties(prefix="atom.schedule")
-//    public OperatorScheduleConfig operatorScheduleConfig() {
-//        return new OperatorScheduleConfig();
-//    }
+    @Bean
+    @ConfigurationProperties(prefix="atom.schedule")
+    public OperatorScheduleConfig operatorScheduleConfig() {
+        return new OperatorScheduleConfig();
+    }
 
 }

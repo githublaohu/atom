@@ -41,8 +41,8 @@ public class ScheduleSuper implements BeanFactoryAware {
 
 	private BeanFactory beanFactory;
 
-//	@Setter
-	private OperatorScheduleConfig operatorScheduleConfig;
+	@Setter
+	private OperatorScheduleConfig operatorScheduleConfig = new OperatorScheduleConfig();
 
 	private AtomScheduleService atomScheduleService;
 

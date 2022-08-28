@@ -17,19 +17,19 @@ import lombok.Data;
 @Data
 public class OperatorScheduleKubernetesConfig {
 
-	private boolean isUser = true;
+	private boolean isUser = true;//todo 不能从nacos赋值
 	
 	private String masterUrl;
 	
-	private String configName  = "kubernetesConfig.yaml";
+	private String configName = "kubernetesConfig.yaml";
 	
 	private String configYaml;
 		
-	private String cpuContainerName = "githublaohu/atom-base-cpu:tf1.15-cpu";
+	private String cpuContainerName;
 	
-	private String gpcContainerName = "githublaohu/atom-base-cpu:tf1.15-gpu";
+	private String gpcContainerName;
 	
-	private String namespace = "default";
+	private String namespace;
 
 	public boolean isUser() {
 		return isUser;

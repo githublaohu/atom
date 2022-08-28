@@ -12,6 +12,7 @@
  */
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.alibaba.nacos.api.naming.NamingService;
@@ -20,6 +21,7 @@ import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.ScheduleReturn;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
+import com.lamp.atom.schedule.api.deploy.AtomInstances;
 
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -59,13 +61,13 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 	private OperatorScheduleKubernetesConfig operatorKubernetesConfig;
 
 	public OperatorKubernetesSchedule(OperatorScheduleKubernetesConfig operatorKubernetesConfig) throws Exception {
-//		this.operatorKubernetesConfig = operatorKubernetesConfig;
-//		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
-//			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());
-//		} else if (Objects.nonNull(operatorKubernetesConfig.getConfigYaml())) {
-//			Config config = Config.fromKubeconfig(operatorKubernetesConfig.getConfigYaml());
-//			client = new DefaultKubernetesClient(config);
-//		}
+		this.operatorKubernetesConfig = operatorKubernetesConfig;
+		if (Objects.nonNull(operatorKubernetesConfig.getMasterUrl())) {
+			client = new DefaultKubernetesClient(operatorKubernetesConfig.getMasterUrl());
+		} else if (Objects.nonNull(operatorKubernetesConfig.getConfigYaml())) {
+			Config config = Config.fromKubeconfig(operatorKubernetesConfig.getConfigYaml());
+			client = new DefaultKubernetesClient(config);
+		}
 	}
 
 	@Override
@@ -99,19 +101,20 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
-				.createOrReplace(operatorKubernetesBuilder.getJob());
-		log.info("job info : {}", job);
 
 		try {
+			Job atomJob = operatorKubernetesBuilder.getJob();
+			Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+				.createOrReplace(atomJob);
+			log.info("job info : {}", job);
 			client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
 					.createOrReplace(operatorKubernetesBuilder.getJob());
 
 			// 注册服务
-//			List<AtomInstances> instancesList = schedule.getDeploy().getInstancesList();
-//			for (AtomInstances atomInstance: instancesList) {
-//				namingService.registerInstance("atom-runtime-kubernetes-service", atomInstance.getIp(), atomInstance.getPort());
-//			}
+			List<AtomInstances> instancesList = schedule.getDeploy().getInstancesList();
+			for (AtomInstances atomInstance: instancesList) {
+				namingService.registerInstance("atom-runtime-kubernetes-service", atomInstance.getIp(), atomInstance.getPort());
+			}
 
 			return new ScheduleReturn(200, "SUCCESS");
 		} catch (Exception e) {
