@@ -11,7 +11,9 @@
  */
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +64,10 @@ public class SessionOperatorKubernetesBuilder {
 		// nvidia.com/gpu
 		metadata
 				// GPU 还是cpu镜像
-				.withName("atom-runtime-session-"+this.schedule.getNodeName())
+				.withName("atom-runtime-session-"
+					+ this.schedule.getNodeName()
+					+ "-"
+					+ new SimpleDateFormat("yyyyMMddhhmmss").format(new Date(System.currentTimeMillis())))
 				// 标签，需要几个
 				// 第一个 算子的名字+序列
 				// 的哥
@@ -88,7 +93,7 @@ public class SessionOperatorKubernetesBuilder {
 			envList.add(new EnvVar(e.getKey(), e.getValue(), null));
 		}
 		envList.add(new EnvVar("docker", "true", null));
-		envList.add(new EnvVar("runtime_model", "session", null));
+		envList.add(new EnvVar("runtime_model", "standalone", null));
 		envList.add(new EnvVar("operator-data", JSON.toJSONString(schedule.getObject()), null));
 		ObjectFieldSelector podIP = new ObjectFieldSelector();
 		podIP.setFieldPath("status.podIP");

@@ -147,6 +147,7 @@ class CreateOperator():
     def __create_source__(self, source_and_connect:SourceAndConnect , isInit=True):
             connect:Connect = self.operator_service.connect_service.get_connect(source_and_connect.connect_to)
             source:Source = self.operator_service.source_service.get_source(source_and_connect.source_to,connect)
+            connect.source_to = source.source_to
             source.source_to.source_conf["file_path"] = self.operator_service.atom_config.download_catalogue
             source.connect = connect
 

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="测试计划" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="用户定义的变量" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="任务" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="循环控制器" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="训练算子-mysql" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;modelConnect&quot;:{&quot;id&quot;:13,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1659902167000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;模式1&quot;,&quot;operationType&quot;:&quot;数据操作&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;124.223.198.143&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;MYSQL&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+	&quot;modelTo&quot;:{&quot;id&quot;:24,&quot;connectId&quot;:13,&quot;connectStatus&quot;:&quot;连接中&quot;,&quot;createTime&quot;:1659902356000,&quot;deleteFlag&quot;:0,&quot;modelAddress&quot;:&quot;&quot;,&quot;modelCreateType&quot;:&quot;TRAIN&quot;,&quot;modelName&quot;:&quot;模型一&quot;,&quot;modelScore&quot;:10,&quot;modelStatus&quot;:&quot;开始&quot;,&quot;modelTechnologyType&quot;:&quot;MULTI_MODE&quot;,&quot;modelType&quot;:&quot;PRE_TRAINING&quot;,&quot;modelVersion&quot;:&quot;0.0.1&quot;,&quot;nodeId&quot;:24,&quot;operatorId&quot;:14,&quot;operatorResult&quot;:&quot;CONTAIN_OPTIMAL&quot;,&quot;produceWay&quot;:&quot;手动&quot;,&quot;resourceSize&quot;:&quot;10&quot;,&quot;resourceType&quot;:&quot;训练资源&quot;,&quot;resourceValue&quot;:&quot;训练一&quot;,&quot;runtimeId&quot;:0,&quot;spaceId&quot;:0,&quot;updateTime&quot;:1659902356000},&#xd;
+	&quot;operatorTo&quot;:{&quot;id&quot;:14,&quot;codeAddress&quot;:&quot;127.0.0.1&quot;,&quot;codeMode&quot;:&quot;CODE&quot;,&quot;codeVersion&quot;:&quot;0.0.1&quot;,&quot;createTime&quot;:1648132810000,&quot;deleteFlag&quot;:0,&quot;deployType&quot;:&quot;NOT_DEPLOY&quot;,&quot;environmentConf&quot;:&quot;&quot;,&quot;executeObject&quot;:&quot;TrainExample&quot;,&quot;level&quot;:1,&quot;modelConf&quot;:&quot;&quot;,&quot;moduleName&quot;:&quot;atom_runtime.example.train_example&quot;,&quot;operatorConf&quot;:&quot;&quot;,&quot;operatorEpoch&quot;:2,&quot;operatorModel&quot;:&quot;OFFLINE&quot;,&quot;operatorName&quot;:&quot;testOperator&quot;,&quot;operatorPlanRuntimes&quot;:&quot;10&quot;,&quot;operatorPriority&quot;:1,&quot;operatorRuntimeType&quot;:&quot;TRAIN&quot;,&quot;operatorSourceId&quot;:1,&quot;operatorSourceType&quot;:&quot;CUSTOM&quot;,&quot;operatorTemplateId&quot;:1,&quot;resourcesAccountId&quot;:1,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648132810000},&#xd;
+	&quot;sourceAndConnects&quot;:&#xd;
+		[&#xd;
+			{&#xd;
+				&quot;connectTo&quot;:{&quot;id&quot;:13,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;124.223.198.143&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;MYSQL&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+				&quot;sourceTo&quot;:{&quot;asyncLoad&quot;:true,&quot;connectReadNum&quot;:0,&quot;connectionId&quot;:9,&quot;connectionName&quot;:&quot;connection1&quot;,&quot;createTime&quot;:1648133522000,&quot;dataExecuteAfter&quot;:&quot;string&quot;,&quot;dataExecuteBefore&quot;:&quot;string&quot;,&quot;dataFormat&quot;:&quot;labelsCSV&quot;,&quot;sourceType&quot;:&quot;source&quot;,&quot;deleteFlag&quot;:0,&quot;disposable&quot;:true,&quot;id&quot;:91,&quot;operateExecute&quot;:&quot;/atom_runtime/example/train.pkl&quot;,&quot;operateExecuteAfter&quot;:&quot;string&quot;,&quot;operateExecuteBefore&quot;:&quot;string&quot;,&quot;operatorReadNum&quot;:0,&quot;order&quot;:0,&quot;paginateReadNum&quot;:0,&quot;sourceConf&quot;:{},&quot;sourceSpace&quot;:&quot;&quot;,&quot;spaceId&quot;:14,&quot;taskInitExecute&quot;:&quot;string&quot;,&quot;updateTime&quot;:1648133522000}&#xd;
+			},&#xd;
+			{&#xd;
+				&quot;connectTo&quot;:{&quot;id&quot;:14,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;124.223.198.143&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;FILE&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+				&quot;sourceTo&quot;:{&quot;asyncLoad&quot;:true,&quot;connectReadNum&quot;:0,&quot;connectionId&quot;:9,&quot;connectionName&quot;:&quot;connection1&quot;,&quot;createTime&quot;:1648133522000,&quot;dataExecuteAfter&quot;:&quot;string&quot;,&quot;dataExecuteBefore&quot;:&quot;string&quot;,&quot;dataFormat&quot;:&quot;labelsCSV&quot;,&quot;sourceType&quot;:&quot;test_source&quot;,&quot;deleteFlag&quot;:0,&quot;disposable&quot;:true,&quot;id&quot;:87,&quot;operateExecute&quot;:&quot;/atom_runtime/example/val.pkl&quot;,&quot;operateExecuteAfter&quot;:&quot;string&quot;,&quot;operateExecuteBefore&quot;:&quot;string&quot;,&quot;operatorReadNum&quot;:0,&quot;order&quot;:0,&quot;paginateReadNum&quot;:0,&quot;sourceConf&quot;:{},&quot;sourceSpace&quot;:&quot;&quot;,&quot;spaceId&quot;:14,&quot;taskInitExecute&quot;:&quot;string&quot;,&quot;updateTime&quot;:1648133522000}&#xd;
+			},&#xd;
+			{&#xd;
+				&quot;connectTo&quot;:{&quot;id&quot;:15,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;124.223.198.143&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;ALIYUNOSS&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+				&quot;sourceTo&quot;:{&quot;asyncLoad&quot;:true,&quot;connectReadNum&quot;:0,&quot;connectionId&quot;:9,&quot;connectionName&quot;:&quot;connection1&quot;,&quot;createTime&quot;:1648133522000,&quot;dataExecuteAfter&quot;:&quot;string&quot;,&quot;dataExecuteBefore&quot;:&quot;string&quot;,&quot;dataFormat&quot;:&quot;labelsCSV&quot;,&quot;sourceType&quot;:&quot;sink&quot;,&quot;deleteFlag&quot;:0,&quot;disposable&quot;:true,&quot;id&quot;:87,&quot;operateExecute&quot;:&quot;atom_runtime-example-&quot;,&quot;operateExecuteAfter&quot;:&quot;string&quot;,&quot;operateExecuteBefore&quot;:&quot;string&quot;,&quot;operatorReadNum&quot;:0,&quot;order&quot;:0,&quot;paginateReadNum&quot;:0,&quot;sourceConf&quot;:{},&quot;sourceSpace&quot;:&quot;&quot;,&quot;spaceId&quot;:14,&quot;taskInitExecute&quot;:&quot;string&quot;,&quot;updateTime&quot;:1648133522000}&#xd;
+			}&#xd;
+		]&#xd;
+}&#xd;
+&#xd;
+#sourceAndConnect的connect的id不能一致</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">127.0.0.1</stringProp>
+          <stringProp name="HTTPSampler.port">9999</stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/operator/create_operators</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="训练算子-oss" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;modelConnect&quot;:{&quot;id&quot;:9,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;120.78.148.188&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;MYSQL&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+	&quot;modelTo&quot;:{&quot;id&quot;:23,&quot;connectId&quot;:9,&quot;connectStatus&quot;:&quot;connected&quot;,&quot;createTime&quot;:1648133455000,&quot;deleteFlag&quot;:0,&quot;modelAddress&quot;:&quot;string&quot;,&quot;modelCreateType&quot;:&quot;TRAIN&quot;,&quot;modelName&quot;:&quot;string&quot;,&quot;modelScore&quot;:0,&quot;modelStatus&quot;:&quot;string&quot;,&quot;modelTechnologyType&quot;:&quot;MULTI_MODE&quot;,&quot;modelType&quot;:&quot;PRE_TRAINING&quot;,&quot;modelVersion&quot;:&quot;string&quot;,&quot;nodeId&quot;:0,&quot;operatorId&quot;:14,&quot;operatorResult&quot;:&quot;CONTAIN_OPTIMAL&quot;,&quot;produceWay&quot;:&quot;string&quot;,&quot;resourceSize&quot;:&quot;string&quot;,&quot;resourceType&quot;:&quot;string&quot;,&quot;resourceValue&quot;:&quot;string&quot;,&quot;runtimeId&quot;:0,&quot;spaceId&quot;:0,&quot;updateTime&quot;:1648133455000},&#xd;
+	&quot;operatorTo&quot;:{&quot;id&quot;:14,&quot;codeAddress&quot;:&quot;127.0.0.1&quot;,&quot;codeMode&quot;:&quot;CODE&quot;,&quot;codeVersion&quot;:&quot;0.0.1&quot;,&quot;createTime&quot;:1648132810000,&quot;deleteFlag&quot;:0,&quot;deployType&quot;:&quot;NOT_DEPLOY&quot;,&quot;environmentConf&quot;:&quot;&quot;,&quot;executeObject&quot;:&quot;TrainExample&quot;,&quot;level&quot;:1,&quot;modelConf&quot;:&quot;&quot;,&quot;moduleName&quot;:&quot;atom_runtime.example.train_example&quot;,&quot;operatorConf&quot;:&quot;&quot;,&quot;operatorEpoch&quot;:2,&quot;operatorModel&quot;:&quot;OFFLINE&quot;,&quot;operatorName&quot;:&quot;testOperator&quot;,&quot;operatorPlanRuntimes&quot;:&quot;10&quot;,&quot;operatorPriority&quot;:1,&quot;operatorRuntimeType&quot;:&quot;TRAIN&quot;,&quot;operatorSourceId&quot;:1,&quot;operatorSourceType&quot;:&quot;CUSTOM&quot;,&quot;operatorTemplateId&quot;:1,&quot;resourcesAccountId&quot;:1,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648132810000},&#xd;
+	&quot;sourceAndConnects&quot;:&#xd;
+		[&#xd;
+			{&#xd;
+				&quot;connectTo&quot;:{&quot;id&quot;:9,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;120.78.148.188&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;MYSQL&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+				&quot;sourceTo&quot;:{&quot;asyncLoad&quot;:true,&quot;connectReadNum&quot;:0,&quot;connectionId&quot;:9,&quot;connectionName&quot;:&quot;connection1&quot;,&quot;createTime&quot;:1648133522000,&quot;dataExecuteAfter&quot;:&quot;string&quot;,&quot;dataExecuteBefore&quot;:&quot;string&quot;,&quot;dataFormat&quot;:&quot;labelsCSV&quot;,&quot;sourceType&quot;:&quot;source&quot;,&quot;deleteFlag&quot;:0,&quot;disposable&quot;:true,&quot;id&quot;:87,&quot;operateExecute&quot;:&quot;/atom_runtime/example/train.pkl&quot;,&quot;operateExecuteAfter&quot;:&quot;string&quot;,&quot;operateExecuteBefore&quot;:&quot;string&quot;,&quot;operatorReadNum&quot;:0,&quot;order&quot;:0,&quot;paginateReadNum&quot;:0,&quot;sourceConf&quot;:{},&quot;sourceSpace&quot;:&quot;&quot;,&quot;spaceId&quot;:14,&quot;taskInitExecute&quot;:&quot;string&quot;,&quot;updateTime&quot;:1648133522000}&#xd;
+			},&#xd;
+			{&#xd;
+				&quot;connectTo&quot;:{&quot;id&quot;:10,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;lampup&quot;,&quot;connectPassword&quot;:&quot;Lampup@123&quot;,&quot;connectAddr&quot;:&quot;120.78.148.188&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;FILE&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+				&quot;sourceTo&quot;:{&quot;asyncLoad&quot;:true,&quot;connectReadNum&quot;:0,&quot;connectionId&quot;:9,&quot;connectionName&quot;:&quot;connection1&quot;,&quot;createTime&quot;:1648133522000,&quot;dataExecuteAfter&quot;:&quot;string&quot;,&quot;dataExecuteBefore&quot;:&quot;string&quot;,&quot;dataFormat&quot;:&quot;labelsCSV&quot;,&quot;sourceType&quot;:&quot;test_source&quot;,&quot;deleteFlag&quot;:0,&quot;disposable&quot;:true,&quot;id&quot;:87,&quot;operateExecute&quot;:&quot;/atom_runtime/example/val.pkl&quot;,&quot;operateExecuteAfter&quot;:&quot;string&quot;,&quot;operateExecuteBefore&quot;:&quot;string&quot;,&quot;operatorReadNum&quot;:0,&quot;order&quot;:0,&quot;paginateReadNum&quot;:0,&quot;sourceConf&quot;:{},&quot;sourceSpace&quot;:&quot;&quot;,&quot;spaceId&quot;:14,&quot;taskInitExecute&quot;:&quot;string&quot;,&quot;updateTime&quot;:1648133522000}&#xd;
+			},&#xd;
+			{&#xd;
+				&quot;connectTo&quot;:{&quot;id&quot;:11,&quot;colonyType&quot;:&quot;SINGLE&quot;,&quot;createTime&quot;:1648133297000,&quot;deleteFlag&quot;:0,&quot;mode&quot;:&quot;string&quot;,&quot;operationType&quot;:&quot;string&quot;,&quot;connectAccount&quot;:&quot;LTAI5tN8UL9PVmoDGrXTRCRw&quot;,&quot;connectPassword&quot;:&quot;IwSzHprV8NzCCQdZtppVd5dIC0j5Cm&quot;,&quot;connectAddr&quot;:&quot;120.78.148.188&quot;,&quot;connect_port&quot;:3306,&quot;sourceConf&quot;:{},&quot;sourceCount&quot;:0,&quot;connectName&quot;:&quot;string&quot;,&quot;sourceRoute&quot;:&quot;string&quot;,&quot;sourceSize&quot;:&quot;10&quot;,&quot;connectSpace&quot;:&quot;atom&quot;,&quot;connectType&quot;:&quot;ALIYUNOSS&quot;,&quot;spaceId&quot;:1,&quot;updateTime&quot;:1648636277000},&#xd;
+				&quot;sourceTo&quot;:{&quot;asyncLoad&quot;:true,&quot;connectReadNum&quot;:0,&quot;connectionId&quot;:9,&quot;connectionName&quot;:&quot;connection1&quot;,&quot;createTime&quot;:1648133522000,&quot;dataExecuteAfter&quot;:&quot;string&quot;,&quot;dataExecuteBefore&quot;:&quot;string&quot;,&quot;dataFormat&quot;:&quot;labelsCSV&quot;,&quot;sourceType&quot;:&quot;sink&quot;,&quot;deleteFlag&quot;:0,&quot;disposable&quot;:true,&quot;id&quot;:87,&quot;operateExecute&quot;:&quot;atom_runtime-example-&quot;,&quot;operateExecuteAfter&quot;:&quot;string&quot;,&quot;operateExecuteBefore&quot;:&quot;string&quot;,&quot;operatorReadNum&quot;:0,&quot;order&quot;:0,&quot;paginateReadNum&quot;:0,&quot;sourceConf&quot;:{},&quot;sourceSpace&quot;:&quot;&quot;,&quot;spaceId&quot;:14,&quot;taskInitExecute&quot;:&quot;string&quot;,&quot;updateTime&quot;:1648133522000}&#xd;
+			}&#xd;
+		]&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">127.0.0.1</stringProp>
+          <stringProp name="HTTPSampler.port">9999</stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/operator/create_operators</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="察看结果树" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

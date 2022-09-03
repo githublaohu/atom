@@ -16,8 +16,6 @@ public class TestOperatorKubernetesSchedule {
 
 	OperatorScheduleKubernetesConfig operatorScheduleKubernetesConfig;
 
-	private String nacosAddress = "124.223.198.143:8848";
-
 	{
 		schedule.setNodeName("test");
 
@@ -37,6 +35,11 @@ public class TestOperatorKubernetesSchedule {
 		Map<String, String> envs = new HashMap<>();
 		envs.put("nacos_config", "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}");
 		schedule.setEnvs(envs);
+
+		Map<String, String> limits = new HashMap<>();
+		limits.put("cpu", "3");
+		limits.put("memory", "2Gi");
+		schedule.setLimits(limits);
 
 		operatorScheduleKubernetesConfig = new OperatorScheduleKubernetesConfig();
 		try {

@@ -33,8 +33,8 @@ def __init__git__():
             # 下载pip
     subprocess.run(install_pip,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,encoding="utf-8",timeout=1)   
 
-
-__init__git__()
+# 暂时注释该方法
+# __init__git__()
 
 rely_info_dict = {}
 
@@ -81,10 +81,11 @@ class GitCodeLoad(CodeLoad):
             self.clone.git.checkout(branch)
 
     def __get_url__(self):
-        newurl = self.operator_to.code_address
-        if self.source_account_to.account != None:
-            newurl = "https://"+self.source_account_to.account+":"+self.source_account_to.password+"@"+newurl[8:len(newurl)]
-        self.code_path = newurl
+        # newurl = self.operator_to.code_address
+        # if self.source_account_to.account != None:
+            # newurl = "https://"+self.source_account_to.account+":"+self.source_account_to.password+"@"+newurl[8:len(newurl)]
+        # self.code_path = newurl
+        self.code_path = "https://"+self.source_account_to.account+":"+self.source_account_to.password+"@"+newurl[8:len(newurl)]
     
     def __get_code_directory__(self):
         self.code_file_name = self.code_path[self.code_path.rfind("/"):len(self.code_path)-4]
@@ -97,3 +98,8 @@ class GitCodeLoad(CodeLoad):
         sys.path.remove(self.code_load_directory)
         os.rmdir(self.code_load_directory)
         
+def __main__():
+    code_load_class = GitCodeLoad()
+    code_address = ''
+    code_load_directory = 'D:\IdeaProjects\GitPros'
+    code_load_class._load_code

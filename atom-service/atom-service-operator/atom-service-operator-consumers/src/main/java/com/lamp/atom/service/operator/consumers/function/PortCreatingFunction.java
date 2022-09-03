@@ -42,7 +42,6 @@ import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 import com.lamp.atom.service.operator.entity.RuntimeEntity;
 import com.lamp.atom.service.operator.service.RuntimeService;
-
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,217 +49,240 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class PortCreatingFunction {
 
-	@Value("${nacos.config.server-addr}")
-	private String nacosAddr;
-	@Value("${nacos.config.namespace}")
-	private String namespace;
-	@Value("${server.port}")
-	private String port;
-
-	private String ip = getIp();
-	
     @Reference
     private RuntimeService runtimeService;
-    
+
+    @Value("${nacos.config.server-addr}")
+    private String nacosAddr;
+    @Value("${nacos.config.namespace}")
+    private String namespace;
+    @Value("${server.port}")
+    private String port;
+
+    private String ip = getIp();
+
     @Autowired
     private AtomScheduleService atomScheduleService;
 
-	public String getIp() {
-		try {
-			return InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			log.info(e.getMessage(), e);
-			return null;
-		}
-	}
+    public String getIp() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.info(e.getMessage(), e);
+            return null;
+        }
+    }
 
-	volatile Map<String, ServiceAndPort> serviceAndPortMap = new HashMap<>();
-	NamingService namingService = null;
+    volatile Map<String, ServiceAndPort> serviceAndPortMap = new HashMap<>();
 
-	// 获取nacos实例
-	@PostConstruct
-	public void init() throws NacosException {
-		Properties properties = new Properties();
-		properties.put("serverAddr", this.nacosAddr);
-		properties.put("namespace", this.namespace);
-		namingService = NamingFactory.createNamingService(properties);
-		this.listen();
-	}
+    NamingService namingService = null;
 
-	// 监听session服务和standalone服务
-	public void listen() throws NacosException {
-		Timer timer = new Timer("serviceListener", true);
-		timer.schedule(new TimerTask() {
-			@SneakyThrows
-			@Override
-			public void run() {
-				PortCreatingFunction.this.registerService();
-				List<String> serviceNames = new ArrayList<>();
-				serviceNames.add("atom-runtime-python-service-session");
-				serviceNames.add("atom-runtime-python-service-standalone");
-				Map<String, ServiceAndPort> newServiceAndPortMap = new HashMap<>();
+    /**
+     * 获取nacos实例
+     *
+     * @throws NacosException
+     */
+//    @PostConstruct
+    public void init() throws NacosException {
+        Properties properties = new Properties();
+        properties.put("serverAddr", this.nacosAddr);
+        properties.put("namespace", this.namespace);
+        namingService = NamingFactory.createNamingService(properties);
 
-				for (String serviceName : serviceNames) {
-					List<Instance> allInstances = namingService.getAllInstances(serviceName);
-					for (Instance instance : allInstances) {
-						ServiceAndPort serviceAndPort = new ServiceAndPort();
-						serviceAndPort.ip = instance.getIp();
-						serviceAndPort.port = new AtomicInteger(instance.getPort());
-						ConcurrentHashMap<Integer, Integer> concurrentHashMap = new ConcurrentHashMap<>();
-						concurrentHashMap.put(instance.getPort(), instance.getPort());
-						serviceAndPort.portMap = concurrentHashMap;
-						newServiceAndPortMap.put(instance.getIp(), serviceAndPort);
-					}
-				}
+        this.listen();
 
-				serviceAndPortMap = newServiceAndPortMap;
-				
-			}
-		}, 100, 5000);
-	}
+        NacosRuntime nacosRuntime = new NacosRuntime();
+        nacosRuntime.run();
+    }
 
-	// 获取可用端口
-	public Integer getPort(String ip) {
-		ServiceAndPort serviceAndPort = this.serviceAndPortMap.get(ip);
-		for (;;) {
-			if (Objects.isNull(serviceAndPort)) {
-				serviceAndPort = new ServiceAndPort();
-				serviceAndPort.ip = ip;
-				serviceAndPort.port = new AtomicInteger(20000);
-				serviceAndPort.portMap = new ConcurrentHashMap<>();
-			}
-			Integer port = serviceAndPort.port.incrementAndGet() % 50000 + 10000;
-			Integer myValue = serviceAndPort.portMap.computeIfAbsent(port, value -> port);
-			if (Objects.nonNull(myValue)) {
-				return port;
-			}
-		}
-	}
+    /**
+     * 刷新session服务和standalone服务实例
+     *
+     * @throws NacosException
+     */
+    public void listen() throws NacosException {
+        Timer timer = new Timer("serviceListener", true);
+        timer.schedule(new TimerTask() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                PortCreatingFunction.this.registerService();
 
-	// 注册实例到服务中
-	public void registerService() throws NacosException {
-		namingService.registerInstance("atom-service-operator", ip, Integer.parseInt(port));
-	}
+                // 监听session和standalone服务，更新ip&port
+                List<String> serviceNames = new ArrayList<>();
+                serviceNames.add("atom-runtime-python-service-session");
+                serviceNames.add("atom-runtime-python-service-standalone");
+                Map<String, ServiceAndPort> refreshServiceAndPortMap = new HashMap<>();
 
-	public static class ServiceAndPort {
-		String ip;
-		private AtomicInteger port = new AtomicInteger();
-		private ConcurrentHashMap<Integer, Integer> portMap = new ConcurrentHashMap<>();
-	}
-	
-	class NacosRuntiime implements Runnable {
+                for (String serviceName : serviceNames) {
+                    List<Instance> allInstances = namingService.getAllInstances(serviceName);
+                    for (Instance instance : allInstances) {
+                        ServiceAndPort serviceAndPort = new ServiceAndPort();
+                        serviceAndPort.ip = instance.getIp();
+                        serviceAndPort.port = new AtomicInteger(instance.getPort());
+                        ConcurrentHashMap<Integer, Integer> concurrentHashMap = new ConcurrentHashMap<>();
+                        concurrentHashMap.put(instance.getPort(), instance.getPort());
+                        serviceAndPort.portMap = concurrentHashMap;
+                        refreshServiceAndPortMap.put(instance.getIp(), serviceAndPort);
+                    }
+                }
 
-		private Set<String> currentService = new HashSet<>();
+                serviceAndPortMap = refreshServiceAndPortMap;
+            }
+        }, 100, 5000);
+    }
 
-		private Set<String> newestService = new HashSet<>();
+    /**
+     * 获取对应ip的可用端口
+     * 1、每次调用后该ip的端口自增一
+     * 2、由创建operator时调用k8s前调用到
+     *
+     * @param ip
+     * @return
+     */
+    public Integer getPort(String ip) {
+        PortCreatingFunction.ServiceAndPort serviceAndPort = this.serviceAndPortMap.get(ip);
+        for (; ; ) {
+            if (Objects.isNull(serviceAndPort)) {
+                serviceAndPort = new PortCreatingFunction.ServiceAndPort();
+                serviceAndPort.ip = ip;
+                serviceAndPort.port = new AtomicInteger(20000);
+                serviceAndPort.portMap = new ConcurrentHashMap<>();
+            }
+            Integer port = serviceAndPort.port.incrementAndGet() % 50000 + 10000;
+            Integer myValue = serviceAndPort.portMap.computeIfAbsent(port, value -> port);
+            if (Objects.nonNull(myValue)) {
+                return port;
+            }
+        }
+    }
 
-		private Map<String, List<Instance>> currentInstances = new HashMap<>();
+    /**
+     * 注册实例到服务中
+     *
+     * @throws NacosException
+     */
+    public void registerService() throws NacosException {
+        namingService.registerInstance("atom-service-operator", ip, Integer.parseInt(port));
+    }
 
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					while (true) {
-						Thread.sleep(1000);
-						this.getServices();
-						if (Objects.isNull(newestService) || newestService.isEmpty()) {
-							continue;
-						}
-						// 已经删除的服务
-						Set<String> newCurrentService = new HashSet<>(currentService);
-						newCurrentService.removeAll(newestService);
-						for (String service : newCurrentService) {
+    public static class ServiceAndPort {
+        String ip;
+        private AtomicInteger port = new AtomicInteger();
+        private ConcurrentHashMap<Integer, Integer> portMap = new ConcurrentHashMap<>();
+    }
 
-						}
-						newestService = currentService;
-						for (String serviceName : newestService) {
-							List<Instance> newestInstance = namingService.selectInstances(serviceName, true);
-							List<Instance> currentInstance = currentInstances.get(serviceName);
-							if (Objects.isNull(currentInstance)) {
-								for (Instance instance : newestInstance) {
-									this.register(instance);
-								}
-							} else {
-								this.classification(currentInstance, newestInstance);
-							}
-							currentInstances.put(serviceName, newestInstance);
-						}
+    class NacosRuntime implements Runnable {
 
-					}
-				} catch (Throwable e) {
-					log.error(e.getMessage(), e);
-				}
-			}
+        private Set<String> currentService = new HashSet<>();
 
-		}
+        private Set<String> newestService = new HashSet<>();
 
-		private void register(Instance instance) {
-			RuntimeEntity runtimeEntity = new RuntimeEntity();
-			try {
-				PortCreatingFunction.this.runtimeService.updateRuntimeStatus(runtimeEntity);
-			}catch(Exception e) {
-				log.error("instance info : {}", instance);
-				log.error(e.getMessage() , e);
-			}
-		}
-		
-		private void unRegister(Instance instance) {
-			RuntimeEntity runtimeEntity = new RuntimeEntity();
-			Schedule schedule = new Schedule();
-			try {
-				Integer code = PortCreatingFunction.this.runtimeService.updateRuntimeStatus(runtimeEntity);
-				if(code == 0) {
-					return;
-				}
-				PortCreatingFunction.this.atomScheduleService.uninstallOperators(schedule);
-				PortCreatingFunction.this.runtimeService.updateRuntimeStatus(runtimeEntity);
-			}catch(Exception e) {
-				log.error("instance info : {}", instance);
-				log.error("runtimeEntity info : {}" , runtimeEntity);
-				log.error("schedule info : {}", schedule);
-				log.error(e.getMessage() , e);
-			}
-		}
+        private Map<String, List<Instance>> currentInstances = new HashMap<>();
 
-		private void classification(List<Instance> currentInstance, List<Instance> newestInstance) {
-			Map<String, Instance> oldHostMap = new HashMap<String, Instance>(currentInstance.size());
-			for (Instance host : currentInstance) {
-				oldHostMap.put(host.toInetAddr(), host);
-			}
-			Map<String, Instance> newHostMap = new HashMap<String, Instance>(newestInstance.size());
-			for (Instance host : newestInstance) {
-				newHostMap.put(host.toInetAddr(), host);
-			}
-			List<Map.Entry<String, Instance>> newServiceHosts = new ArrayList<Map.Entry<String, Instance>>(
-					newHostMap.entrySet());
-			for (Map.Entry<String, Instance> entry : newServiceHosts) {
-				Instance host = entry.getValue();
-				String key = entry.getKey();
-				if (oldHostMap.containsKey(key)
-						&& !StringUtils.equals(host.toString(), oldHostMap.get(key).toString())) {
-					this.register(host);
-					continue;
-				}
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    while (true) {
+                        Thread.sleep(1000);
+                        this.getServices();
+                        if (Objects.isNull(newestService) || newestService.isEmpty()) {
+                            continue;
+                        }
+                        // 已经删除的服务
+                        Set<String> newCurrentService = new HashSet<>(currentService);
+                        newCurrentService.removeAll(newestService);
+                        for (String service : newCurrentService) {
+                            log.info("service is unregister(服务已下线):" + service);
+                        }
+                        currentService = newestService;
+                        for (String serviceName : newestService) {
+                            List<Instance> newestInstance = namingService.selectInstances(serviceName, true);
+                            List<Instance> currentInstance = currentInstances.get(serviceName);
+                            if (Objects.isNull(currentInstance)) {
+                                for (Instance instance : newestInstance) {
+                                    this.register(instance);
+                                }
+                            } else {
+                                this.classification(currentInstance, newestInstance);
+                            }
+                            currentInstances.put(serviceName, newestInstance);
+                        }
 
-				if (!oldHostMap.containsKey(key)) {
-					this.register(host);
-				}
-			}
-			for (Map.Entry<String, Instance> entry : oldHostMap.entrySet()) {
-				Instance host = entry.getValue();
-				String key = entry.getKey();
-				if (newHostMap.containsKey(key)) {
-					continue;
-				}
-				if (!newHostMap.containsKey(key)) {
-					this.unRegister(host);
-				}
-			}
-		}
+                    }
+                } catch (Throwable e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
 
-		void getServices() throws NacosException {
-			newestService.add("atom-runtime-python-service-session");
-			newestService.add("atom-runtime-python-service-standalone");
-		}
-	}
+        }
+
+        private void register(Instance instance) {
+            RuntimeEntity runtimeEntity = new RuntimeEntity();
+            try {
+                PortCreatingFunction.this.runtimeService.updateRuntimeStatus(runtimeEntity);
+            } catch (Exception e) {
+                log.error("instance info : {}", instance);
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        private void unRegister(Instance instance) {
+            RuntimeEntity runtimeEntity = new RuntimeEntity();
+            Schedule schedule = new Schedule();
+            try {
+                Integer code = PortCreatingFunction.this.runtimeService.updateRuntimeStatus(runtimeEntity);
+                if (code == 0) {
+                    return;
+                }
+                PortCreatingFunction.this.atomScheduleService.uninstallOperators(schedule);
+                PortCreatingFunction.this.runtimeService.updateRuntimeStatus(runtimeEntity);
+            } catch (Exception e) {
+                log.error("instance info : {}", instance);
+                log.error("runtimeEntity info : {}", runtimeEntity);
+                log.error("schedule info : {}", schedule);
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        private void classification(List<Instance> currentInstance, List<Instance> newestInstance) {
+            Map<String, Instance> oldHostMap = new HashMap<String, Instance>(currentInstance.size());
+            for (Instance host : currentInstance) {
+                oldHostMap.put(host.toInetAddr(), host);
+            }
+            Map<String, Instance> newHostMap = new HashMap<String, Instance>(newestInstance.size());
+            for (Instance host : newestInstance) {
+                newHostMap.put(host.toInetAddr(), host);
+            }
+            List<Map.Entry<String, Instance>> newServiceHosts = new ArrayList<Map.Entry<String, Instance>>(newHostMap.entrySet());
+            for (Map.Entry<String, Instance> entry : newServiceHosts) {
+                Instance host = entry.getValue();
+                String key = entry.getKey();
+                if (oldHostMap.containsKey(key) && !StringUtils.equals(host.toString(), oldHostMap.get(key).toString())) {
+                    this.register(host);
+                    continue;
+                }
+
+                if (!oldHostMap.containsKey(key)) {
+                    this.register(host);
+                }
+            }
+            for (Map.Entry<String, Instance> entry : oldHostMap.entrySet()) {
+                Instance host = entry.getValue();
+                String key = entry.getKey();
+                if (newHostMap.containsKey(key)) {
+                    continue;
+                }
+                if (!newHostMap.containsKey(key)) {
+                    this.unRegister(host);
+                }
+            }
+        }
+
+        void getServices() throws NacosException {
+            newestService.add("atom-runtime-python-service-session");
+            newestService.add("atom-runtime-python-service-standalone");
+        }
+    }
 }

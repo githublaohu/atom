@@ -49,5 +49,5 @@ class AliyunOSSConnect(Connect):
         self.__get__bucket(data).get_object_to_file(connent, path)
 
 
-    def write(self , conntent:str , data):
+    def write(self, conntent:str , data):
         return  self.__get__bucket(data).put_object(conntent, data)

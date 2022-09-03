@@ -49,7 +49,7 @@ public class RuntimeEntity extends BaseEntity {
     /**
      * 服务配置ID
      */
-    private Long sourceId;
+    private Long serviceInfoId;
 
     /**
      * 服务器IP
@@ -59,7 +59,7 @@ public class RuntimeEntity extends BaseEntity {
     /**
      * 服务器端口
      */
-    private String serverPort;
+    private Integer serverPort;
 
     /**
      * 开始时间
@@ -82,7 +82,7 @@ public class RuntimeEntity extends BaseEntity {
     private Date estimateEndTime;
 
     /**
-     * 状态
+     * 运行状态
      */
     private OperatorRuntimeStatus operatorRuntimeStatus;
 

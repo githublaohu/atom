@@ -29,5 +29,5 @@ class HdfsConnect(Connect):
     def download(self,connect:str,path:str,data):
         pass
 
-    def write(self , conntent:str , data):
+    def write(self, conntent:str , data):
         pass

@@ -27,6 +27,7 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.ScheduleReturn;
 import com.lamp.atom.schedule.api.config.OperatorScheduleRpcConfig;
 import com.lamp.atom.schedule.api.deploy.AtomInstances;
 import com.lamp.atom.schedule.api.deploy.Deploy;
@@ -111,24 +112,26 @@ public class OperatorRpcSchedule implements AtomOperatorShedule {
 
 	/**
 	 * 全量 标签 覆盖
-	 */
+     * @return
+     */
 	@Override
-	public void createOperators(Schedule schedule) {
+	public ScheduleReturn createOperators(Schedule schedule) {
 		try {
 			// 获取部署实例信息
 			List<Instance> instanceList = this.getInstance(schedule);
 
 			// 创建对象
 			CreateOperator object = (CreateOperator) schedule.getObject();
+
+			// 发送请求
 			for (Instance instance : instanceList) {
 				this.createClient(instance)
 					.createOperators(object);
 			}
-
-			// 发送请求
-
+			return new ScheduleReturn(200, "SUCCESS");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
+			return new ScheduleReturn(500, "FAIL");
 		}
 
 	}

@@ -31,6 +31,7 @@ class SourceAndConnect():
 
 
 class OperatorCreateTo():
+    task_id = None
     source_and_connects:List[SourceAndConnect] = list
     model_to:ModelTo= None
     source_account:SourceAccountTo = None
@@ -43,6 +44,7 @@ class OperatorCreateTo():
     def __init__(self, data:dict):
         if len(data) == 0:
             return
+        self.task_id = data["task_id"]
         source_and_connect_list = list(data['source_and_connects'])
         self.source_and_connects = list()
         for item in source_and_connect_list:

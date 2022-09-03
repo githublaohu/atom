@@ -12,13 +12,18 @@
  */
 package com.lamp.atom.schedule.python.operator.kubernetes;
 
+import java.util.List;
 import java.util.Objects;
 
+import com.alibaba.nacos.api.naming.NamingService;
 import com.lamp.atom.schedule.api.AtomOperatorShedule;
 import com.lamp.atom.schedule.api.AtomServiceShedule;
 import com.lamp.atom.schedule.api.Schedule;
+import com.lamp.atom.schedule.api.ScheduleReturn;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
+import com.lamp.atom.schedule.api.deploy.AtomInstances;
 
+import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
@@ -30,6 +35,7 @@ import io.fabric8.kubernetes.client.dsl.Gettable;
 import io.fabric8.kubernetes.client.dsl.PodResource;
 import io.fabric8.kubernetes.client.dsl.RollableScalableResource;
 import io.fabric8.kubernetes.client.dsl.ScalableResource;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -42,6 +48,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServiceShedule {
+
+	@Value("${nacos.config.server-addr}")
+	private String nacosAddr;
+	@Value("${nacos.config.namespace}")
+	private String namespace;
+
+	NamingService namingService = null;
 
 	private KubernetesClient client;
 
@@ -62,9 +75,16 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		StandaloneOperatorKubernetesBuilder operatorKubernetesBuilder = new StandaloneOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
+
+		// for test
+		NamespaceList namespaceList = client.namespaces().list();
+		namespaceList.getItems()
+				.forEach(namespace ->
+						System.out.println(namespace.getMetadata().getName() + ":" + namespace.getStatus().getPhase()));
+
 		Deployment deployment = client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getDeployment());
-		log.info("deployment info : {}", deployment);		
+		log.info("deployment info : {}", deployment);
 	}
 
 	@Override
@@ -77,21 +97,38 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 	}
 
 	@Override
-	public void createOperators(Schedule schedule) {
+	public ScheduleReturn createOperators(Schedule schedule) {
 		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
 		operatorKubernetesBuilder.setSchedule(schedule);
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
-				.createOrReplace(operatorKubernetesBuilder.getJob());
-		log.info("job info : {}", job);
+
+		try {
+			Job atomJob = operatorKubernetesBuilder.getJob();
+			Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+				.createOrReplace(atomJob);
+			log.info("job info : {}", job);
+			client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+					.createOrReplace(operatorKubernetesBuilder.getJob());
+
+			// 注册服务
+			List<AtomInstances> instancesList = schedule.getDeploy().getInstancesList();
+			for (AtomInstances atomInstance: instancesList) {
+				namingService.registerInstance("atom-runtime-kubernetes-service", atomInstance.getIp(), atomInstance.getPort());
+			}
+
+			return new ScheduleReturn(200, "SUCCESS");
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return new ScheduleReturn(500, "FAIL");
+		}
 	}
 
 	@Override
 	public void uninstallOperators(Schedule schedule) {
 		this.deletePods(schedule);
 	}
-	
-	
+
+
 
 	private void deleteDeployment(Schedule schedule) {
 		RollableScalableResource<Deployment> deploymentResource = client.apps().deployments()

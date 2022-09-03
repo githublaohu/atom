@@ -65,17 +65,17 @@ public class ServiceController {
     public Integer createRuntime(RuntimeEntity runtimeEntity) {
     	// 查询服务状态
     	ServiceInfoEntity serviceInfoEntity = new ServiceInfoEntity();
-    	serviceInfoEntity.setId(runtimeEntity.getSourceId());
+    	serviceInfoEntity.setId(runtimeEntity.getServiceInfoId());
     	serviceInfoEntity = serviceInfoService.queryServiceInfoEntity(serviceInfoEntity);
     	serviceInfoEntity.setSiName(serviceInfoEntity.getSiName());
     	// 创建runtime 对象 主类型
     	
     	runtimeEntity.setSpaceId(serviceInfoEntity.getSpaceId());
     	runtimeEntity.setCaseSourceType(CaseSourceType.SERVICE);
-    	runtimeEntity.setSourceId(serviceInfoEntity.getId());
+    	runtimeEntity.setServiceInfoId(serviceInfoEntity.getId());
     	
-    	runtimeEntity.setServerIp("main");
-    	runtimeEntity.setServerPort("0");
+    	runtimeEntity.setServerIp("-1");
+    	runtimeEntity.setServerPort(-1);
     	runtimeEntity.setStartTime(new Date());
     	runtimeEntity.setEndTime(new Date());
     	runtimeEntity.setEstimateStartTime(new Date());

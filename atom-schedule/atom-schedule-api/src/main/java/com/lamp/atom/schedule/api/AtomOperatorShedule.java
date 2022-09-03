@@ -14,7 +14,7 @@ package com.lamp.atom.schedule.api;
 public interface AtomOperatorShedule {
 
 	
-	public void createOperators(Schedule schedule);
+	public ScheduleReturn createOperators(Schedule schedule);
 	
 	public default void startOperators(Schedule schedule) {
 		

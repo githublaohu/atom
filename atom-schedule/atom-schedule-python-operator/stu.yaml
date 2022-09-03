@@ -1,0 +1,139 @@
+!!io.fabric8.kubernetes.api.model.apps.Deployment
+additionalProperties: {}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  additionalProperties: {}
+  annotations: null
+  clusterName: null
+  creationTimestamp: null
+  deletionGracePeriodSeconds: null
+  deletionTimestamp: null
+  finalizers: []
+  generateName: null
+  generation: null
+  labels: {test: test}
+  managedFields: []
+  name: atom-runtime-standalone-test
+  namespace: null
+  ownerReferences: []
+  resourceVersion: null
+  selfLink: null
+  uid: null
+spec:
+  additionalProperties: {}
+  minReadySeconds: null
+  paused: null
+  progressDeadlineSeconds: null
+  replicas: 1
+  revisionHistoryLimit: null
+  selector: null
+  strategy: null
+  template:
+    additionalProperties: {}
+    metadata: null
+    spec:
+      activeDeadlineSeconds: null
+      additionalProperties: {}
+      affinity: null
+      automountServiceAccountToken: null
+      containers:
+      - additionalProperties: {}
+        args: []
+        command: []
+        env:
+        - additionalProperties: {}
+          name: nacos_config
+          value: '{''nacos_address'':''127.0.0.1'',''nacos_namespace'':''atom''}'
+          valueFrom: null
+        - additionalProperties: {}
+          name: docker
+          value: 'true'
+          valueFrom: null
+        - additionalProperties: {}
+          name: runtime_model
+          value: standalone
+          valueFrom: null
+        - additionalProperties: {}
+          name: node_ip
+          value: null
+          valueFrom:
+            additionalProperties: {}
+            configMapKeyRef: null
+            fieldRef:
+              additionalProperties: {}
+              apiVersion: null
+              fieldPath: status.podIP
+            resourceFieldRef: null
+            secretKeyRef: null
+        envFrom: []
+        image: githublaohu/atom-base-cpu:tf1.15-cpu
+        imagePullPolicy: null
+        lifecycle: null
+        livenessProbe: null
+        name: test
+        ports: []
+        readinessProbe: null
+        resources:
+          additionalProperties: {}
+          limits:
+            memory:
+              additionalProperties: {}
+              amount: '2'
+              format: Gi
+            cpu:
+              additionalProperties: {}
+              amount: '3'
+              format: ''
+          requests:
+            memory:
+              additionalProperties: {}
+              amount: '1'
+              format: Gi
+            cpu:
+              additionalProperties: {}
+              amount: '2'
+              format: ''
+        securityContext: null
+        startupProbe: null
+        stdin: null
+        stdinOnce: null
+        terminationMessagePath: null
+        terminationMessagePolicy: null
+        tty: null
+        volumeDevices: []
+        volumeMounts: []
+        workingDir: null
+      dnsConfig: null
+      dnsPolicy: null
+      enableServiceLinks: null
+      ephemeralContainers: []
+      hostAliases: []
+      hostIPC: null
+      hostNetwork: true
+      hostPID: null
+      hostname: null
+      imagePullSecrets: []
+      initContainers: []
+      nodeName: null
+      nodeSelector: null
+      os: null
+      overhead: null
+      preemptionPolicy: null
+      priority: null
+      priorityClassName: null
+      readinessGates: []
+      restartPolicy: OnFailure
+      runtimeClassName: null
+      schedulerName: null
+      securityContext: null
+      serviceAccount: null
+      serviceAccountName: null
+      setHostnameAsFQDN: null
+      shareProcessNamespace: null
+      subdomain: null
+      terminationGracePeriodSeconds: null
+      tolerations: []
+      topologySpreadConstraints: []
+      volumes: []
+status: null

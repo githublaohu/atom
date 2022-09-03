@@ -34,14 +34,14 @@ public class OperatorEntity extends BaseEntity {
     private Long spaceId;
 
     /**
-     * 算子模板
-     */
-    private Long operatorTemplateId;
-
-    /**
      * 算子名
      */
     private String operatorName;
+
+    /**
+     * 算子模板
+     */
+    private Long operatorTemplateId;
 
     /**
      * 算子源id
@@ -94,6 +94,11 @@ public class OperatorEntity extends BaseEntity {
     private String moduleName;
 
     /**
+     * 模型配置
+     */
+    private String modelConf;
+
+    /**
      * 执行对象
      */
     private String executeObject;
@@ -107,11 +112,6 @@ public class OperatorEntity extends BaseEntity {
      * 算子环境配置
      */
     private String environmentConf;
-
-    /**
-     * 模型配置
-     */
-    private String modelConf;
 
     /**
      * 训练轮数

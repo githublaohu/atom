@@ -24,5 +24,5 @@ public class AtomInstances {
 	/**
 	 * instance port.
 	 */
-	private int port;
+	private Integer port;
 }

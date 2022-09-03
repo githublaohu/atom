@@ -23,7 +23,7 @@ public enum OperatorRuntimeType {
     /**
      * REASONING
      */
-    REASONING("推理算子"),
+    REASON("推理算子"),
 
     /**
      * FEATURES

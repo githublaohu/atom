@@ -10,6 +10,7 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 import json
+import requests
 from flask import Flask,request
 from atom_runtime.utils.data_handler_utils import DataHandler
 from atom_runtime.service.operator_service import  OperatorService
@@ -35,6 +36,8 @@ class OperatorController():
         data = data_handler.humpToUnderline(data)
         operator_create_to = OperatorCreateTo(data)
         self.operator_service.create_operators(operator_create_to)
+        # 回调"算子运行自动完成"接口
+        response = self.running_auto_finish(operator_create_to)
         
     def start_operators(self):
         data = json.loads(request.get_data(as_text=True))
@@ -47,3 +50,23 @@ class OperatorController():
     def uninstall_operators(self):
         data = json.loads(request.get_data(as_text=True))
         self.operator_service.uninstall_operators(OperatorTo(**data))
+
+    def running_auto_finish(self, operator_create_to:OperatorCreateTo):
+        # nacos发现算子服务
+        # nacos_client = nacos.NacosClient(server_addresses="124.223.198.143:8848", namespace="atom-dev")
+        # server_list = nacos_client.list_naming_instance("atom-service-operator-consumer", namespace_id="atom-dev", group_name="DEFAULT_GROUP", healthy_only=True)
+        # for server in server_list:
+            # print(server)
+            # request_param = {"taskId": "", "operatorRuntimeType": "", "runParameter":{}, "envs":{}}
+            # requests.post("/lamp/atom/service/operator/taskEvent/startNodeTask", request_param)
+
+        request_param = {"taskId": operator_create_to.task_id,
+                        "operatorRuntimeType": operator_create_to.operator_to.operator_runtime_type, 
+                        "runParameter":{}, 
+                        "envs":{}}
+        headers={'content-type':'application/json','charset':'UTF-8'}
+        # todo dynamic url
+        response = requests.post(url = "http://127.0.0.1:9002/lamp/atom/service/operator/taskEvent/runningAutoFinish",
+                                 headers = headers,
+                                 data = json.dumps(request_param))
+        return response

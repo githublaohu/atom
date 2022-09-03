@@ -66,7 +66,7 @@ public class ConnectionEntity extends BaseEntity {
     private String connectSpace;
 
     /**
-     * 模式
+     * 连接模式：直连
      */
     private String mode;
 

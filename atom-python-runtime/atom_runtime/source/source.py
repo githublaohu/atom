@@ -11,6 +11,7 @@
 #############################################################################
 
 import pickle
+import time
 from urllib3.packages.six import BytesIO
 from multiprocessing import Queue   
 
@@ -120,12 +121,16 @@ class Source(SourceBase):
         self.connect.stream(self.source_to.operate_execute,self.source_to.source_conf,source_stream)
     
     def train_upload(self, train):
-        path = self.source_to.operate_execute + self.source_to.space_name + "-" +self.source_to.scene_name +"-" + self.source_to.experiment_name +"-"
+        path = self.source_to.operate_execute + "/" + \
+            self.source_to.space_name + "/" + \
+            self.source_to.scene_name + "/" + \
+            self.source_to.experiment_name + "/" + \
+            time.strftime('%H%M%S', time.localtime()) + str(int(time.time()*1000)%1000)
         
         if isinstance(train,str):
              with open(train, 'rb') as f:
                 train = f.read()
-        self.connect.write(path , train)
+        self.connect.write(path, train)
 
 
 

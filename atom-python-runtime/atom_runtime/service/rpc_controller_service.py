@@ -27,7 +27,6 @@ class RpcControllerServcie():
         pass 
 
     def register_controller(self , controller):
-
         pass
 
     def run(self):

@@ -32,7 +32,7 @@ class AtomConfig():
     nacos_namespace:str
     # 
     config_name:str
-    rpc_controller_port:int = None
+    rpc_controller_port:int = 9999
     is_config:bool
     # 文件下载地址
     download_catalogue:str = None

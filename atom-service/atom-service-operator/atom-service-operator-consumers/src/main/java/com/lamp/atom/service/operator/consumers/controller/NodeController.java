@@ -227,25 +227,26 @@ public class NodeController {
         minServiceInfoRelationEntity.setOrder(1);
 
         // 下一节点
-        if (!Objects.equals(nodeRelation.getNextNodeId(), -1L)) {
-            NodeEntity nextNode = new NodeEntity();
-            nextNode.setId(nodeRelation.getNextNodeId());
-            nextNode = nodeService.queryNodeEntity(nextNode);
-            if (Objects.isNull(nextNode)) {
-                log.info("选择下一个节点不存在 {}", nodeRelation);
-                return ResultObjectEnums.FAIL.getResultObject();
-            }
-
-            ResourceRelationEntity nodeRelationEntity = new ResourceRelationEntity();
-            nodeRelationEntity.setRelationType(RelationType.NODE_RELATION);
-            nodeRelationEntity.setRelateId(node.getId());
-            nodeRelationEntity.setRelateType(ResourceType.NODE);
-            nodeRelationEntity.setBeRelatedId(nextNode.getId());
-            nodeRelationEntity.setBeRelatedType(ResourceType.NODE);
-            nodeRelationEntity.setRelationStatus("relate");
-            nodeRelationEntity.setOrder(1);
-            resourceRelationEntityList.add(nodeRelationEntity);
-        }
+        //todo 暂时没有下一个节点
+//        if (!Objects.equals(nodeRelation.getNextNodeId(), -1L)) {
+//            NodeEntity nextNode = new NodeEntity();
+//            nextNode.setId(nodeRelation.getNextNodeId());
+//            nextNode = nodeService.queryNodeEntity(nextNode);
+//            if (Objects.isNull(nextNode)) {
+//                log.error("选择下一个节点不存在 {}", nodeRelation);
+//                return ResultObjectEnums.FAIL.getResultObject();
+//            }
+//
+//            ResourceRelationEntity nodeRelationEntity = new ResourceRelationEntity();
+//            nodeRelationEntity.setRelationType(RelationType.NODE_RELATION);
+//            nodeRelationEntity.setRelateId(node.getId());
+//            nodeRelationEntity.setRelateType(ResourceType.NODE);
+//            nodeRelationEntity.setBeRelatedId(nextNode.getId());
+//            nodeRelationEntity.setBeRelatedType(ResourceType.NODE);
+//            nodeRelationEntity.setRelationStatus("relate");
+//            nodeRelationEntity.setOrder(1);
+//            resourceRelationEntityList.add(nodeRelationEntity);
+//        }
 
         resourceRelationEntityList.add(modelRelationEntity);
         resourceRelationEntityList.add(operatorRelationEntity);

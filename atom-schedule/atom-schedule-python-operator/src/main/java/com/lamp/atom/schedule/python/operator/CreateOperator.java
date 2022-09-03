@@ -23,13 +23,33 @@ import java.util.List;
 @Data
 public class CreateOperator {
 
+    /**
+     * 实验ID/节点ID
+     */
+    private Long taskId;
+
+    /**
+     * 数据源和连接
+     */
     private List<SourceAndConnect> sourceAndConnects;
 
+    /**
+     * 模型
+     */
     private ModelEntity modelTo;
 
+    /**
+     * 资源
+     */
     private ResourceAccountEntity resourceAccountTo;
 
+    /**
+     * 算子
+     */
     private OperatorEntity operatorTo;
 
+    /**
+     * 模型连接
+     */
     private ConnectionEntity modelConnect;
 }

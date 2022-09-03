@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
+    <title>electron</title>
+  <link rel="shortcut icon" href="./favicon.ico"><link href="./common.css?=2022814_1811" rel="stylesheet"><link href="./app.css?=2022814_1811" rel="stylesheet"></head>
+  <body>
+  <div id="app">
+
+  </div>
+  <script>
+    // 后端注入配置
+    window.g_config = {
+      urlPrefix: "",// api请求前缀
+      uploadUrl: "{{uploadUrl}}" // 上传地址
+    }
+  </script>
+    <!-- built files will be auto injected -->
+  <script type="text/javascript" src="./common.js?=2022814_1811"></script><script type="text/javascript" src="./app.js?=2022814_1811"></script></body>
+</html>
