@@ -45,7 +45,7 @@ class MySQLConnect(Connect):
     def write(self, path:str , data):
         cursor = self.connection.cursor()
         try:
-            sql = 'insert into ' + 'train_result(space,scene,experiment,path,data) ' \
+            sql = 'insert into ' + 'atom.train_result(space,scene,experiment,path,data) ' \
                 + 'values(\''+ \
                 self.source_to.space_name + '\',\'' + \
                 self.source_to.scene_name + '\',\'' + \
