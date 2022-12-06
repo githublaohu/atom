@@ -9,6 +9,7 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
+import logging
 from flask import Flask
 from atom_runtime.utils.environment import name_atom
 

@@ -10,8 +10,19 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 
+from atom_runtime.service.atom_service import AtomService
+from flask import Flask,request
+
 
 class RuntimeController():
 
+        atom_service:AtomService
+
+        def __init__(self,app:Flask):
+            app.add_url_rule('/runtime/closeRuntime', "/runtime/closeRuntime",self.closeRuntime,methods=["POST","GET"])
+
         def finish(self):
             pass
+
+        def closeRuntime(self):
+            self.atom_service.closeRuntime();

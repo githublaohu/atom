@@ -1,5 +1,5 @@
 FROM tensorflow/tensorflow:1.15.5-jupyter
-ENV docker yes
+ENV docker true
 # Install git
 RUN apt update && \
          apt install -y git python3.7 python3.7-dev python3-pip build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev&& \
@@ -9,5 +9,11 @@ RUN apt update && \
           pip install oss2 && \
           pip install crcmod && \
           pip install atom-runtime  && \
-          mkdir -p ~/atom/{download_catalogue,code_directory,model_directory,public}
+          pip install i https://files.pythonhosted.org/packages/f1/eb/36e4b63c744984aeb0b3a64dd60edd6da760faa9ab70050d1c44447e5b32/atom_runtime-0.0.20-py3-none-any.whl   && \  
+          mkdir -p ~/atom/logs && \
+          mkdir -p ~/atom/download_catalogue && \
+          mkdir -p ~/atom/code_directory && \
+          mkdir -p ~/atom/model_directory&& \
+          mkdir -p ~/atom/public
+
 CMD atom

@@ -90,10 +90,17 @@ public class StandaloneOperatorKubernetesBuilder {
 		envList.add(new EnvVar("docker", "true", null));
 		envList.add(new EnvVar("runtime_model", "standalone", null));
 		ObjectFieldSelector podId = new ObjectFieldSelector();
-		podId.setFieldPath("status.podIP");
+		podId.setFieldPath("status.hostIP");
 		EnvVarSource nodeIp = new EnvVarSource();
 		nodeIp.setFieldRef(podId);
 		envList.add(new EnvVar("node_ip", null, nodeIp));
+		
+		ObjectFieldSelector podName = new ObjectFieldSelector();
+		podName.setFieldPath("metadata.name");
+		podName.setApiVersion("v1");
+		EnvVarSource nodeName = new EnvVarSource();
+		nodeName.setFieldRef(podName);
+		envList.add(new EnvVar("pod_name", null, nodeName));
 		
 		String value = schedule.getHardwareConfig().get("nvidia.com/gpu");
 		SpecNested<DeploymentBuilder> spec = job.withNewSpec();

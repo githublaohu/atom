@@ -9,7 +9,22 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
+from lib2to3.pytree import Node
 import os
+import random
+
+isGetcwdFail = False;
+atrom_catalogue = os.environ['HOME']+"/atom"
+
+try:
+    print(os.getcwd())
+except Exception as e:
+    isGetcwdFail = True
+    print("rewrite getcwd")
+    if os.path.exists(atrom_catalogue) == False:
+        os.makedirs(atrom_catalogue)
+    os.chdir(atrom_catalogue)
+
 import json
 import signal
 import logging
@@ -17,6 +32,7 @@ import logging.config
 from flask import Flask
 
 from atom_runtime.utils.environment import get_env
+from atom_runtime.rpc_controller.runtime_controller import RuntimeController
 from atom_runtime.rpc_service.rpc_runtime_service import RpcRuntimeService
 from atom_runtime.service.logging_service import LoggingServcie
 from atom_runtime.transfer_object.operator.operator_create_to import OperatorCreateTo
@@ -33,6 +49,7 @@ from atom_runtime.service.rpc_controller_service import RpcControllerServcie
 from atom_runtime.service.rpc_servcie_servcie import HttpClient, RpcServcieServcie
 from atom_runtime.service.source_service import SourceService
 from atom_runtime.service.atom_service import AtomService
+
 
 app = Flask(__name__)
 
@@ -56,13 +73,8 @@ class AtomController():
 
     rpc_controller_servcie:RpcControllerServcie
 
-    def __init__(self) :
-        path = r'./logging.conf'
-        if os.path.exists(path) == False:
-            path = r'./atom_runtime/logging.conf'
-
-        with open(path,"r",encoding = 'utf-8') as f:
-            logging.config.fileConfig(path)
+    def __init__(self) :        
+        self.__init_base()
         self.__init_config__()
         self.__init_logging__()
         self.__init_code__()
@@ -74,6 +86,33 @@ class AtomController():
         # 注意 rpc_controller 会启动http servier
         self.__init_rpc_controller__()
         pass
+
+    def __init_base(self):
+        if os.path.exists(atrom_catalogue+"/logs") == False:
+            os.makedirs(atrom_catalogue+"/logs")
+        
+        root_path = ""
+        if isGetcwdFail:
+            root_path = __file__[0:__file__.rfind("/")]+"/"
+
+        path = root_path + r'./logging.conf'
+        if os.path.exists(path) == False:
+            path = root_path  + r'./atom_runtime/logging.conf'
+        
+        if os.path.exists(path) == False:
+            root_path = __file__[0:__file__.rfind("/")]+"/"
+            path = root_path + r'./logging.conf'
+        
+        print("logging path is : " + path)
+
+        logfilename = 'logs/atrom-python-runtime.log'
+        if __file__.find("atom-python-runtime") == -1 :
+            logfilename = atrom_catalogue+ "/logs/atrom-python-runtime.log"
+
+        print("logfilename is :" + logfilename)
+
+        with open(path,"r",encoding = 'utf-8') as f:
+            logging.config.fileConfig(path,defaults={"logfilename":logfilename})
 
     def __init_config__(self):
         atom_config_service:AtomConfigServier = AtomConfigServier()
@@ -111,8 +150,18 @@ class AtomController():
         self.rpc_operator_servcie.atom_service = self.atom_service
         self.rpcRuntimeService:RpcRuntimeService = RpcRuntimeService()
         self.rpcRuntimeService.client = http_client;
-        if self.atom_config.docker_model :
-           self.atom_config.rpc_controller_port = self.rpcRuntimeService.get_internet_protocol_address()
+
+        if self.atom_config.test_model :
+            self.atom_config.rpc_controller_port = random.randint(10000,50000)
+            return
+
+        if self.atom_config.docker_model:
+            try:
+                self.atom_config.rpc_controller_port = self.rpcRuntimeService.get_internet_protocol_address()
+            except Exception as e:
+                logging.exception(e)
+                self.atom_service.closeRuntime();
+            
 
     def __init_operator_service__(self):
         if  self.atom_config.is_local():
@@ -127,9 +176,12 @@ class AtomController():
     def __init_rpc_controller__(self):
         operator_controller = OperatorController(self.operator_service,app)
         reasoning_controller = ReasoningController(self.operator_service)
+        runtime_controller = RuntimeController(app)
+        runtime_controller.atom_service = self.atom_service
         self.rpc_controller:RpcControllerServcie = RpcControllerServcie(self.atom_config,app)
         self.rpc_controller.register_controller(operator_controller)
         self.rpc_controller.register_controller(reasoning_controller)
+        self.rpc_controller.register_controller(runtime_controller)
     
     def __pattern_discern_(self):
         operator_id = get_env("operator-id")

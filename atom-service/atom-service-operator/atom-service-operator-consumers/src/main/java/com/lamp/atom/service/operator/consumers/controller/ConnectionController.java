@@ -12,9 +12,19 @@
 package com.lamp.atom.service.operator.consumers.controller;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.atom.service.operator.entity.ConnectionEntity;
 import com.lamp.atom.service.operator.service.ConnectionService;
-import com.lamp.atom.service.operator.consumers.utils.ResultObjectEnums;
 import com.lamp.decoration.core.result.ResultObject;
 
 import io.swagger.annotations.Api;
@@ -24,25 +34,27 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
 
-import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-
 @Slf4j
 @RequestMapping("/connection")
 @RestController("connectionController")
 @Api(tags = {"连接操作接口"})
 public class ConnectionController {
 
-    @Reference
+    @Reference(group="a" , version="1.0.0")
     private ConnectionService connectionService;
 
+    
+    public void init() {
+    	ConnectionEntity connectionEntity = new ConnectionEntity();
+    	connectionEntity.setId(1L);
+    	try {
+    		connectionService.queryConnectionEntity(connectionEntity);
+    	}catch (Exception e) {
+    		e.printStackTrace();
+			// TODO: handle exception
+		}
+    }
+    
     /**
      * 添加连接
      *

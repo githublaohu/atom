@@ -27,6 +27,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.lamp.atom.schedule.api.config.OperatorScheduleConfig;
 import com.lamp.atom.schedule.core.AtomScheduleService;
 
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -41,8 +42,9 @@ public class ScheduleSuper implements BeanFactoryAware {
 
 	private BeanFactory beanFactory;
 
+	@Getter
 	@Setter
-	private OperatorScheduleConfig operatorScheduleConfig;
+	private OperatorScheduleConfig operatorScheduleConfig = new OperatorScheduleConfig();
 
 	private AtomScheduleService atomScheduleService;
 

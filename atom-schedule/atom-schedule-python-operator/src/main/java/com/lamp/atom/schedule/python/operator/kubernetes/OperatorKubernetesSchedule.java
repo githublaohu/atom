@@ -21,6 +21,7 @@ import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
@@ -64,34 +65,41 @@ public class OperatorKubernetesSchedule implements AtomOperatorShedule, AtomServ
 		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
 		Deployment deployment = client.apps().deployments().inNamespace(operatorKubernetesConfig.getNamespace())
 				.createOrReplace(operatorKubernetesBuilder.getDeployment());
-		log.info("deployment info : {}", deployment);		
+		log.info("deployment info : {}", deployment);
 	}
 
 	@Override
 	public void closeService(Schedule schedule) {
-		if(schedule.getNodeK8sType() == "") {
+		if (schedule.getNodeK8sType() == "") {
 			this.deleteDeployment(schedule);
-		}else {
+		} else {
 			this.deleteJob(schedule);
 		}
 	}
 
 	@Override
 	public void createOperators(Schedule schedule) {
-		SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
-		operatorKubernetesBuilder.setSchedule(schedule);
-		operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
-		Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
-				.createOrReplace(operatorKubernetesBuilder.getJob());
-		log.info("job info : {}", job);
+		if (Objects.isNull(schedule.getStrategy()) || Objects.isNull(schedule.getStrategy().getTiming())) {
+			SessionOperatorKubernetesBuilder operatorKubernetesBuilder = new SessionOperatorKubernetesBuilder();
+			operatorKubernetesBuilder.setSchedule(schedule);
+			operatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
+			Job job = client.batch().v1().jobs().inNamespace(operatorKubernetesConfig.getNamespace())
+					.createOrReplace(operatorKubernetesBuilder.getJob());
+			log.info("job info : {}", job);
+		} else {
+			CronSessionOperatorKubernetesBuilder cronSessionOperatorKubernetesBuilder = new CronSessionOperatorKubernetesBuilder();
+			cronSessionOperatorKubernetesBuilder.setSchedule(schedule);
+			cronSessionOperatorKubernetesBuilder.setOperatorKubernetesConfig(operatorKubernetesConfig);
+			CronJob cronjobs = client.batch().v1().cronjobs().inNamespace(operatorKubernetesConfig.getNamespace())
+					.createOrReplace(cronSessionOperatorKubernetesBuilder.getJob());
+			log.info("cronjobs info : {}", cronjobs);
+		}
 	}
 
 	@Override
 	public void uninstallOperators(Schedule schedule) {
 		this.deletePods(schedule);
 	}
-	
-	
 
 	private void deleteDeployment(Schedule schedule) {
 		RollableScalableResource<Deployment> deploymentResource = client.apps().deployments()

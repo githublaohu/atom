@@ -59,12 +59,16 @@ class UploadCommand(Command):
 
 
 packages = find_packages()
+package_data={
+    'atom_runtime':['logging.conf']
+}
 setup(
     name="atom-runtime",
     packages=packages,
+    package_data=package_data,
     include_package_data=True,
     zip_safe=False,
-    version= "0.0.8",
+    version= "0.0.20",
     entry_points={"console_scripts": ["atom=atom_runtime.atom_controller:main"]},
 
     url="https://github.com/githublaohu/atom",
@@ -93,7 +97,8 @@ setup(
         "oss2",
         "crcmod",
         "pymysql",
-        "happybase"
+        "happybase",
+        "mysql-connector"
     ],
     cmdclass={
         'upload': UploadCommand,

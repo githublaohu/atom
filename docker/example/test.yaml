@@ -1,0 +1,45 @@
+# https://kubernetes.io/zh-cn/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
+# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#node-v1-core
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-envars-fieldref
+spec:
+  containers:
+    - name: test-container
+      image: ubuntu:latest
+      command: [ "sh", "-c"]
+      args:
+      - while true; do
+          echo -en '\n';
+          printenv MY_NODE_NAME MY_POD_NAME MY_POD_NAMESPACE;
+          printenv MY_POD_IP MY_POD_SERVICE_ACCOUNT;
+          printenv NODE_IP;
+          sleep 10;
+        done;
+      env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MY_POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+  restartPolicy: Never

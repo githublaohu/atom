@@ -9,16 +9,21 @@ import org.junit.Test;
 import com.lamp.atom.schedule.api.Schedule;
 import com.lamp.atom.schedule.api.config.OperatorScheduleKubernetesConfig;
 import com.lamp.atom.schedule.api.deploy.Deploy;
+import com.lamp.atom.schedule.api.strategy.Strategy;
 
 public class TestOperatorKubernetesSchedule {
 
 	Schedule schedule = new Schedule();
 
 	OperatorScheduleKubernetesConfig operatorScheduleKubernetesConfig;
-
-	private String nacosAddress = "124.223.198.143:8848";
+	
+	Map<String, String> envs;
 
 	{
+		Strategy strategy = new Strategy();
+		strategy.setWorksNum(6);
+		schedule.setStrategy(strategy);
+		
 		schedule.setNodeName("test");
 
 		Deploy deploy = new Deploy();
@@ -34,11 +39,12 @@ public class TestOperatorKubernetesSchedule {
 		hardwareConfig.put("memory", "1Gi");
 		schedule.setHardwareConfig(hardwareConfig);
 
-		Map<String, String> envs = new HashMap<>();
-		envs.put("nacos_config", "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}");
+		envs = new HashMap<>();
+		//envs.put("nacos_config", "{'nacos_address':'127.0.0.1','nacos_namespace':'atom'}");
 		schedule.setEnvs(envs);
-
+		
 		operatorScheduleKubernetesConfig = new OperatorScheduleKubernetesConfig();
+		operatorScheduleKubernetesConfig.setCpuContainerName("githublaohu/atom-base-cpu:tf1.15-cpu-0.0.9");
 		try {
 			InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("kubernetesConfig.yaml");
 			byte[] data = new byte[inputStream.available()];
@@ -61,8 +67,18 @@ public class TestOperatorKubernetesSchedule {
 	
 	@Test
 	public void testCreateOperators() throws Exception {
+		envs.put("test_model","True");
+		
 		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
-
 		kubernetesSchedule.createOperators(schedule);
+		
+	}
+	
+	@Test
+	public void testUninstallOperators() throws Exception{
+		OperatorKubernetesSchedule kubernetesSchedule = new OperatorKubernetesSchedule(operatorScheduleKubernetesConfig);
+		
+		schedule.setNodeName("atom-runtime-session-test--1-5485z");
+		kubernetesSchedule.uninstallOperators(schedule);
 	}
 }

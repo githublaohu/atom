@@ -9,8 +9,7 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
-import logging
-import traceback
+
 import sys
 import os
 
@@ -39,13 +38,7 @@ name_atom = "atom"
 def check_os_rely():
     pass
 
-
-
-def __get_atrom_catalogue_():
-    path = os.getcwd()
-    return path[0:path.rfind("/")]
-
-atrom_catalogue = __get_atrom_catalogue_()
+atrom_catalogue = os.environ['HOME']+"/atom"
 
 def get_env(envName):
     argvName= envName+"="
@@ -56,3 +49,11 @@ def get_env(envName):
     if envValue == None :
         envValue = os.getenv(envName)
     return envValue
+
+def get_env_default(envName , defaultValue):
+    envValue = get_env(envName)
+    if envValue == None:
+        return defaultValue
+    else:
+        return envValue
+

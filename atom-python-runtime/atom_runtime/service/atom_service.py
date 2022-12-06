@@ -10,7 +10,6 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 
-import sys
 import os
 
 from atom_runtime.atom_config import  AtomConfig
@@ -35,11 +34,14 @@ class AtomService():
 
     def uninstall_operators(self, operator_to:OperatorTo):
         if self.atom_config.is_session():
-            os._exit(1)
+            os._exit(0)
     
     def abnormal_operators(self ,operator_to:OperatorTo ):
         if self.atom_config.is_session():
-           os._exit(1)
+           os._exit(0)
+    
+    def closeRuntime(self):
+        os._exit(0)
             
     
 

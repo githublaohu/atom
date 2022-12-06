@@ -10,13 +10,12 @@
 #See the Mulan PubL v2 for more details.
 #############################################################################
 
-from cmath import log
 import os
 import json
 import yaml
 import nacos
 import logging
-from atom_runtime.utils.environment import atrom_catalogue,get_env
+from atom_runtime.utils.environment import atrom_catalogue,get_env,get_env_default
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -26,13 +25,16 @@ class AtomConfig():
     docker_model:bool = False
     runtime_model:str = "standalone"
     node_ip:str = "127.0.0.1"
+    pod_name:str
+    test_model:bool = False
 
     # nacos配置
     nacos_address:str
     nacos_namespace:str
     # 
     config_name:str
-    rpc_controller_port:int = None
+
+    rpc_controller_port:int = 9999
     is_config:bool
     # 文件下载地址
     download_catalogue:str = None
@@ -55,6 +57,7 @@ class  AtomConfigServier():
     def __init__(self) :
         self.__atrom_catalogue = atrom_catalogue
         docker = get_env("docker")
+        self.takeEnv()
         logging.info("it is docker model  {} " .format( docker))
         if docker == None:
             self.__load_atom_config__()
@@ -63,16 +66,20 @@ class  AtomConfigServier():
             self.atom_config.docker_model = True
             self.__docker_model()
     
+    def takeEnv(self):
+        self.atom_config.test_model = get_env_default("test_model",self.atom_config.test_model )
+
     def __docker_model(self):
-            node_ip = get_env("node_ip")
-            logging.info("it is node IP  {} " .format( node_ip))
+            self.atom_config.node_ip = get_env("node_ip")
+            logging.info("it is node IP  {} " .format( self.atom_config.node_ip))
             self.__atrom_catalogue = "~/atom"
-            if node_ip  != None:
-                self.atom_config.node_ip = node_ip
-            runtime_model = get_env("runtime_model")
-            logging.info("it is runtime_model  {} " .format( runtime_model))
-            if runtime_model != None:
-                self.atom_config.runtime_model = runtime_model
+
+            self.atom_config.pod_name = get_env("pod_name")
+            logging.info("it is pod name   {} " .format(  self.atom_config.pod_name))
+
+            self.atom_config.runtime_model  = get_env("runtime_model")
+            logging.info("it is runtime_model  {} " .format( self.atom_config.runtime_model ))
+
             nacos_config = get_env("nacos_config")
             logging.info("it is nacos_config %s", nacos_config)
             if nacos_config == None:

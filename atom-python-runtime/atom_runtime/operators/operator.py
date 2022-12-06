@@ -11,6 +11,7 @@
 #############################################################################
 
 import traceback
+import logging
 from atom_runtime.atom_runtime_api.operator.operators_api import OperatorApi
 from atom_runtime.rpc_service.rpc_operator_service import RpcOperatorServcie
 from atom_runtime.source.source import  Source
@@ -45,11 +46,11 @@ class OperatorRuntime():
             self.run()
             self.rpc_operator_service.complete_operators(self.operator_to)
         except Exception as e:
-            traceback.print_exc()
+            logging.exception(e)
             try:
                 self.rpc_operator_service.abnormal_operators(self.operator_to)
             except Exception as ee:
-                 traceback.print_exc()
+                logging.exception(e)
 
     def run(self):
         pass

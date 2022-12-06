@@ -9,3 +9,15 @@
 #MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #See the Mulan PubL v2 for more details.
 #############################################################################
+
+from atom_runtime.implement_code.code_load import CodeLoad
+
+
+class ByteCodeLoad(CodeLoad):
+    
+    def _load_code(self):
+        # 把数据写入文件，然后加载就行了
+        # 目录，self.atom_config.code_directory  +/  byte / name /veresion/ 代码
+
+        
+        pass

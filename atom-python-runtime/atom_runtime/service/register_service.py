@@ -35,6 +35,8 @@ class RegisterService():
         self.atom_config = atom_config
         if  atom_config.is_local():
             return
+        if self.atom_config.test_model:
+            return
         self.metadata["podId"]= get_env("pod_id");
         self.metadata["nodeInfo"]= get_env("nodeInfo");
 

@@ -26,4 +26,6 @@ public class Strategy {
     private Map<String, String> labels;
 
     private String timing;
+    
+    private Integer worksNum;
 }
